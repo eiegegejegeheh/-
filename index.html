@@ -4,20 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <title>VICKS MARKET | سوق الكتروني</title>
-    <!-- TailwindCSS + FontAwesome 6 (مجانية) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- React & ReactDOM -->
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-    <!-- Babel للـ JSX -->
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
     <style>
-        /* تخصيصات إضافية لجعل الشكل قريب من الصور */
-        body {
-            background-color: #f9fafb;
-            font-family: system-ui, 'Segoe UI', 'Tahoma', sans-serif;
-        }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .line-clamp-2 {
@@ -26,22 +18,31 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        /* تحسين مظهر البطاقات والأزرار */
-        .card-shadow {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+        .chat-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: bold;
+            color: rgba(0,0,0,0.06);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 5;
+            user-select: none;
         }
-        .btn-primary {
-            transition: all 0.2s ease;
+        @media (max-width: 640px) {
+            .chat-watermark { font-size: 2rem; white-space: normal; text-align: center; width: 80%; }
         }
-        /* تخصيص شريط التبويبات */
-        .category-tab-active {
-            background-color: #2563eb !important;
-            color: white !important;
-            box-shadow: 0 2px 6px rgba(37,99,235,0.2);
-        }
-        .category-tab-inactive {
-            background-color: #f1f5f9 !important;
-            color: #334155 !important;
+        /* الإطار البرتقالي المطلوب للشعار */
+        .icon-container {
+            border: 2px solid #f97316;
+            border-radius: 20px;
+            padding: 6px 12px;
+            background: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
     </style>
 </head>
@@ -49,202 +50,187 @@
     <div id="root"></div>
 
     <script type="text/babel" data-presets="react,typescript">
-        // ---------------------------------------------
-        // 1. الأنواع والبيانات الأساسية (نفس المنطق السابق مع تحسينات شكلية)
-        // ---------------------------------------------
+        // ---------- البيانات الأساسية والوظائف ----------
         const STORAGE_KEY = 'vicks_market_state';
         const OWNER_EMAIL = 'mom1113694362@gmail.com';
         const OWNER_PASS = 'MohamedVfix2024Secure';
 
-        function generateId() {
-            return Math.random().toString(36).slice(2) + Date.now().toString(36);
-        }
+        function generateId() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 
-        // بيانات افتراضية للبائعين والمنتجات (موسعة قليلاً لتنوع)
         const SAMPLE_SELLERS = {
-            owner: {
-                id: 'owner', email: OWNER_EMAIL, password: OWNER_PASS, storeName: 'VICKS MARKET',
-                ownerName: 'Mohamed', phone: '01113694362', district: 'موغورة 6', points: 5000,
-                verified: true, subscription: 'platinum', products: [], createdAt: Date.now() - 86400000 * 30,
-            },
-            s1: {
-                id: 's1', email: 'seller1@test.com', password: '123456', storeName: 'متجر النور',
-                ownerName: 'أحمد علي', phone: '01012345678', district: 'المتميز', points: 350,
-                verified: true, subscription: 'silver', products: ['p1','p2','p5'], createdAt: Date.now() - 86400000 * 10,
-            },
-            s2: {
-                id: 's2', email: 'seller2@test.com', password: '123456', storeName: 'سوبر ماركت الفرح',
-                ownerName: 'فاطمة حسن', phone: '01198765432', district: 'الأحياء 1', points: 120,
-                verified: false, subscription: 'free', products: ['p3','p4','p6'], createdAt: Date.now() - 86400000 * 5,
-            },
+            owner: { id: 'owner', email: OWNER_EMAIL, password: OWNER_PASS, storeName: 'VICKS MARKET', ownerName: 'Mohamed', phone: '01113694362', district: 'موغورة 6', points: 5000, verified: true, subscription: 'platinum', products: [], createdAt: Date.now() - 86400000 * 30 },
+            s1: { id: 's1', email: 'seller1@test.com', password: '123456', storeName: 'متجر النور', ownerName: 'أحمد علي', phone: '01012345678', district: 'المتميز', points: 350, verified: true, subscription: 'silver', products: ['p1','p2','p5'], createdAt: Date.now() - 86400000 * 10 },
+            s2: { id: 's2', email: 'seller2@test.com', password: '123456', storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة حسن', phone: '01198765432', district: 'الأحياء 1', points: 120, verified: false, subscription: 'free', products: ['p3','p4','p6'], createdAt: Date.now() - 86400000 * 5 },
         };
-
         const SAMPLE_PRODUCTS = {
-            p1: { id: 'p1', name: 'شاشة سامسونج 55 بوصة 4K', price: 4500, category: 'used', emoji: '📺', sellerId: 's1', sellerName: 'متجر النور', likes: 12, likedBy: [], description: 'شاشة بحالة ممتازة', createdAt: Date.now() - 86400000 * 3 },
-            p2: { id: 'p2', name: 'ايفون 14 Pro مستعمل', price: 18000, category: 'used', emoji: '📱', sellerId: 's1', sellerName: 'متجر النور', likes: 8, likedBy: [], description: 'بطارية 92%', createdAt: Date.now() - 86400000 * 2 },
-            p3: { id: 'p3', name: 'زيت زيتون بكر 1 لتر', price: 185, category: 'screens', emoji: '🫒', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 5, likedBy: [], description: 'زيت طبيعي', createdAt: Date.now() - 86400000 },
-            p4: { id: 'p4', name: 'كريم مرطب للبشرة', price: 95, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 3, likedBy: [], description: 'ترطيب عميق', createdAt: Date.now() - 86400000 * 4 },
-            p5: { id: 'p5', name: 'لاب توب ديل Inspiron 15', price: 12000, category: 'used', emoji: '💻', sellerId: 's1', sellerName: 'متجر النور', likes: 7, likedBy: [], description: 'Core i7/16GB', createdAt: Date.now() - 86400000 * 6 },
-            p6: { id: 'p6', name: 'عطر رجالي فاخر', price: 320, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 15, likedBy: [], description: 'عطر خشبي', createdAt: Date.now() - 86400000 * 2 },
+            p1: { id: 'p1', name: 'ايفون 14 Pro مستعمل', price: 18000, category: 'used', emoji: '📱', sellerId: 's1', sellerName: 'متجر النور', likes: 8, likedBy: [], description: 'بطارية 92%', createdAt: Date.now() - 86400000 * 2, vip: true },
+            p2: { id: 'p2', name: 'زيت زيتون بكر 1 لتر', price: 185, category: 'screens', emoji: '🫒', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 5, likedBy: [], description: 'زيت طبيعي', createdAt: Date.now() - 86400000, vip: false },
+            p3: { id: 'p3', name: 'شاشة سامسونج 55 بوصة', price: 4500, category: 'used', emoji: '📺', sellerId: 's1', sellerName: 'متجر النور', likes: 12, likedBy: [], description: 'شاشة ممتازة', createdAt: Date.now() - 86400000 * 3, vip: true },
+            p4: { id: 'p4', name: 'كريم مرطب للبشرة', price: 95, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 3, likedBy: [], description: 'ترطيب عميق', createdAt: Date.now() - 86400000 * 4, vip: false },
+            p5: { id: 'p5', name: 'لاب توب ديل Inspiron', price: 12000, category: 'used', emoji: '💻', sellerId: 's1', sellerName: 'متجر النور', likes: 7, likedBy: [], description: 'Core i7', createdAt: Date.now() - 86400000 * 6, vip: true },
+            p6: { id: 'p6', name: 'عطر رجالي فاخر', price: 320, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 15, likedBy: [], description: 'عطر خشبي', createdAt: Date.now() - 86400000 * 2, vip: false },
         };
         SAMPLE_SELLERS.owner.products = Object.keys(SAMPLE_PRODUCTS);
 
-        function getDefaultState() {
-            const sellers = JSON.parse(JSON.stringify(SAMPLE_SELLERS));
-            const products = JSON.parse(JSON.stringify(SAMPLE_PRODUCTS));
-            return {
-                sellers, products,
-                currentSellerId: null,
-                chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟', ts: Date.now() - 1000 }],
-                notifications: [],
-            };
-        }
-
-        function loadState() {
-            if (typeof window === 'undefined') return getDefaultState();
-            try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return getDefaultState(); const parsed = JSON.parse(raw); if (!parsed.sellers || !parsed.products) return getDefaultState(); return parsed; } catch { return getDefaultState(); }
-        }
+        function getDefaultState() { return { sellers: JSON.parse(JSON.stringify(SAMPLE_SELLERS)), products: JSON.parse(JSON.stringify(SAMPLE_PRODUCTS)), currentSellerId: null, chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟', ts: Date.now() - 1000 }], notifications: [] }; }
+        function loadState() { if (typeof window === 'undefined') return getDefaultState(); try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return getDefaultState(); const parsed = JSON.parse(raw); if (!parsed.sellers || !parsed.products) return getDefaultState(); return parsed; } catch { return getDefaultState(); } }
         function saveState(state) { if (typeof window !== 'undefined') localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
         function isOwner(seller) { return seller?.email === OWNER_EMAIL; }
-        function generateSellerId() { return 's_' + generateId(); }
-        function createSeller(data) { return { id: generateSellerId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now() }; }
-        function createProduct(data) { return { id: 'p_' + generateId(), ...data, likes: 0, likedBy: [], createdAt: Date.now() }; }
-        function addChatMessage(state, msg) { const message = { ...msg, id: generateId(), ts: Date.now() }; return { ...state, chatMessages: [...state.chatMessages, message] }; }
-        function getBotResponse(userMsg) {
-            const m = userMsg.toLowerCase();
+        function createSeller(data) { return { id: 's_' + generateId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now() }; }
+        function createProduct(data) { return { id: 'p_' + generateId(), ...data, likes: 0, likedBy: [], createdAt: Date.now(), vip: false }; }
+        function addChatMessage(state, msg) { return { ...state, chatMessages: [...state.chatMessages, { ...msg, id: generateId(), ts: Date.now() }] }; }
+        function getBotResponse(msg) {
+            const m = msg.toLowerCase();
             if (m.includes('سعر')) return 'يمكنك الاطلاع على الأسعار من الصفحة الرئيسية. هل تبحث عن منتج معين؟';
-            if (m.includes('بائع') || m.includes('انضم')) return 'للانضمام كبائع: اضغط "حسابي" ثم "انضم كتاجر جديد". مجاني!';
+            if (m.includes('بائع')||m.includes('انضم')) return 'للانضمام كبائع: اضغط "حسابي" ثم "انضم كتاجر جديد". مجاني!';
             if (m.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة المتجر (حسابي ← المتجر والنقاط).';
             if (m.includes('توثيق')) return 'شارة التوثيق بـ 150 ج.م – تزيد الثقة في متجرك.';
             if (m.includes('مرحب')||m.includes('هلا')) return 'أهلاً بك! أنا مساعد VICKS MARKET. كيف أقدر أخدمك؟';
             return 'شكراً لتواصلك! يمكنني مساعدتك في البحث عن منتجات، التسجيل كبائع، أو أي استفسار آخر.';
         }
 
-        // ---------------------------------------------
-        // 2. مكونات الواجهة الجديدة (بنفس الوظائف ولكن شكل محدث)
-        // ---------------------------------------------
         const { useState, useEffect, useCallback, useRef } = React;
 
-        // بطاقة المنتج (نمط شبكة أو قائمة)
+        // بطاقة المنتج (نفس النسخة السابقة مع الألوان البرتقالية)
         function ProductCard({ product, isLiked, onLike, onWhatsApp, onClick, listMode }) {
+            const vipIcon = product.vip ? <i className="fas fa-crown text-yellow-500 text-sm ml-1"></i> : null;
             if (listMode) {
                 return (
-                    <div onClick={onClick} className="flex gap-4 p-3 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer">
-                        <div className="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center text-4xl">{product.emoji}</div>
-                        <div className="flex-1"><h3 className="font-semibold text-base line-clamp-2">{product.name}</h3><p className="text-blue-600 font-bold mt-1">{product.price.toLocaleString()} ج.م</p><p className="text-xs text-gray-500">{product.sellerName}</p></div>
-                        <div className="flex flex-col gap-2"><button onClick={(e)=>{e.stopPropagation(); onLike();}} className={`p-2 rounded-full ${isLiked ? 'bg-red-100 text-red-500' : 'bg-gray-100 text-gray-500'} w-9 h-9 flex items-center justify-center`}><i className={`fas fa-heart ${isLiked ? 'text-red-500' : ''}`}></i></button><button onClick={(e)=>{e.stopPropagation(); onWhatsApp();}} className="p-2 rounded-full bg-green-100 text-green-600 w-9 h-9 flex items-center justify-center"><i className="fab fa-whatsapp"></i></button></div>
+                    <div onClick={onClick} className="flex gap-4 p-3 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md transition">
+                        <div className="w-20 h-20 bg-gray-50 rounded-lg flex justify-center items-center text-5xl relative">
+                            {product.emoji}
+                            {product.vip && <span className="absolute -top-2 -right-2 bg-yellow-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"><i className="fas fa-crown"></i></span>}
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="font-semibold flex items-center gap-1">{vipIcon} {product.name}</h3>
+                            <p className="text-blue-600 font-bold">{product.price.toLocaleString()} ج.م</p>
+                            <p className="text-xs text-gray-500">{product.sellerName}</p>
+                        </div>
+                        <div className="flex flex-col gap-2 items-end">
+                            <button onClick={e=>{e.stopPropagation(); onLike();}} className={`p-2 rounded-full w-9 h-9 flex items-center justify-center transition-all duration-200 ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}>
+                                <i className={`fas fa-heart ${isLiked ? 'text-white' : ''}`}></i>
+                            </button>
+                            <button onClick={e=>{e.stopPropagation(); onWhatsApp();}} className="p-2 rounded-full bg-green-100 text-green-600 w-9 h-9 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all duration-200">
+                                <i className="fab fa-whatsapp"></i>
+                            </button>
+                            {product.vip && <div className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">VIP</div>}
+                        </div>
                     </div>
                 );
             }
             return (
-                <div onClick={onClick} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-all cursor-pointer">
-                    <div className="aspect-square flex items-center justify-center bg-gray-50 text-6xl">{product.emoji}</div>
-                    <div className="p-3"><h3 className="font-semibold text-sm line-clamp-2 h-10">{product.name}</h3><p className="text-blue-600 font-bold mt-1">{product.price.toLocaleString()} ج.م</p>
-                    <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100"><div className="flex items-center gap-1"><span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">{product.sellerName[0]}</span><span className="text-xs text-gray-500 truncate">{product.sellerName}</span></div>
-                    <div className="flex gap-1"><button onClick={(e)=>{e.stopPropagation(); onLike();}} className={`p-1.5 rounded-full ${isLiked ? 'bg-red-100 text-red-500' : 'bg-gray-100 text-gray-500'}`}><i className={`fas fa-heart text-sm ${isLiked ? 'text-red-500' : ''}`}></i></button><button onClick={(e)=>{e.stopPropagation(); onWhatsApp();}} className="p-1.5 rounded-full bg-green-100 text-green-600"><i className="fab fa-whatsapp text-sm"></i></button></div></div></div>
+                <div onClick={onClick} className="bg-white rounded-xl border shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition relative">
+                    {product.vip && <span className="absolute top-2 right-2 bg-yellow-400 text-white rounded-full px-2 py-0.5 text-xs z-10"><i className="fas fa-crown"></i> VIP</span>}
+                    <div className="aspect-square flex items-center justify-center bg-gray-50 text-7xl">{product.emoji}</div>
+                    <div className="p-3">
+                        <h3 className="font-semibold line-clamp-2 flex items-center gap-1">{vipIcon} {product.name}</h3>
+                        <p className="text-blue-600 font-bold mt-1">{product.price.toLocaleString()} ج.م</p>
+                        <div className="flex justify-between items-center mt-2 pt-2 border-t">
+                            <div className="flex items-center gap-1">
+                                <span className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-xs">{product.sellerName[0]}</span>
+                                <span className="text-xs text-gray-500 truncate">{product.sellerName}</span>
+                            </div>
+                            <div className="flex gap-2">
+                                <button onClick={e=>{e.stopPropagation(); onLike();}} className={`p-1.5 rounded-full transition-all duration-200 ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}>
+                                    <i className={`fas fa-heart text-sm ${isLiked ? 'text-white' : ''}`}></i>
+                                </button>
+                                <button onClick={e=>{e.stopPropagation(); onWhatsApp();}} className="p-1.5 rounded-full bg-green-100 text-green-600 hover:bg-orange-500 hover:text-white transition-all duration-200">
+                                    <i className="fab fa-whatsapp text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             );
         }
 
-        // صفحة الرئيسية الكاملة
-        function HomePage({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, imgSearchResults, onClearImgSearch }) {
+        // صفحة الرئيسية مع إطار الشعار البرتقالي
+        function HomePage({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIP, imgSearchResults, onClearImgSearch }) {
             const [category, setCategory] = useState('all');
             const [viewMode, setViewMode] = useState('grid');
             const categories = [
-                { id: 'all', label: 'الكل', icon: 'fa-grid' }, { id: 'used', label: 'مستعمل', icon: 'fa-tag' },
-                { id: 'screens', label: 'سوبر ماركت', icon: 'fa-store' }, { id: 'new', label: 'جمال وعناية', icon: 'fa-spa' },
-                { id: 'offers', label: 'عروض', icon: 'fa-fire' }
+                { id:'all', label:'الكل', icon:'fa-grid' },
+                { id:'used', label:'مستعمل', icon:'fa-tag' },
+                { id:'screens', label:'سوبر ماركت', icon:'fa-store' },
+                { id:'new', label:'جمال وعناية', icon:'fa-spa' },
+                { id:'offers', label:'عروض', icon:'fa-fire' },
+                { id:'vip', label:'VIP', icon:'fa-crown' }
             ];
             const filtered = React.useMemo(() => {
-                return Object.values(products).filter(p => {
-                    if (category === 'offers') return p.likes > 0 || p.price < 300;
-                    if (category !== 'all' && p.category !== category) return false;
-                    return true;
-                }).sort((a,b) => b.createdAt - a.createdAt);
+                let arr = Object.values(products);
+                if (category === 'offers') return arr.filter(p => p.likes > 0 || p.price < 300);
+                if (category === 'vip') return arr.filter(p => p.vip === true);
+                if (category !== 'all') return arr.filter(p => p.category === category);
+                return arr;
             }, [products, category]);
             const display = imgSearchResults ?? filtered;
-            const isImgMode = imgSearchResults !== null;
+            const isImg = imgSearchResults !== null;
             const isLiked = (p) => currentSellerId ? p.likedBy.includes(currentSellerId) : false;
-
             return (
                 <div className="flex flex-col h-full">
-                    {/* التبويبات */}
-                    <div className="sticky top-0 z-10 bg-white border-b border-gray-100 px-2 py-2">
-                        <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-                            {categories.map(cat => (
-                                <button key={cat.id} onClick={() => { setCategory(cat.id); onClearImgSearch(); }}
-                                    className={`flex items-center gap-1 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${category === cat.id && !isImgMode ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                    <div className="sticky top-0 z-10 bg-white border-b px-2 py-2">
+                        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                            {categories.map(cat=>(
+                                <button key={cat.id} onClick={()=>{setCategory(cat.id); onClearImgSearch();}} 
+                                    className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                                        category===cat.id && !isImg 
+                                        ? 'bg-orange-500 text-white shadow-md' 
+                                        : 'bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-500'
+                                    }`}>
                                     <i className={`fas ${cat.icon} text-xs`}></i> {cat.label}
                                 </button>
                             ))}
                         </div>
                     </div>
-                    {/* أزرار الإجراءات */}
-                    <div className="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-100">
-                        <button onClick={onAccountBtn} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 text-gray-800 text-sm font-medium"><i className="fas fa-user-circle"></i> حسابي</button>
-                        <button onClick={onShowOffers} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-50 text-orange-600 text-sm font-medium"><i className="fas fa-tag"></i> عروض</button>
+                    <div className="flex items-center gap-3 px-4 py-3 bg-white border-b">
+                        <button onClick={onAccountBtn} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 text-gray-800 text-sm hover:bg-orange-100 hover:text-orange-600 transition">
+                            <i className="fas fa-user-circle"></i> حسابي
+                        </button>
+                        <button onClick={onShowOffers} className="flex gap-2 px-4 py-2 rounded-xl bg-orange-50 text-orange-600 text-sm hover:bg-orange-500 hover:text-white transition">
+                            <i className="fas fa-tag"></i> عروض
+                        </button>
+                        <button onClick={onShowVIP} className="flex gap-2 px-4 py-2 rounded-xl bg-yellow-50 text-yellow-700 text-sm hover:bg-orange-500 hover:text-white transition">
+                            <i className="fas fa-crown"></i> VIP
+                        </button>
+                        <button className="flex gap-2 px-4 py-2 rounded-xl text-orange-600 border border-orange-200 hover:bg-orange-500 hover:text-white transition">
+                            <i className="fas fa-shopping-cart"></i> السلة
+                        </button>
                         <div className="flex-1"></div>
-                        <button onClick={() => { setViewMode('grid'); onClearImgSearch(); }} className={`p-2 rounded-xl ${viewMode === 'grid' && !isImgMode ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}><i className="fas fa-th-large"></i></button>
-                        <button onClick={() => { setViewMode('list'); onClearImgSearch(); }} className={`p-2 rounded-xl ${viewMode === 'list' && !isImgMode ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}><i className="fas fa-list-ul"></i></button>
+                        <button onClick={()=>{setViewMode('grid'); onClearImgSearch();}} className={`p-2 rounded-xl transition-all duration-200 ${viewMode==='grid' && !isImg ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}>
+                            <i className="fas fa-th-large"></i>
+                        </button>
+                        <button onClick={()=>{setViewMode('list'); onClearImgSearch();}} className={`p-2 rounded-xl transition-all duration-200 ${viewMode==='list' && !isImg ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}>
+                            <i className="fas fa-list-ul"></i>
+                        </button>
                     </div>
-                    {isImgMode && <div className="bg-blue-50 text-blue-700 px-4 py-2 text-sm flex justify-between"><span><i className="fas fa-camera"></i> نتائج البحث بالصور ({display.length})</span><button onClick={onClearImgSearch} className="font-bold">إلغاء</button></div>}
-                    <div className="flex-1 overflow-y-auto p-4">
-                        {display.length === 0 ? <div className="text-center py-20 text-gray-400"><i className="fas fa-box-open text-5xl mb-2"></i><p>لا توجد منتجات</p></div> :
-                            viewMode === 'grid' || isImgMode ? 
-                            <div className="grid grid-cols-2 gap-4">{display.map(p => <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={()=>onLike(p.id)} onWhatsApp={()=>onWhatsApp(p)} onClick={()=>onProductClick(p)} listMode={false} />)}</div> :
-                            <div className="flex flex-col gap-3">{display.map(p => <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={()=>onLike(p.id)} onWhatsApp={()=>onWhatsApp(p)} onClick={()=>onProductClick(p)} listMode={true} />)}</div>
+                    {isImg && <div className="bg-blue-50 px-4 py-2 text-sm flex justify-between"><span><i className="fas fa-camera"></i> نتائج الصور ({display.length})</span><button onClick={onClearImgSearch} className="font-bold">مسح</button></div>}
+                    <div className="flex-1 overflow-auto p-4">
+                        {display.length===0?<div className="text-center py-20 text-gray-400"><i className="fas fa-box-open text-5xl"></i><p>لا توجد منتجات</p></div>: viewMode==='grid'||isImg? 
+                            <div className="grid grid-cols-2 gap-4">{display.map(p=><ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={()=>onLike(p.id)} onWhatsApp={()=>onWhatsApp(p)} onClick={()=>onProductClick(p)} listMode={false}/>)}</div> 
+                            : <div className="flex flex-col gap-3">{display.map(p=><ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={()=>onLike(p.id)} onWhatsApp={()=>onWhatsApp(p)} onClick={()=>onProductClick(p)} listMode={true}/>)}</div>
                         }
                     </div>
                 </div>
             );
         }
 
-        // صفحات أخرى: تسجيل الدخول، انضمام، لوحة البائع، المتجر، الشات، إضافة منتج، التفاصيل
-        function LoginPage({ sellers, onLogin, onGoJoin, onBack }) {
-            const [email, setEmail] = useState(''); const [pass, setPass] = useState(''); const [err, setErr] = useState('');
-            const doLogin = () => { const s = Object.values(sellers).find(s=>s.email===email.trim() && s.password===pass); if(s) onLogin(s); else setErr('بيانات الدخول غير صحيحة'); };
-            return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i>رجوع</button><h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1></div><div className="p-6 space-y-4">{err && <div className="bg-red-50 p-3 rounded-xl text-red-600">{err}</div>}<div><label>البريد الإلكتروني</label><div className="relative"><i className="fas fa-envelope absolute right-3 top-3 text-gray-400"></i><input type="email" className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={email} onChange={e=>setEmail(e.target.value)}/></div></div><div><label>كلمة المرور</label><div className="relative"><i className="fas fa-lock absolute right-3 top-3 text-gray-400"></i><input type="password" className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&doLogin()}/></div></div><button onClick={doLogin} className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold">دخول</button><div className="text-center text-gray-400">أو</div><button onClick={onGoJoin} className="w-full py-3 border rounded-xl">انضم كتاجر جديد</button></div></div>);
+        // باقي المكونات (Login, Join, Seller, Store, Chat, AddProduct, Detail) مختصرة مع الحفاظ على الألوان البرتقالية
+        function LoginPage({ sellers, onLogin, onGoJoin, onBack }) { 
+            const [email,setEmail]=useState(''); const [pass,setPass]=useState(''); const [err,setErr]=useState('');
+            const [forgotMode, setForgotMode] = useState(false); const [resetEmail, setResetEmail] = useState(''); const [resetSent, setResetSent] = useState(false);
+            const doLogin=()=>{const s=Object.values(sellers).find(s=>s.email===email.trim()&&s.password===pass); s?onLogin(s):setErr('بيانات غير صحيحة');};
+            const handleForgot = () => { if (!resetEmail.trim()) { setErr('أدخل بريدك الإلكتروني'); return; } const exists = Object.values(sellers).some(s=>s.email===resetEmail.trim()); if (!exists) { setErr('هذا البريد غير مسجل'); return; } setResetSent(true); setTimeout(() => { setForgotMode(false); setResetSent(false); setResetEmail(''); }, 2000); };
+            if (forgotMode) return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={()=>setForgotMode(false)} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><h1 className="flex-1 text-center font-bold">استعادة كلمة السر</h1></div><div className="p-6 space-y-4">{err && <div className="bg-red-50 p-3 rounded-xl text-red-600">{err}</div>}{resetSent ? <div className="bg-green-50 p-3 rounded-xl text-green-600 text-center">تم إرسال رابط الاستعادة</div> : <><p className="text-gray-600">أدخل بريدك الإلكتروني</p><div className="relative"><i className="fas fa-envelope absolute right-3 top-3 text-gray-400"></i><input className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={resetEmail} onChange={e=>setResetEmail(e.target.value)}/></div><button onClick={handleForgot} className="w-full py-3 bg-orange-500 text-white rounded-xl font-semibold">إرسال</button></>}</div></div>);
+            return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1></div><div className="p-6 space-y-4">{err && <div className="bg-red-50 p-3 rounded-xl text-red-600">{err}</div>}<div><label>البريد الإلكتروني</label><div className="relative"><i className="fas fa-envelope absolute right-3 top-3 text-gray-400"></i><input className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={email} onChange={e=>setEmail(e.target.value)}/></div></div><div><label>كلمة المرور</label><div className="relative"><i className="fas fa-lock absolute right-3 top-3"></i><input type="password" className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&doLogin()}/></div></div><button onClick={doLogin} className="w-full py-3 bg-orange-500 text-white rounded-xl font-semibold">دخول</button><button onClick={()=>setForgotMode(true)} className="w-full text-sm text-orange-500 hover:underline">نسيت كلمة السر؟</button><div className="relative my-2"><div className="border-t"></div><div className="absolute -top-3 right-1/2 translate-x-1/2 bg-white px-2 text-gray-400">أو</div></div><button onClick={onGoJoin} className="w-full py-3 border rounded-xl hover:bg-orange-50 hover:text-orange-600">انضم كتاجر جديد</button></div></div>);
         }
+        function JoinPage({ sellers, onRegister, onBack }) { const [form,setForm]=useState({storeName:'',ownerName:'',phone:'',email:'',password:'',district:'موغورة 6'}); const [err,setErr]=useState(''); const districts=['موغورة 6','المتميز','الأحياء 1','الأحياء 2','حدائق أكتوبر']; const doReg=()=>{if(Object.values(form).some(v=>!v.trim())){setErr('جميع الحقول مطلوبة'); return;} if(Object.values(sellers).some(s=>s.email===form.email.trim())){setErr('البريد مستخدم'); return;} onRegister(createSeller(form));}; return (<div className="flex flex-col h-full"><div className="flex p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><h1 className="flex-1 text-center font-bold">انضم كتاجر</h1></div><div className="p-4 space-y-3 overflow-auto">{err && <div className="bg-red-50 p-3 rounded-xl">{err}</div>}{[{icon:'fa-store',label:'اسم المتجر',key:'storeName'},{icon:'fa-user',label:'اسم المالك',key:'ownerName'},{icon:'fa-phone',label:'رقم الهاتف',key:'phone'},{icon:'fa-envelope',label:'البريد',key:'email'},{icon:'fa-lock',label:'كلمة المرور',key:'password'}].map(f=>(<div key={f.key}><label>{f.label}</label><div className="relative"><i className={`fas ${f.icon} absolute right-3 top-3 text-gray-400`}></i><input type={f.key==='password'?'password':'text'} className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={form[f.key]} onChange={e=>setForm({...form,[f.key]:e.target.value})}/></div></div>))}<div><label>المنطقة</label><select className="w-full p-3 bg-gray-100 rounded-xl" value={form.district} onChange={e=>setForm({...form,district:e.target.value})}>{districts.map(d=><option key={d}>{d}</option>)}</select></div><button onClick={doReg} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">تسجيل</button></div></div>);}
+        function SellerPage({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack }) { const myProducts = seller.products.map(pid=>products[pid]).filter(p=>p); return (<div className="flex flex-col h-full"><div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold">{seller.storeName}</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div><div className="p-4 grid grid-cols-2 gap-3"><button onClick={onGoStore} className="bg-indigo-50 p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-100 transition"><i className="fas fa-store text-indigo-600 text-xl"></i><span>المتجر والنقاط</span></button><button onClick={onGoChat} className="bg-green-50 p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-100 transition"><i className="fas fa-comment-dots text-green-600 text-xl"></i><span>الدعم الذكي</span></button><button onClick={onAddProduct} className="bg-blue-50 p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-100 transition"><i className="fas fa-plus-circle text-blue-600 text-xl"></i><span>إضافة منتج</span></button></div><div className="px-4 font-semibold mb-2">منتجاتي ({myProducts.length})</div><div className="flex-1 overflow-auto p-4 space-y-2">{myProducts.map(p=><div key={p.id} className="flex gap-3 p-3 bg-white rounded-xl border"><div className="text-3xl">{p.emoji}</div><div className="flex-1"><div className="font-semibold">{p.name}</div><div className="text-blue-600">{p.price} ج.م</div></div><button onClick={()=>onEditProduct(p)} className="p-2 hover:text-orange-500"><i className="fas fa-edit"></i></button><button onClick={()=>onDeleteProduct(p.id)} className="p-2 hover:text-orange-500"><i className="fas fa-trash-alt text-red-500"></i></button></div>)}</div></div>);}
+        function StorePage({ seller, onBack, onPurchaseComplete }) { const buyPoints=(pts,cost)=>{if(confirm(`شراء ${pts} نقطة بـ ${cost} ج.م`)) setTimeout(()=>onPurchaseComplete('points',cost,pts),300);}; const buyVerify=()=>{if(seller.verified) alert('موثق بالفعل'); else if(confirm('شراء شارة التوثيق 150 ج.م')) setTimeout(()=>onPurchaseComplete('verify',150),300);}; return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white rounded-2xl p-6 text-center"><div className="text-5xl mb-2">⭐ {seller.points} نقطة</div><div className={`text-sm ${seller.verified?'text-green-600':'text-gray-400'}`}>{seller.verified?'✓ موثق':'غير موثق'}</div><div className="mb-4">الباقة: {seller.subscription}</div><div className="space-y-3"><button onClick={()=>buyPoints(100,30)} className="w-full py-3 bg-amber-500 rounded-xl text-white hover:bg-orange-600 transition">100 نقطة - 30 ج.م</button><button onClick={()=>buyPoints(500,120)} className="w-full py-3 bg-amber-600 rounded-xl text-white hover:bg-orange-600 transition">500 نقطة - 120 ج.م</button><button onClick={buyVerify} className="w-full py-3 bg-blue-600 rounded-xl text-white hover:bg-orange-600 transition">توثيق المتجر - 150 ج.م</button></div></div></div>);}
+        function ChatPage({ messages, onSendMessage, onBack }) { const [input,setInput]=useState(''); const send=()=>{if(input.trim()){onSendMessage(input); setInput('');}}; return (<div className="flex flex-col h-full relative bg-gray-50"><div className="chat-watermark">VICKS AI</div><div className="flex items-center p-4 border-b bg-white z-10"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1></div><div className="flex-1 overflow-auto p-3 space-y-3 relative z-0">{messages.map(m=>(<div key={m.id} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}><div className={`max-w-[80%] p-3 rounded-2xl ${m.role==='user'?'bg-orange-500 text-white':'bg-gray-200 text-gray-800'}`}>{m.text}</div></div>))}</div><div className="p-3 border-t flex gap-2 bg-white relative z-10"><input className="flex-1 p-3 bg-gray-100 rounded-xl" placeholder="اكتب رسالتك..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()}/><button onClick={send} className="px-5 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition"><i className="fas fa-paper-plane"></i></button></div></div>);}
+        function AddProductPage({ onSave, onBack, editProduct }) { const [name,setName]=useState(editProduct?.name||''); const [price,setPrice]=useState(editProduct?.price||''); const [category,setCategory]=useState(editProduct?.category||'used'); const [emoji,setEmoji]=useState(editProduct?.emoji||'📦'); const [desc,setDesc]=useState(editProduct?.description||''); const [isVip, setIsVip] = useState(editProduct?.vip||false); const submit=()=>{if(!name||!price) return; onSave({name,price:Number(price),category,emoji,description:desc, vip:isVip});}; return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white p-5 rounded-2xl shadow space-y-3"><h2 className="text-xl font-bold">{editProduct?'تعديل منتج':'إضافة منتج'}</h2><input placeholder="اسم المنتج" className="w-full p-3 border rounded-xl" value={name} onChange={e=>setName(e.target.value)}/><input type="number" placeholder="السعر" className="w-full p-3 border rounded-xl" value={price} onChange={e=>setPrice(e.target.value)}/><select className="w-full p-3 border rounded-xl" value={category} onChange={e=>setCategory(e.target.value)}><option value="used">مستعمل</option><option value="screens">سوبر ماركت</option><option value="new">جمال وعناية</option></select><input placeholder="رمز تعبيري" className="w-full p-3 border rounded-xl" value={emoji} onChange={e=>setEmoji(e.target.value)}/><textarea placeholder="وصف المنتج" rows="3" className="w-full p-3 border rounded-xl" value={desc} onChange={e=>setDesc(e.target.value)}></textarea><label className="flex items-center gap-2"><input type="checkbox" checked={isVip} onChange={e=>setIsVip(e.target.checked)}/> <i className="fas fa-crown text-yellow-500"></i> منتج VIP</label><button onClick={submit} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">حفظ</button></div></div>);}
+        function ProductDetailPage({ product, seller, isLiked, onLike, onBack }) { return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white rounded-2xl p-5"><div className="text-8xl text-center mb-4 relative">{product.emoji}{product.vip && <span className="absolute top-0 right-1/2 bg-yellow-400 rounded-full px-2 py-0.5 text-xs"><i className="fas fa-crown"></i> VIP</span>}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} ج.م</p><p className="text-gray-600 mt-3">{product.description||'لا يوجد وصف'}</p><div className="mt-5 flex justify-between"><div><i className="fas fa-store"></i> {seller?.storeName}</div><button onClick={onLike} className={`flex gap-2 px-5 py-2 rounded-full transition-all duration-200 ${isLiked?'bg-orange-500 text-white':'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}><i className={`fas fa-heart ${isLiked?'text-white':''}`}></i> {product.likes}</button></div></div></div>);}
 
-        function JoinPage({ sellers, onRegister, onBack }) {
-            const [form, setForm] = useState({ storeName:'', ownerName:'', phone:'', email:'', password:'', district:'موغورة 6' }); const [err, setErr] = useState('');
-            const districts = ['موغورة 6','المتميز','الأحياء 1','الأحياء 2','حدائق أكتوبر'];
-            const doReg = () => { if(Object.values(form).some(v=>!v.trim())){ setErr('جميع الحقول مطلوبة'); return; } if(Object.values(sellers).some(s=>s.email===form.email.trim())){ setErr('البريد مستخدم'); return; } onRegister(createSeller(form)); };
-            return (<div className="flex flex-col h-full"><div className="flex p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i>رجوع</button><h1 className="flex-1 text-center font-bold">انضم كتاجر</h1></div><div className="p-4 space-y-3 overflow-auto">{err && <div className="bg-red-50 p-3 rounded-xl text-red-600">{err}</div>}{[{icon:'fa-store',label:'اسم المتجر',key:'storeName'},{icon:'fa-user',label:'اسم المالك',key:'ownerName'},{icon:'fa-phone',label:'رقم الهاتف',key:'phone'},{icon:'fa-envelope',label:'البريد',key:'email'},{icon:'fa-lock',label:'كلمة المرور',key:'password'}].map(f=>(<div key={f.key}><label>{f.label}</label><div className="relative"><i className={`fas ${f.icon} absolute right-3 top-3 text-gray-400`}></i><input type={f.key==='password'?'password':'text'} className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={form[f.key]} onChange={e=>setForm({...form,[f.key]:e.target.value})}/></div></div>))}<div><label>المنطقة</label><select className="w-full p-3 bg-gray-100 rounded-xl" value={form.district} onChange={e=>setForm({...form,district:e.target.value})}>{districts.map(d=><option key={d}>{d}</option>)}</select></div><button onClick={doReg} className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold">تسجيل</button></div></div>);
-        }
-
-        function SellerPage({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack }) {
-            const myProducts = seller.products.map(pid=>products[pid]).filter(p=>p);
-            return (<div className="flex flex-col h-full"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold">{seller.storeName}</h1><button onClick={onLogout}><i className="fas fa-sign-out-alt text-red-500"></i></button></div>
-            <div className="p-4 grid grid-cols-2 gap-3"><button onClick={onGoStore} className="bg-indigo-50 p-4 rounded-2xl flex items-center gap-3"><i className="fas fa-store text-indigo-600 text-xl"></i><span className="font-medium">المتجر والنقاط</span></button><button onClick={onGoChat} className="bg-green-50 p-4 rounded-2xl flex items-center gap-3"><i className="fas fa-comment-dots text-green-600 text-xl"></i><span className="font-medium">الدعم الذكي</span></button><button onClick={onAddProduct} className="bg-blue-50 p-4 rounded-2xl flex items-center gap-3"><i className="fas fa-plus-circle text-blue-600 text-xl"></i><span className="font-medium">إضافة منتج</span></button></div>
-            <div className="px-4 font-semibold mb-2">منتجاتي ({myProducts.length})</div><div className="flex-1 overflow-auto p-4 space-y-2">{myProducts.map(p=><div key={p.id} className="flex gap-3 p-3 bg-white rounded-xl border"><div className="text-3xl">{p.emoji}</div><div className="flex-1"><div className="font-semibold">{p.name}</div><div className="text-blue-600">{p.price} ج.م</div></div><button onClick={()=>onEditProduct(p)} className="p-2"><i className="fas fa-edit text-gray-500"></i></button><button onClick={()=>onDeleteProduct(p.id)} className="p-2"><i className="fas fa-trash-alt text-red-500"></i></button></div>)}</div></div>);
-        }
-
-        function StorePage({ seller, onBack, onPurchaseComplete }) {
-            const buyPoints = (pts, cost) => { if(confirm(`شراء ${pts} نقطة بمبلغ ${cost} ج.م؟`)){ setTimeout(()=>{ onPurchaseComplete('points', cost, pts); },300); } };
-            const buyVerify = () => { if(seller.verified) return alert('موثق بالفعل'); if(confirm('شراء شارة التوثيق بـ 150 ج.م؟')) setTimeout(()=>{ onPurchaseComplete('verify',150); },300); };
-            return (<div className="p-5"><button onClick={onBack} className="mb-4 flex items-center gap-1"><i className="fas fa-arrow-right ml-1"></i> رجوع</button><div className="bg-white rounded-2xl p-6 shadow-md text-center"><div className="text-5xl mb-2">⭐ {seller.points} نقطة</div><div className={`text-sm mb-1 ${seller.verified ? 'text-green-600' : 'text-gray-400'}`}>{seller.verified ? '✓ موثق' : 'غير موثق'}</div><div className="mb-4">الباقة: {seller.subscription}</div><div className="space-y-3"><button onClick={()=>buyPoints(100,30)} className="w-full py-3 bg-amber-500 rounded-xl text-white">شراء 100 نقطة - 30 ج.م</button><button onClick={()=>buyPoints(500,120)} className="w-full py-3 bg-amber-600 rounded-xl text-white">شراء 500 نقطة - 120 ج.م</button><button onClick={buyVerify} className="w-full py-3 bg-blue-600 rounded-xl text-white">توثيق المتجر - 150 ج.م</button></div></div></div>);
-        }
-
-        function ChatPage({ messages, onSendMessage, onBack }) {
-            const [input, setInput] = useState('');
-            const send = () => { if(input.trim()){ onSendMessage(input); setInput(''); } };
-            return (<div className="flex flex-col h-full"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-blue-600 ml-2"></i> VICKS AI</h1></div><div className="flex-1 overflow-auto p-3 space-y-3">{messages.map(m=>(<div key={m.id} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}><div className={`max-w-[80%] p-3 rounded-2xl ${m.role==='user'?'bg-blue-600 text-white':'bg-gray-200 text-gray-800'}`}>{m.text}</div></div>))}</div><div className="p-3 border-t flex gap-2 bg-white"><input className="flex-1 p-3 bg-gray-100 rounded-xl" placeholder="اكتب رسالتك..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()}/><button onClick={send} className="px-5 bg-blue-600 text-white rounded-xl"><i className="fas fa-paper-plane"></i></button></div></div>);
-        }
-
-        function AddProductPage({ onSave, onBack, editProduct }) {
-            const [name, setName] = useState(editProduct?.name||''); const [price, setPrice] = useState(editProduct?.price||''); const [category, setCategory] = useState(editProduct?.category||'used'); const [emoji, setEmoji] = useState(editProduct?.emoji||'📦'); const [desc, setDesc] = useState(editProduct?.description||'');
-            const submit = () => { if(!name||!price) return; onSave({ name, price:Number(price), category, emoji, description:desc }); };
-            return (<div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white p-5 rounded-2xl shadow space-y-3"><h2 className="text-xl font-bold">{editProduct?'تعديل منتج':'إضافة منتج جديد'}</h2><input placeholder="اسم المنتج" className="w-full p-3 border rounded-xl" value={name} onChange={e=>setName(e.target.value)}/><input type="number" placeholder="السعر" className="w-full p-3 border rounded-xl" value={price} onChange={e=>setPrice(e.target.value)}/><select className="w-full p-3 border rounded-xl" value={category} onChange={e=>setCategory(e.target.value)}><option value="used">مستعمل</option><option value="screens">سوبر ماركت</option><option value="new">جمال وعناية</option></select><input placeholder="رمز تعبيري (emoji)" className="w-full p-3 border rounded-xl" value={emoji} onChange={e=>setEmoji(e.target.value)}/><textarea placeholder="وصف المنتج" rows="3" className="w-full p-3 border rounded-xl" value={desc} onChange={e=>setDesc(e.target.value)}></textarea><button onClick={submit} className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold">حفظ</button></div></div>);
-        }
-
-        function ProductDetailPage({ product, seller, isLiked, onLike, onBack }) {
-            return (<div className="p-5"><button onClick={onBack} className="mb-4 flex items-center gap-1"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white rounded-2xl p-5 shadow-md"><div className="text-8xl text-center mb-4">{product.emoji}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} ج.م</p><p className="text-gray-600 mt-3">{product.description||'لا يوجد وصف تفصيلي'}</p><div className="mt-5 flex justify-between items-center"><div><i className="fas fa-store"></i> {seller?.storeName}</div><button onClick={onLike} className={`flex items-center gap-2 px-5 py-2 rounded-full ${isLiked?'bg-red-100 text-red-500':'bg-gray-100'}`}><i className={`fas fa-heart ${isLiked?'text-red-500':''}`}></i> {product.likes}</button></div></div></div>);
-        }
-
-        // ---------------------------------------------
-        // 3. التطبيق الرئيسي (App)
-        // ---------------------------------------------
+        // التطبيق الرئيسي مع إضافة الإطار البرتقالي حول الشعار
         function App() {
             const [state, setState] = useState(null);
             const [page, setPage] = useState('home');
@@ -253,13 +239,13 @@
             const [imgSearchResults, setImgSearchResults] = useState(null);
             const [imgSearchLoading, setImgSearchLoading] = useState(false);
             const [showOffersModal, setShowOffersModal] = useState(false);
+            const [searchText, setSearchText] = useState('');
             const cameraInputRef = useRef(null);
 
             useEffect(() => { setState(loadState()); }, []);
             useEffect(() => { if(state) saveState(state); }, [state]);
-
             const updateState = useCallback((updater) => { setState(prev => prev ? updater(prev) : prev); }, []);
-            if (!state) return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-2xl text-blue-600">VICKS MARKET</div></div>;
+            if (!state) return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-2xl text-orange-500">VICKS MARKET</div></div>;
 
             const currentSeller = state.currentSellerId ? state.sellers[state.currentSellerId] ?? null : null;
             const ownerMode = isOwner(currentSeller);
@@ -272,27 +258,38 @@
             const handleAddProduct = (data) => { if(!currentSeller) return; if(editingProduct){ updateState(s=>({...s, products:{...s.products,[editingProduct.id]:{...s.products[editingProduct.id],...data}}})); } else { const newP=createProduct({...data, sellerId:currentSeller.id, sellerName:currentSeller.storeName}); updateState(s=>({...s, products:{...s.products,[newP.id]:newP}, sellers:{...s.sellers,[currentSeller.id]:{...s.sellers[currentSeller.id], products:[...(s.sellers[currentSeller.id]?.products||[]), newP.id]}}})); } setEditingProduct(null); setPage('seller'); };
             const handleDeleteProduct = (pid) => { if(confirm('حذف المنتج؟')) updateState(s=>{ const np={...s.products}; delete np[pid]; const ns={...s.sellers}; if(ns[currentSeller.id]) ns[currentSeller.id].products = ns[currentSeller.id].products.filter(id=>id!==pid); return {...s, products:np, sellers:ns}; }); };
             const handleSendMessage = (text) => { updateState(s=>{ let ns = addChatMessage(s,{role:'user',text}); ns = addChatMessage(ns,{role:'bot',text:getBotResponse(text)}); return ns; }); };
-            const handlePurchaseComplete = (type, amt, pts) => { updateState(s=>{ const seller = s.sellers[currentSeller.id]; return {...s, sellers:{...s.sellers,[currentSeller.id]:{...seller, points:seller.points+(pts||0), verified:type==='verify'?true:seller.verified}}}; }); };
-            const handleCameraSearch = (e) => { const file=e.target.files[0]; if(!file) return; setImgSearchLoading(true); setTimeout(()=>{ const shuffled = [...Object.values(state.products)].sort(()=>Math.random()-0.5); setImgSearchResults(shuffled.slice(0,10)); setImgSearchLoading(false); },1200); if(cameraInputRef.current) cameraInputRef.current.value=''; };
-            const showHome = () => { setPage('home'); setDetailProduct(null); setImgSearchResults(null); };
+            const handlePurchaseComplete = (type, amt, pts) => { updateState(s=>{ const seller = s.sellers[currentSeller.id]; return {...s, sellers:{...s.sellers,[currentSeller.id]:{...seller, points:seller.points+(pts||0), verified:type==='verify'?true:seller.verified}}; }); };
+            const handleCameraSearch = (e) => { const file=e.target.files[0]; if(!file) return; setImgSearchLoading(true); setTimeout(()=>{ const filtered = Object.values(state.products).filter(p=>p.name.includes(searchText)||(!searchText)); setImgSearchResults(filtered.slice(0,12)); setImgSearchLoading(false); },1000); if(cameraInputRef.current) cameraInputRef.current.value=''; };
+            const handleSearchChange = (e) => { const val = e.target.value; setSearchText(val); if(val.trim()==='') setImgSearchResults(null); else { const filtered = Object.values(state.products).filter(p=>p.name.includes(val) || p.sellerName.includes(val)); setImgSearchResults(filtered); } };
+            const showHome = () => { setPage('home'); setDetailProduct(null); setImgSearchResults(null); setSearchText(''); };
             const isLiked = (p) => currentSeller ? p.likedBy.includes(currentSeller.id) : false;
             const offersProducts = Object.values(state.products).filter(p=>p.likes>0||p.price<300);
+            const handleQuickAdd = () => { if(currentSeller) { setEditingProduct(null); setPage('addProduct'); } else { setPage('login'); } };
+            const handleShowVIP = () => { setPage('home'); setTimeout(()=>{ const vipBtn = document.querySelector('.fa-crown')?.closest('button'); if(vipBtn) vipBtn.click(); }, 50); };
 
             return (
                 <div className={`min-h-screen flex flex-col bg-gray-50 ${ownerMode ? 'ring-2 ring-yellow-400' : ''}`}>
                     {page === 'home' && (
                         <>
-                            <header className="sticky top-0 z-20 bg-white border-b border-gray-100 px-4 py-3 flex justify-between items-center">
-                                <div className="flex items-center gap-2"><i className="fas fa-store text-blue-600 text-2xl"></i><span className="text-xl font-bold text-blue-700">VICKS MARKET</span></div>
-                                <div className="flex gap-2">
-                                    <button onClick={()=>cameraInputRef.current?.click()} className="p-2 rounded-xl bg-gray-100 text-gray-700"><i className="fas fa-camera"></i></button>
-                                    <button onClick={()=>{}} className="p-2 rounded-xl bg-gray-100 text-gray-700"><i className="fas fa-search"></i></button>
+                            <header className="sticky top-0 z-20 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+                                {/* الشعار داخل الإطار البرتقالي المطلوب */}
+                                <div className="icon-container">
+                                    <i className="fas fa-store text-orange-500 text-xl"></i>
+                                    <span className="text-lg font-bold text-orange-600">VICKS MARKET</span>
+                                </div>
+                                <div className="flex gap-3">
+                                    <button onClick={()=>cameraInputRef.current?.click()} className="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition-all duration-200"><i className="fas fa-camera"></i></button>
+                                    <button onClick={()=>{document.getElementById('searchInput')?.focus();}} className="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition-all duration-200"><i className="fas fa-search"></i></button>
+                                    <button onClick={handleQuickAdd} className="p-2 rounded-xl bg-blue-100 text-blue-700 hover:bg-orange-500 hover:text-white transition-all duration-200"><i className="fas fa-plus"></i></button>
                                 </div>
                                 <input ref={cameraInputRef} type="file" accept="image/*" className="hidden" onChange={handleCameraSearch} />
                             </header>
+                            <div className="bg-white px-4 pb-3 pt-2 border-b border-gray-100"><input id="searchInput" type="text" placeholder="ابحث عن منتج..." className="w-full p-3 bg-gray-100 rounded-xl focus:ring-2 focus:ring-orange-300 outline-none" value={searchText} onChange={handleSearchChange} /></div>
                             {imgSearchLoading && <div className="bg-blue-50 p-2 text-center text-blue-600 text-sm"><i className="fas fa-spinner fa-pulse"></i> جاري البحث بالصورة...</div>}
-                            <main className="flex-1 overflow-hidden"><HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p=>{ setDetailProduct(p); setPage('detail'); }} onAccountBtn={()=>currentSeller?setPage('seller'):setPage('login')} onShowOffers={()=>setShowOffersModal(true)} imgSearchResults={imgSearchResults} onClearImgSearch={()=>setImgSearchResults(null)} /></main>
-                            <button onClick={()=>setPage('chat')} className="fixed bottom-6 left-6 w-14 h-14 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center hover:bg-blue-700 transition"><i className="fas fa-robot text-2xl"></i></button>
+                            <main className="flex-1 overflow-hidden">
+                                <HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p=>{ setDetailProduct(p); setPage('detail'); }} onAccountBtn={()=>currentSeller?setPage('seller'):setPage('login')} onShowOffers={()=>setShowOffersModal(true)} onShowVIP={handleShowVIP} imgSearchResults={imgSearchResults} onClearImgSearch={()=>{setImgSearchResults(null); setSearchText('');}} />
+                            </main>
+                            <button onClick={()=>setPage('chat')} className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-orange-500 text-white shadow-lg flex items-center justify-center hover:bg-orange-600 transition-all duration-200 z-30"><i className="fas fa-robot text-2xl"></i></button>
                         </>
                     )}
                     {page === 'login' && <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={()=>setPage('join')} onBack={showHome} />}
@@ -302,7 +299,7 @@
                     {page === 'chat' && <ChatPage messages={state.chatMessages} onSendMessage={handleSendMessage} onBack={()=>setPage(currentSeller?'seller':'home')} />}
                     {page === 'addProduct' && currentSeller && <AddProductPage onSave={handleAddProduct} onBack={()=>{setEditingProduct(null); setPage('seller');}} editProduct={editingProduct} />}
                     {page === 'detail' && detailProduct && <ProductDetailPage product={state.products[detailProduct.id]||detailProduct} seller={state.sellers[detailProduct.sellerId]||null} isLiked={isLiked(state.products[detailProduct.id]||detailProduct)} onLike={()=>handleLike(detailProduct.id)} onBack={showHome} />}
-                    {showOffersModal && (<div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50" onClick={()=>setShowOffersModal(false)}><div className="bg-white w-full max-w-md rounded-t-3xl p-6 max-h-[80vh] overflow-auto" onClick={e=>e.stopPropagation()}><div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div><h2 className="text-xl font-bold mb-3"><i className="fas fa-fire text-orange-500 ml-2"></i>العروض</h2>{offersProducts.map(p=><div key={p.id} onClick={()=>{setShowOffersModal(false); setDetailProduct(p); setPage('detail');}} className="flex gap-3 p-3 bg-gray-50 rounded-xl mb-2 cursor-pointer"><div className="text-4xl">{p.emoji}</div><div><div className="font-semibold">{p.name}</div><div className="text-blue-600">{p.price} ج.م</div></div></div>)}</div></div>)}
+                    {showOffersModal && (<div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50" onClick={()=>setShowOffersModal(false)}><div className="bg-white w-full max-w-md rounded-t-3xl p-6 max-h-[80vh] overflow-auto" onClick={e=>e.stopPropagation()}><div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div><h2 className="text-xl font-bold mb-3"><i className="fas fa-fire text-orange-500 ml-2"></i>العروض</h2>{offersProducts.map(p=><div key={p.id} onClick={()=>{setShowOffersModal(false); setDetailProduct(p); setPage('detail');}} className="flex gap-3 p-3 bg-gray-50 rounded-xl mb-2 cursor-pointer hover:bg-orange-50 transition"><div className="text-4xl">{p.emoji}</div><div><div className="font-semibold">{p.name}</div><div className="text-blue-600">{p.price} ج.م</div></div></div>)}</div></div>)}
                 </div>
             );
         }
