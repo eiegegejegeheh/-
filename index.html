@@ -112,17 +112,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js">
     </script>
 
-    <script type="text/babel" data-presets="react,typescript">
+    <script type="text/babel" data-presets="react">
         const { useState, useEffect, useRef } = React;
 
-        // ---------- constants ----------
+        // ========== constants ==========
         const STORAGE_KEY = 'vicks_market_final_v9';
         const THEME_KEY = 'vicks_theme_v9';
         const ADMIN_EMAIL = 'mom1113694362@gmail.com';
         const ADMIN_PASS = 'momMOM2023#';
         const ADMIN_ID = '10000000000';
 
-        function genId() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+        function genId() {
+            return Math.random().toString(36).slice(2) + Date.now().toString(36);
+        }
 
         const categories = [
             { id: 'all', label: 'الكل', icon: '' },
@@ -195,8 +197,12 @@
         }
 
         function loadState() {
-            try { const r = localStorage.getItem(STORAGE_KEY); return r ? (JSON.parse(r) || getInitialState()) : getInitialState(); }
-            catch { return getInitialState(); }
+            try {
+                const r = localStorage.getItem(STORAGE_KEY);
+                return r ? (JSON.parse(r) || getInitialState()) : getInitialState();
+            } catch {
+                return getInitialState();
+            }
         }
         function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
 
@@ -212,7 +218,9 @@
             return { id: 'p_'+genId(), ...d, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 };
         }
 
-        function addMessage(s, m) { return { ...s, chatMessages: [...s.chatMessages, {...m, id: genId(), ts: Date.now()}] }; }
+        function addMessage(s, m) {
+            return { ...s, chatMessages: [...s.chatMessages, {...m, id: genId(), ts: Date.now()}] };
+        }
 
         function botReply(t) {
             const tx = t.toLowerCase();
@@ -222,7 +230,6 @@
             return 'شكراً لتواصلك! كيف يمكنني مساعدتك؟';
         }
 
-        // قائمة دول العالم (ISO 3166-1 alpha-2)
         const countries = [
             { code: 'AF', name: 'أفغانستان' }, { code: 'AL', name: 'ألبانيا' }, { code: 'DZ', name: 'الجزائر' },
             { code: 'AD', name: 'أندورا' }, { code: 'AO', name: 'أنغولا' }, { code: 'AR', name: 'الأرجنتين' },
@@ -287,7 +294,7 @@
             { code: 'ZW', name: 'زيمبابوي' }
         ];
 
-        // ---------- Components ----------
+        // ========== Components ==========
         function ImagePreviewModal({ emoji, name, onClose }) {
             useEffect(() => {
                 const esc = (e) => e.key==='Escape' && onClose();
@@ -310,7 +317,9 @@
 
         function ChatPage({ messages, onSend, onBack }) {
             const [input, setInput] = useState('');
-            const fileRef = useRef(null), camRef = useRef(null), endRef = useRef(null);
+            const fileRef = useRef(null);
+            const camRef = useRef(null);
+            const endRef = useRef(null);
             const send = () => { if(input.trim()) { onSend(input.trim()); setInput(''); } };
             useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
             return (
@@ -343,7 +352,6 @@
             );
         }
 
-        // Updated ProductCard with new layout
         function ProductCard({ prod, liked, onLike, onWhats, onClick, onRate, sellerAvatar, sellerVerification, onSellerClick, isList, onImageClick, onCommentsClick }) {
             const stars = Array(5).fill(0).map((_, i) =>
                 <i key={i} className={`fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'}`}
@@ -416,9 +424,10 @@
                 if (searchQuery.trim()) return p.name.toLowerCase().includes(searchQuery.toLowerCase());
                 return true;
             });
-            const isLiked = p => currSellerId ? p.likedBy.includes(currSellerId) : false;
+            const isLiked = (p) => currSellerId ? p.likedBy.includes(currSellerId) : false;
             const half = Math.ceil(filtered.length / 2);
-            const row1 = filtered.slice(0, half), row2 = filtered.slice(half);
+            const row1 = filtered.slice(0, half);
+            const row2 = filtered.slice(half);
 
             return (
                 <div className="flex flex-col h-full relative">
@@ -468,9 +477,12 @@
         }
 
         function LoginPage({ sellers, onLogin, onGoJoin, onBack, onForgotPassword }) {
-            const [email, setEmail] = useState(''); const [pass, setPass] = useState(''); const [err, setErr] = useState('');
+            const [email, setEmail] = useState('');
+            const [pass, setPass] = useState('');
+            const [err, setErr] = useState('');
             const dologin = () => {
-                const e = email.trim(), p = pass.trim();
+                const e = email.trim();
+                const p = pass.trim();
                 if(!e || !p) { setErr('يرجى إدخال البريد الإلكتروني وكلمة المرور'); return; }
                 const found = Object.values(sellers).find(s => s.email===e && s.password===p);
                 if(found) { setErr(''); onLogin(found); return; }
@@ -506,7 +518,6 @@
             const handleSend = () => {
                 if (email.trim()) {
                     setSent(true);
-                    // في الواقع هنا يتم إرسال رابط استعادة
                 }
             };
             return (
@@ -535,9 +546,12 @@
         }
 
         function JoinPage({ onRegister, onBack }) {
-            const [store, setStore] = useState(''); const [owner, setOwner] = useState('');
-            const [email, setEmail] = useState(''); const [pass, setPass] = useState('');
-            const [phone, setPhone] = useState(''); const [country, setCountry] = useState('مصر');
+            const [store, setStore] = useState('');
+            const [owner, setOwner] = useState('');
+            const [email, setEmail] = useState('');
+            const [pass, setPass] = useState('');
+            const [phone, setPhone] = useState('');
+            const [country, setCountry] = useState('مصر');
             const [accountType, setAccountType] = useState('customer');
             const [err, setErr] = useState('');
             const [showCountries, setShowCountries] = useState(false);
@@ -602,7 +616,6 @@
             );
         }
 
-        // VIP Page for sellers
         function VIPPage({ seller, onBack, onPurchase, onAddPoints }) {
             const [showAddPoints, setShowAddPoints] = useState(false);
             const [pointsAmount, setPointsAmount] = useState(50);
@@ -675,4 +688,241 @@
                                     <p className="text-xs text-gray-500">50 نقطة (صلاحيات إضافية)</p>
                                 </div>
                                 <button onClick={()=>onPurchase('vip')} disabled={seller.subscription === 'vip' || seller.points < 50}
-                                    className={`px-4 py-2 rounded-lg 
+                                    className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.subscription === 'vip' ? 'bg-gray-200 text-gray-400' : seller.points >= 50 ? 'bg-purple-500 text-white hover:bg-purple-600' : 'bg-gray-200 text-gray-400'}`}>
+                                    {seller.subscription === 'vip' ? 'مفعل' : 'شراء'}
+                                </button>
+                            </div>
+                            <div className="border rounded-xl p-4 space-y-2">
+                                <p className="font-semibold">🚀 اشتراك مفتوح (Unlimited)</p>
+                                <div className="grid grid-cols-5 gap-2">
+                                    {subscriptionOptions.map(opt => (
+                                        <button key={opt.months} onClick={()=>onPurchase('unlimited', opt.months)} disabled={seller.points < opt.cost}
+                                            className={`py-2 rounded-lg text-xs font-semibold ${seller.points >= opt.cost ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'bg-gray-200 text-gray-400'}`}>
+                                            {opt.label}<br/>{opt.cost} نقطة
+                                        </button>
+                                    ))}
+                                </div>
+                                <p className="text-xs text-gray-500">تنتهي الصلاحية: {seller.subscriptionExpiry ? new Date(seller.subscriptionExpiry).toLocaleDateString('ar-EG') : 'غير مفعل'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            const [state, setState] = useState(null);
+            const [page, setPage] = useState('home');
+            const [previewImg, setPreviewImg] = useState(null);
+            const [dark, setDark] = useState(() => localStorage.getItem(THEME_KEY)==='dark');
+            const [showSearchBar, setShowSearchBar] = useState(false);
+            const [searchQuery, setSearchQuery] = useState('');
+
+            useEffect(() => {
+                setState(loadState());
+            }, []);
+
+            useEffect(() => {
+                if (state) saveState(state);
+            }, [state]);
+
+            useEffect(() => {
+                document.body.classList.toggle('dark', dark);
+                localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+            }, [dark]);
+
+            if (!state) {
+                return (
+                    <div className="min-h-screen flex items-center justify-center">
+                        <div className="animate-pulse text-orange-500 text-xl">
+                            <i className="fas fa-spinner fa-spin ml-2"></i> جار التحميل...
+                        </div>
+                    </div>
+                );
+            }
+
+            const currentSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
+            const isSeller = currentSeller && currentSeller.accountType === 'seller';
+
+            const handleLogin = (seller) => {
+                setState(prev => ({ ...prev, currentSellerId: seller.id }));
+                setPage('home');
+            };
+            const handleLogout = () => {
+                setState(prev => ({ ...prev, currentSellerId: null }));
+                setPage('home');
+            };
+            const handleRegister = (newSeller) => {
+                setState(prev => {
+                    const sellers = { ...prev.sellers, [newSeller.id]: newSeller };
+                    return { ...prev, sellers, currentSellerId: newSeller.id };
+                });
+                setPage('home');
+            };
+            const handleSendMessage = (text) => {
+                setState(prev => {
+                    const withUser = addMessage(prev, { role: 'user', text });
+                    return addMessage(withUser, { role: 'bot', text: botReply(text) });
+                });
+            };
+            const handleLike = (prodId) => {
+                if (!currentSeller) return alert('يرجى تسجيل الدخول أولاً');
+                setState(prev => {
+                    const products = { ...prev.products };
+                    const prod = { ...products[prodId] };
+                    const idx = prod.likedBy.indexOf(currentSeller.id);
+                    if (idx >= 0) {
+                        prod.likedBy = prod.likedBy.filter(id => id !== currentSeller.id);
+                        prod.likes = Math.max(0, prod.likes - 1);
+                    } else {
+                        prod.likedBy = [...prod.likedBy, currentSeller.id];
+                        prod.likes += 1;
+                    }
+                    products[prodId] = prod;
+                    return { ...prev, products };
+                });
+            };
+            const handleWhats = (prod) => {
+                const seller = state.sellers[prod.sellerId];
+                if (!seller) return;
+                window.open(`https://wa.me/+2${seller.phone}?text=مرحباً، أنا مهتم بمنتج: ${prod.name}`, '_blank');
+            };
+            const handleRate = (prodId, rating) => {
+                setState(prev => {
+                    const products = { ...prev.products };
+                    products[prodId] = { ...products[prodId], rating };
+                    return { ...prev, products };
+                });
+            };
+            const handleShowVIP = () => {
+                if (!currentSeller) return alert('يرجى تسجيل الدخول أولاً');
+                if (currentSeller.accountType !== 'seller') return alert('خدمة VIP متاحة للتجار فقط');
+                setPage('vip');
+            };
+            const handlePurchase = (service, months) => {
+                setState(prev => {
+                    const sellers = { ...prev.sellers };
+                    const seller = { ...sellers[currentSeller.id] };
+                    switch (service) {
+                        case 'verify':
+                            if (seller.points >= 70 && !seller.verificationBadge) {
+                                seller.points -= 70;
+                                seller.verificationBadge = true;
+                            }
+                            break;
+                        case 'max100':
+                            if (seller.points >= 50 && seller.maxProducts < 100) {
+                                seller.points -= 50;
+                                seller.maxProducts = 100;
+                            }
+                            break;
+                        case 'vip':
+                            if (seller.points >= 50 && seller.subscription !== 'vip') {
+                                seller.points -= 50;
+                                seller.subscription = 'vip';
+                            }
+                            break;
+                        case 'unlimited':
+                            const cost = months === 1 ? 200 : months === 3 ? 500 : months === 6 ? 900 : months === 10 ? 1400 : 1600;
+                            if (seller.points >= cost) {
+                                seller.points -= cost;
+                                const expiry = new Date();
+                                expiry.setMonth(expiry.getMonth() + months);
+                                seller.subscriptionExpiry = expiry.getTime();
+                                seller.subscription = 'unlimited';
+                            }
+                            break;
+                        default: break;
+                    }
+                    sellers[currentSeller.id] = seller;
+                    return { ...prev, sellers };
+                });
+            };
+            const handleAddPoints = (amount) => {
+                setState(prev => {
+                    const sellers = { ...prev.sellers };
+                    sellers[currentSeller.id] = { ...sellers[currentSeller.id], points: sellers[currentSeller.id].points + amount };
+                    return { ...prev, sellers };
+                });
+            };
+            const handleSellerProfile = (sellerId) => {
+                alert(`ملف التاجر: ${state.sellers[sellerId]?.storeName || 'مستخدم'}`);
+            };
+            const handleImageClick = (prod) => setPreviewImg(prod);
+            const handleCommentsClick = (prod) => alert(`التعليقات على ${prod.name} (قيد التطوير)`);
+
+            if (page === 'chat') {
+                return <ChatPage messages={state.chatMessages} onSend={handleSendMessage} onBack={() => setPage('home')} />;
+            }
+            if (page === 'login') {
+                return <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={() => setPage('join')} onBack={() => setPage('home')} onForgotPassword={() => setPage('forgot-password')} />;
+            }
+            if (page === 'join') {
+                return <JoinPage onRegister={handleRegister} onBack={() => setPage('login')} />;
+            }
+            if (page === 'forgot-password') {
+                return <ForgotPasswordPage onBack={() => setPage('login')} />;
+            }
+            if (page === 'vip') {
+                if (!currentSeller || currentSeller.accountType !== 'seller') {
+                    setPage('home');
+                    return null;
+                }
+                return <VIPPage seller={state.sellers[currentSeller.id]} onBack={() => setPage('home')} onPurchase={handlePurchase} onAddPoints={handleAddPoints} />;
+            }
+
+            return (
+                <div className="flex flex-col h-screen bg-gray-50">
+                    {previewImg && <ImagePreviewModal emoji={previewImg.emoji} name={previewImg.name} onClose={() => setPreviewImg(null)} />}
+                    <div className="flex items-center justify-between p-3 bg-white border-b shadow-sm">
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => setPage('chat')} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
+                                <i className="fas fa-robot"></i>
+                            </button>
+                            <button onClick={() => setShowSearchBar(!showSearchBar)} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
+                                <i className="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <h1 className="text-xl font-bold text-orange-600">VICKS MARKET</h1>
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => setDark(!dark)} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
+                                <i className={`fas ${dark ? 'fa-sun' : 'fa-moon'}`}></i>
+                            </button>
+                            {currentSeller ? (
+                                <button onClick={handleLogout} className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 hover:bg-red-200" title="تسجيل الخروج">
+                                    <i className="fas fa-sign-out-alt"></i>
+                                </button>
+                            ) : (
+                                <button onClick={() => setPage('login')} className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 hover:bg-orange-200">
+                                    <i className="fas fa-user"></i>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                        <HomePage
+                            products={state.products}
+                            sellers={state.sellers}
+                            currSellerId={state.currentSellerId}
+                            onLike={handleLike}
+                            onWhats={handleWhats}
+                            onProductClick={prod => alert(`تفاصيل ${prod.name}`)}
+                            onShowOffers={() => alert('قسم العروض قيد التطوير')}
+                            onShowVIP={handleShowVIP}
+                            onRate={handleRate}
+                            onSellerProfile={handleSellerProfile}
+                            onImageClick={handleImageClick}
+                            onCommentsClick={handleCommentsClick}
+                            showSearchBar={showSearchBar}
+                            searchQuery={searchQuery}
+                            onSearchQueryChange={setSearchQuery}
+                        />
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
