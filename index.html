@@ -1,928 +1,974 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>VICKS MARKET | منصة تجارة عالمية</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background-color: #f9fafb;
-            transition: background-color 0.2s, color 0.2s;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-        }
-        body.dark { background-color: #000000; }
-        body.dark .bg-white { background-color: #121212 !important; }
-        body.dark .bg-gray-50, body.dark .bg-gray-100 { background-color: #1e1e1e !important; }
-        body.dark .text-gray-800, body.dark .text-gray-600, body.dark .text-gray-500, body.dark .text-blue-600,
-        body.dark span, body.dark p, body.dark h1, body.dark h2, body.dark h3,
-        body.dark .product-name, body.dark .seller-name, body.dark .price { color: #ff6600 !important; }
-        body.dark .border, body.dark .border-gray-100, body.dark .border-t {
-            border-color: #ff6600 !important; border-width: 0.5px;
-        }
-        .chat-watermark {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 2.8rem; font-weight: bold; opacity: 0.07; white-space: nowrap;
-            display: flex; align-items: center; gap: 10px; pointer-events: none; z-index: 5;
-        }
-        body.dark .chat-watermark { opacity: 0.1; color: #ff6600; }
-        .chat-input-bar {
-            position: fixed; bottom: 0; left: 0; right: 0; background-color: white;
-            border-top: 1px solid #e5e7eb; padding: 8px 10px; display: flex; gap: 8px;
-            align-items: center; z-index: 20;
-        }
-        body.dark .chat-input-bar { background-color: #121212; border-top-color: #ff6600; }
-        .chat-input {
-            flex: 1; padding: 10px 16px; border-radius: 24px; background-color: #f3f4f6;
-            border: none; font-size: 0.9rem; outline: none;
-        }
-        body.dark .chat-input { background-color: #2a2a2a; color: #ff6600; }
-        .chat-icon-btn {
-            width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center;
-            justify-content: center; background-color: #f3f4f6; color: #4b5563; transition: 0.2s;
-            cursor: pointer; flex-shrink: 0;
-        }
-        body.dark .chat-icon-btn { background-color: #2a2a2a; color: #ff6600; }
-        .send-btn { background-color: #ff6600; color: white; border-radius: 12px; }
-        body.dark .send-btn { background-color: #ff6600; color: #000000; }
-        .action-btn-sm {
-            width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-size: 12px; cursor: pointer; transition: 0.2s;
-        }
-        .search-overlay {
-            background: white; padding: 10px 16px; border-bottom: 1px solid #eee;
-            z-index: 25; animation: slideDown 0.25s ease;
-        }
-        body.dark .search-overlay { background: #121212; border-color: #ff6600; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .categories-scroll {
-            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
-            -webkit-overflow-scrolling: touch; scrollbar-width: none;
-        }
-        .categories-scroll::-webkit-scrollbar { display: none; }
-        .message-bubble-user { background-color: #ff6600; color: white; border-radius: 20px 20px 4px 20px; }
-        .message-bubble-bot { background-color: #e5e7eb; color: #1f2937; border-radius: 20px 20px 20px 4px; }
-        body.dark .message-bubble-bot { background-color: #2a2a2a; color: #ff6600; }
-        .messages-container { overflow-y: auto; padding: 16px 12px; padding-bottom: 85px; }
-        .image-preview-backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100;
-            display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .image-preview-container { width: 80%; height: 80%; display: flex; align-items: center; justify-content: center; position: relative; animation: scaleIn 0.25s ease; }
-        @keyframes scaleIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .image-preview-close {
-            position: absolute; top: -15px; left: -15px; width: 40px; height: 40px;
-            background: white; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-size: 18px; font-weight: bold; cursor: pointer;
-            z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: 0.2s;
-        }
-        .image-preview-close:hover { background: #f3f4f6; transform: scale(1.1); }
-        body.dark .image-preview-close { background: #2a2a2a; color: #ff6600; }
-        .social-btn {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; padding: 12px; border-radius: 12px; font-weight: 600;
-            font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
-            border: 1px solid #e5e7eb; background: white; color: #374151;
-        }
-        .social-btn:hover { background: #f9fafb; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        .social-btn.google { border-color: #ea4335; color: #ea4335; }
-        .social-btn.google:hover { background: #fef2f2; border-color: #dc2626; }
-        .social-btn.facebook { border-color: #1877f2; color: #1877f2; }
-        .social-btn.facebook:hover { background: #eff6ff; border-color: #2563eb; }
-        body.dark .social-btn { background: #1e1e1e; border-color: #ff6600; color: #ff6600; }
-        body.dark .social-btn:hover { background: #2a2a2a; box-shadow: 0 2px 12px rgba(255,102,0,0.2); }
-        .country-dropdown {
-            max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb;
-            border-radius: 12px; margin-top: 4px; background: white;
-        }
-        body.dark .country-dropdown { background: #1e1e1e; border-color: #ff6600; }
-    </style>
-</head>
-<body class="bg-gray-50 font-sans antialiased">
-    <div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js">
-    </script>
+<script type="text/babel" data-presets="react">
+    const { useState, useEffect, useRef } = React;
 
-    <script type="text/babel" data-presets="react">
-        const { useState, useEffect, useRef } = React;
+    // ========== Firebase Configuration ==========
+    // ضع إعدادات مشروع Firebase الخاص بك هنا
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
 
-        // ========== constants ==========
-        const STORAGE_KEY = 'vicks_market_final_v9';
-        const THEME_KEY = 'vicks_theme_v9';
-        const ADMIN_EMAIL = 'mom1113694362@gmail.com';
-        const ADMIN_PASS = 'momMOM2023#';
-        const ADMIN_ID = '10000000000';
+    // Initialize Firebase (لن يعمل بدون الإعدادات الصحيحة ولكنه يمنع الأخطاء)
+    let auth = null;
+    try {
+        if (firebase.apps && firebase.apps.length === 0) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        auth = firebase.auth();
+    } catch (e) {
+        console.warn("Firebase غير مهيأ بعد. يمكنك إضافة المفاتيح لاحقاً.");
+    }
 
-        function genId() {
-            return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    // ========== constants ==========
+    const STORAGE_KEY = 'vicks_market_final_v10';
+    const THEME_KEY = 'vicks_theme_v9';
+    const ADMIN_EMAIL = 'mom1113694362@gmail.com';
+    const ADMIN_PASS = 'momMOM2023#';
+    const ADMIN_ID = '10000000000';
+
+    function genId() {
+        return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+
+    const categories = [
+        { id: 'all', label: 'الكل', icon: '' },
+        { id: 'electronics', label: 'إلكترونيات', icon: '📱' },
+        { id: 'fashion', label: 'موضة', icon: '👗' },
+        { id: 'home', label: 'المنزل', icon: '🏠' },
+        { id: 'smart', label: 'أدوات ذكية', icon: '🤖' },
+        { id: 'games', label: 'ألعاب', icon: '🎮' },
+        { id: 'accessories', label: 'إكسسوارات', icon: '💍' }
+    ];
+
+    const initialSellers = {
+        admin: {
+            id: ADMIN_ID, email: ADMIN_EMAIL, password: ADMIN_PASS,
+            storeName: 'VICKS MARKET', ownerName: 'محمد المالك', phone: '01113694362',
+            points: 50000, verified: true, subscription: 'platinum', products: [],
+            createdAt: Date.now(), country: 'مصر', isAdmin: true, avatar: '👑',
+            verificationBadge: true, accountType: 'seller', maxProducts: Infinity,
+            subscriptionExpiry: null, contactPreference: 'whatsapp'
+        },
+        s1: {
+            id: 's1', email: 'seller1@test.com', password: '123456',
+            storeName: 'متجر النور', ownerName: 'أحمد', phone: '01012345678',
+            points: 350, verified: true, subscription: 'silver', products: [],
+            country: 'مصر', isAdmin: false, avatar: '🌟', verificationBadge: true,
+            accountType: 'seller', maxProducts: Infinity, subscriptionExpiry: null,
+            contactPreference: 'whatsapp'
+        },
+        s2: {
+            id: 's2', email: 'seller2@test.com', password: '123456',
+            storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة', phone: '01198765432',
+            points: 120, verified: false, subscription: 'free', products: [],
+            country: 'السعودية', isAdmin: false, avatar: '🛒', verificationBadge: false,
+            accountType: 'seller', maxProducts: 10, subscriptionExpiry: null,
+            contactPreference: 'whatsapp'
+        },
+        customer1: {
+            id: 'cust_1', email: 'customer@test.com', password: '123456',
+            storeName: '', ownerName: 'عميل عادي', phone: '01000000000',
+            points: 50, verified: false, subscription: 'free', products: [],
+            createdAt: Date.now(), country: 'مصر', isAdmin: false, avatar: '👤',
+            verificationBadge: false, accountType: 'customer', contactPreference: 'whatsapp'
+        }
+    };
+
+    const productNames = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر', 'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'];
+    const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧', '🍳', '⚽', '💎', '📷'];
+    const possibleCategories = ['electronics', 'fashion', 'home', 'smart', 'games', 'accessories'];
+
+    const initialProducts = {};
+    for (let i = 1; i <= 14; i++) {
+        const sellerId = i % 2 === 0 ? 's2' : 's1';
+        initialProducts[`p${i}`] = {
+            id: `p${i}`, name: productNames[(i-1)%productNames.length] + (i>10 ? ` ${i}` : ''),
+            price: 80 + i*50, category: possibleCategories[(i-1)%possibleCategories.length],
+            emoji: emojis[(i-1)%emojis.length], sellerId, sellerName: sellerId==='s1'?'متجر النور':'سوبر ماركت الفرح',
+            sellerCountry: sellerId==='s1'?'مصر':'السعودية', likes: (i*7)%19, likedBy: [],
+            description: `وصف المنتج ${i}`, createdAt: Date.now() - i*86400000,
+            vip: i%3===0, comments: [], rating: i%5
+        };
+    }
+    initialSellers.s1.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId==='s1');
+    initialSellers.s2.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId==='s2');
+
+    function getInitialState() {
+        return {
+            sellers: JSON.parse(JSON.stringify(initialSellers)),
+            products: JSON.parse(JSON.stringify(initialProducts)),
+            currentSellerId: null,
+            chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟', ts: Date.now() }]
+        };
+    }
+
+    function loadState() {
+        try {
+            const r = localStorage.getItem(STORAGE_KEY);
+            return r ? (JSON.parse(r) || getInitialState()) : getInitialState();
+        } catch {
+            return getInitialState();
+        }
+    }
+    function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+
+    function createSeller(d) {
+        return {
+            id: 's_'+genId(), ...d, points: 0, verified: false, subscription: 'free',
+            products: [], createdAt: Date.now(), isAdmin: false, verificationBadge: false,
+            avatar: d.accountType==='customer'?'👤':'🛍️', maxProducts: 10, subscriptionExpiry: null,
+            contactPreference: 'whatsapp'
+        };
+    }
+
+    function createProduct(d) {
+        return { id: 'p_'+genId(), ...d, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 };
+    }
+
+    function addMessage(s, m) {
+        return { ...s, chatMessages: [...s.chatMessages, {...m, id: genId(), ts: Date.now()}] };
+    }
+
+    function botReply(t) {
+        const tx = t.toLowerCase();
+        if (tx.includes('سعر')) return 'يمكنك الاطلاع على الأسعار في الصفحة الرئيسية.';
+        if (tx.includes('بائع')) return 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد".';
+        if (tx.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة VIP.';
+        return 'شكراً لتواصلك! كيف يمكنني مساعدتك؟';
+    }
+
+    const countries = [
+        { code: 'AF', name: 'أفغانستان' }, { code: 'AL', name: 'ألبانيا' }, { code: 'DZ', name: 'الجزائر' },
+        { code: 'AD', name: 'أندورا' }, { code: 'AO', name: 'أنغولا' }, { code: 'AR', name: 'الأرجنتين' },
+        { code: 'AM', name: 'أرمينيا' }, { code: 'AU', name: 'أستراليا' }, { code: 'AT', name: 'النمسا' },
+        { code: 'AZ', name: 'أذربيجان' }, { code: 'BH', name: 'البحرين' }, { code: 'BD', name: 'بنغلاديش' },
+        { code: 'BY', name: 'بيلاروسيا' }, { code: 'BE', name: 'بلجيكا' }, { code: 'BJ', name: 'بنين' },
+        { code: 'BT', name: 'بوتان' }, { code: 'BO', name: 'بوليفيا' }, { code: 'BA', name: 'البوسنة والهرسك' },
+        { code: 'BW', name: 'بوتسوانا' }, { code: 'BR', name: 'البرازيل' }, { code: 'BN', name: 'بروناي' },
+        { code: 'BG', name: 'بلغاريا' }, { code: 'BF', name: 'بوركينا فاسو' }, { code: 'BI', name: 'بوروندي' },
+        { code: 'KH', name: 'كمبوديا' }, { code: 'CM', name: 'الكاميرون' }, { code: 'CA', name: 'كندا' },
+        { code: 'CV', name: 'الرأس الأخضر' }, { code: 'CF', name: 'جمهورية أفريقيا الوسطى' }, { code: 'TD', name: 'تشاد' },
+        { code: 'CL', name: 'تشيلي' }, { code: 'CN', name: 'الصين' }, { code: 'CO', name: 'كولومبيا' },
+        { code: 'KM', name: 'جزر القمر' }, { code: 'CG', name: 'الكونغو' }, { code: 'CR', name: 'كوستاريكا' },
+        { code: 'HR', name: 'كرواتيا' }, { code: 'CU', name: 'كوبا' }, { code: 'CY', name: 'قبرص' },
+        { code: 'CZ', name: 'التشيك' }, { code: 'DK', name: 'الدنمارك' }, { code: 'DJ', name: 'جيبوتي' },
+        { code: 'DO', name: 'جمهورية الدومينيكان' }, { code: 'EC', name: 'الإكوادور' }, { code: 'EG', name: 'مصر' },
+        { code: 'SV', name: 'السلفادور' }, { code: 'GQ', name: 'غينيا الاستوائية' }, { code: 'ER', name: 'إريتريا' },
+        { code: 'EE', name: 'إستونيا' }, { code: 'ET', name: 'إثيوبيا' }, { code: 'FJ', name: 'فيجي' },
+        { code: 'FI', name: 'فنلندا' }, { code: 'FR', name: 'فرنسا' }, { code: 'GA', name: 'الغابون' },
+        { code: 'GM', name: 'غامبيا' }, { code: 'GE', name: 'جورجيا' }, { code: 'DE', name: 'ألمانيا' },
+        { code: 'GH', name: 'غانا' }, { code: 'GR', name: 'اليونان' }, { code: 'GT', name: 'غواتيمالا' },
+        { code: 'GN', name: 'غينيا' }, { code: 'GW', name: 'غينيا بيساو' }, { code: 'GY', name: 'غيانا' },
+        { code: 'HT', name: 'هايتي' }, { code: 'HN', name: 'هندوراس' }, { code: 'HU', name: 'المجر' },
+        { code: 'IS', name: 'أيسلندا' }, { code: 'IN', name: 'الهند' }, { code: 'ID', name: 'إندونيسيا' },
+        { code: 'IR', name: 'إيران' }, { code: 'IQ', name: 'العراق' }, { code: 'IE', name: 'أيرلندا' },
+        { code: 'IL', name: 'إسرائيل' }, { code: 'IT', name: 'إيطاليا' }, { code: 'JM', name: 'جامايكا' },
+        { code: 'JP', name: 'اليابان' }, { code: 'JO', name: 'الأردن' }, { code: 'KZ', name: 'كازاخستان' },
+        { code: 'KE', name: 'كينيا' }, { code: 'KI', name: 'كيريباتي' }, { code: 'KP', name: 'كوريا الشمالية' },
+        { code: 'KR', name: 'كوريا الجنوبية' }, { code: 'KW', name: 'الكويت' }, { code: 'KG', name: 'قيرغيزستان' },
+        { code: 'LA', name: 'لاوس' }, { code: 'LV', name: 'لاتفيا' }, { code: 'LB', name: 'لبنان' },
+        { code: 'LS', name: 'ليسوتو' }, { code: 'LR', name: 'ليبيريا' }, { code: 'LY', name: 'ليبيا' },
+        { code: 'LI', name: 'ليختنشتاين' }, { code: 'LT', name: 'ليتوانيا' }, { code: 'LU', name: 'لوكسمبورغ' },
+        { code: 'MG', name: 'مدغشقر' }, { code: 'MW', name: 'مالاوي' }, { code: 'MY', name: 'ماليزيا' },
+        { code: 'MV', name: 'المالديف' }, { code: 'ML', name: 'مالي' }, { code: 'MT', name: 'مالطا' },
+        { code: 'MH', name: 'جزر مارشال' }, { code: 'MR', name: 'موريتانيا' }, { code: 'MU', name: 'موريشيوس' },
+        { code: 'MX', name: 'المكسيك' }, { code: 'FM', name: 'ميكرونيسيا' }, { code: 'MD', name: 'مولدوفا' },
+        { code: 'MC', name: 'موناكو' }, { code: 'MN', name: 'منغوليا' }, { code: 'ME', name: 'الجبل الأسود' },
+        { code: 'MA', name: 'المغرب' }, { code: 'MZ', name: 'موزمبيق' }, { code: 'MM', name: 'ميانمار' },
+        { code: 'NA', name: 'ناميبيا' }, { code: 'NR', name: 'ناورو' }, { code: 'NP', name: 'نيبال' },
+        { code: 'NL', name: 'هولندا' }, { code: 'NZ', name: 'نيوزيلندا' }, { code: 'NI', name: 'نيكاراغوا' },
+        { code: 'NE', name: 'النيجر' }, { code: 'NG', name: 'نيجيريا' }, { code: 'MK', name: 'مقدونيا الشمالية' },
+        { code: 'NO', name: 'النرويج' }, { code: 'OM', name: 'عُمان' }, { code: 'PK', name: 'باكستان' },
+        { code: 'PW', name: 'بالاو' }, { code: 'PS', name: 'فلسطين' }, { code: 'PA', name: 'بنما' },
+        { code: 'PG', name: 'بابوا غينيا الجديدة' }, { code: 'PY', name: 'باراغواي' }, { code: 'PE', name: 'بيرو' },
+        { code: 'PH', name: 'الفلبين' }, { code: 'PL', name: 'بولندا' }, { code: 'PT', name: 'البرتغال' },
+        { code: 'QA', name: 'قطر' }, { code: 'RO', name: 'رومانيا' }, { code: 'RU', name: 'روسيا' },
+        { code: 'RW', name: 'رواندا' }, { code: 'WS', name: 'ساموا' }, { code: 'SM', name: 'سان مارينو' },
+        { code: 'SA', name: 'السعودية' }, { code: 'SN', name: 'السنغال' }, { code: 'RS', name: 'صربيا' },
+        { code: 'SC', name: 'سيشل' }, { code: 'SL', name: 'سيراليون' }, { code: 'SG', name: 'سنغافورة' },
+        { code: 'SK', name: 'سلوفاكيا' }, { code: 'SI', name: 'سلوفينيا' }, { code: 'SB', name: 'جزر سليمان' },
+        { code: 'SO', name: 'الصومال' }, { code: 'ZA', name: 'جنوب أفريقيا' }, { code: 'SS', name: 'جنوب السودان' },
+        { code: 'ES', name: 'إسبانيا' }, { code: 'LK', name: 'سريلانكا' }, { code: 'SD', name: 'السودان' },
+        { code: 'SR', name: 'سورينام' }, { code: 'SE', name: 'السويد' }, { code: 'CH', name: 'سويسرا' },
+        { code: 'SY', name: 'سوريا' }, { code: 'TW', name: 'تايوان' }, { code: 'TJ', name: 'طاجيكستان' },
+        { code: 'TZ', name: 'تنزانيا' }, { code: 'TH', name: 'تايلاند' }, { code: 'TL', name: 'تيمور الشرقية' },
+        { code: 'TG', name: 'توغو' }, { code: 'TO', name: 'تونغا' }, { code: 'TN', name: 'تونس' },
+        { code: 'TR', name: 'تركيا' }, { code: 'TM', name: 'تركمانستان' }, { code: 'TV', name: 'توفالو' },
+        { code: 'UG', name: 'أوغندا' }, { code: 'UA', name: 'أوكرانيا' }, { code: 'AE', name: 'الإمارات العربية المتحدة' },
+        { code: 'GB', name: 'المملكة المتحدة' }, { code: 'US', name: 'الولايات المتحدة' }, { code: 'UY', name: 'أوروغواي' },
+        { code: 'UZ', name: 'أوزبكستان' }, { code: 'VU', name: 'فانواتو' }, { code: 'VE', name: 'فنزويلا' },
+        { code: 'VN', name: 'فيتنام' }, { code: 'YE', name: 'اليمن' }, { code: 'ZM', name: 'زامبيا' },
+        { code: 'ZW', name: 'زيمبابوي' }
+    ];
+
+    // ========== Components ==========
+    function ImagePreviewModal({ emoji, name, onClose }) {
+        useEffect(() => {
+            const esc = (e) => e.key==='Escape' && onClose();
+            document.addEventListener('keydown', esc);
+            document.body.style.overflow = 'hidden';
+            return () => { document.removeEventListener('keydown', esc); document.body.style.overflow = ''; };
+        }, [onClose]);
+        return (
+            <div className="image-preview-backdrop" onClick={onClose}>
+                <div className="image-preview-container" onClick={e => e.stopPropagation()}>
+                    <button className="image-preview-close" onClick={onClose}><i className="fas fa-times"></i></button>
+                    <div className="flex flex-col items-center justify-center">
+                        <span className="text-[10rem] md:text-[14rem] select-none">{emoji}</span>
+                        {name && <p className="text-white text-lg mt-4 font-semibold opacity-80">{name}</p>}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    function ChatPage({ messages, onSend, onBack }) {
+        const [input, setInput] = useState('');
+        const fileRef = useRef(null);
+        const camRef = useRef(null);
+        const endRef = useRef(null);
+        const send = () => { if(input.trim()) { onSend(input.trim()); setInput(''); } };
+        useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+        return (
+            <div className="flex flex-col relative bg-gray-50" style={{height:'100vh',overflow:'hidden'}}>
+                <div className="flex items-center p-4 border-b bg-white z-10">
+                    <button onClick={onBack} className="ml-2"><i className="fas fa-arrow-right text-lg"></i></button>
+                    <h1 className="flex-1 text-center font-bold text-lg"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1>
+                </div>
+                <div className="chat-watermark"><i className="fas fa-robot text-4xl"></i><span className="text-3xl font-bold">VICKS AI</span></div>
+                <div className="messages-container flex-1" style={{position:'relative',zIndex:5}}>
+                    {messages.map(m => (
+                        <div key={m.id} className={`flex ${m.role==='user'?'justify-end':'justify-start'} mb-3`}>
+                            <div className={`max-w-[75%] p-3 text-sm ${m.role==='user'?'message-bubble-user':'message-bubble-bot'}`}>{m.text}</div>
+                        </div>
+                    ))}
+                    <div ref={endRef} />
+                </div>
+                <div className="chat-input-bar">
+                    <button onClick={send} className="chat-icon-btn send-btn"><i className="fas fa-paper-plane"></i></button>
+                    <input type="text" className="chat-input" placeholder="هيا نتحدث.." value={input}
+                        onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send()} />
+                    <div className="flex gap-2">
+                        <button onClick={()=>fileRef.current.click()} className="chat-icon-btn"><i className="fas fa-plus"></i></button>
+                        <button onClick={()=>camRef.current.click()} className="chat-icon-btn"><i className="fas fa-camera"></i></button>
+                    </div>
+                    <input ref={fileRef} type="file" className="hidden" />
+                    <input ref={camRef} type="file" capture="environment" className="hidden" />
+                </div>
+            </div>
+        );
+    }
+
+    function ProductCard({ prod, liked, onLike, onWhats, onClick, onRate, sellerAvatar, sellerVerification, onSellerClick, isList, onImageClick, onCommentsClick, contactPreference }) {
+        const stars = Array(5).fill(0).map((_, i) =>
+            <i key={i} className={`fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+               style={{fontSize:'10px', cursor:'pointer'}} onClick={e => { e.stopPropagation(); onRate(i+1); }}></i>
+        );
+        const shortName = prod.sellerName.length > 10 ? prod.sellerName.slice(0,8)+'..' : prod.sellerName;
+        // تحديد أيقونة التواصل بناءً على تفضيل التاجر
+        const isTelegram = contactPreference === 'telegram';
+
+        if (isList) {
+            return (
+                <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer hover:shadow-md transition-shadow">
+                    <div onClick={e => { e.stopPropagation(); onImageClick && onImageClick(prod); }}
+                         className="w-24 h-24 bg-gray-50 rounded-xl flex items-center justify-center text-5xl flex-shrink-0 cursor-pointer hover:bg-gray-100 transition-colors">
+                        {prod.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0 flex flex-col justify-between">
+                        <div className="font-semibold text-sm truncate mb-1">{prod.name}</div>
+                        <div className="flex justify-between items-center mb-1">
+                            <div className="flex gap-0.5">{stars}</div>
+                            <div className="flex items-center gap-1 cursor-pointer" onClick={e => { e.stopPropagation(); onSellerClick(); }}>
+                                <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar || '🏪'}</span>
+                                <span className="text-[10px] text-gray-500 max-w-[60px] truncate">{shortName}</span>
+                                {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
+                            </div>
+                        </div>
+                        <div className="flex justify-between items-center mt-auto">
+                            <div className="flex items-center gap-2">
+                                <button onClick={e => { e.stopPropagation(); onWhats(); }} className={`action-btn-sm ${isTelegram ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                                    <i className={`fab ${isTelegram ? 'fa-telegram' : 'fa-whatsapp'}`}></i>
+                                </button>
+                                <button onClick={e => { e.stopPropagation(); onCommentsClick && onCommentsClick(prod); }} className="action-btn-sm bg-blue-100 text-blue-600"><i className="fas fa-comment"></i></button>
+                                <button onClick={e => { e.stopPropagation(); onLike(); }} className={`action-btn-sm ${liked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
+                            </div>
+                            <span className="text-sm font-bold text-orange-600">{prod.price.toLocaleString()} ج.م</span>
+                        </div>
+                    </div>
+                </div>
+            );
         }
 
-        const categories = [
-            { id: 'all', label: 'الكل', icon: '' },
-            { id: 'electronics', label: 'إلكترونيات', icon: '📱' },
-            { id: 'fashion', label: 'موضة', icon: '👗' },
-            { id: 'home', label: 'المنزل', icon: '🏠' },
-            { id: 'smart', label: 'أدوات ذكية', icon: '🤖' },
-            { id: 'games', label: 'ألعاب', icon: '🎮' },
-            { id: 'accessories', label: 'إكسسوارات', icon: '💍' }
-        ];
+        return (
+            <div onClick={onClick} className="p-3 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md w-[180px] flex-shrink-0 transition-shadow flex flex-col">
+                <div onClick={e => { e.stopPropagation(); onImageClick && onImageClick(prod); }}
+                     className="h-32 flex items-center justify-center bg-gray-50 rounded-xl text-6xl mb-2 cursor-pointer hover:bg-gray-100 transition-colors">
+                    {prod.emoji}
+                </div>
+                <h3 className="font-semibold text-xs truncate text-center mb-1">{prod.name}</h3>
+                <div className="flex justify-between items-center px-1 mb-1">
+                    <div className="flex gap-0.5">{stars}</div>
+                    <div className="flex items-center gap-1 cursor-pointer" onClick={e => { e.stopPropagation(); onSellerClick(); }}>
+                        <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar || '🏪'}</span>
+                        <span className="text-[10px] text-gray-500 max-w-[50px] truncate">{shortName}</span>
+                        {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
+                    </div>
+                </div>
+                <div className="flex justify-between items-center mt-auto px-1">
+                    <div className="flex items-center gap-1.5">
+                        <button onClick={e => { e.stopPropagation(); onWhats(); }} className={`action-btn-sm ${isTelegram ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                            <i className={`fab ${isTelegram ? 'fa-telegram' : 'fa-whatsapp'}`}></i>
+                        </button>
+                        <button onClick={e => { e.stopPropagation(); onCommentsClick && onCommentsClick(prod); }} className="action-btn-sm bg-blue-100 text-blue-600"><i className="fas fa-comment"></i></button>
+                        <button onClick={e => { e.stopPropagation(); onLike(); }} className={`action-btn-sm ${liked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
+                    </div>
+                    <span className="text-sm font-bold text-orange-600">{prod.price.toLocaleString()} ج.م</span>
+                </div>
+            </div>
+        );
+    }
 
-        const initialSellers = {
-            admin: {
-                id: ADMIN_ID, email: ADMIN_EMAIL, password: ADMIN_PASS,
-                storeName: 'VICKS MARKET', ownerName: 'محمد المالك', phone: '01113694362',
-                points: 50000, verified: true, subscription: 'platinum', products: [],
-                createdAt: Date.now(), country: 'مصر', isAdmin: true, avatar: '👑',
-                verificationBadge: true, accountType: 'seller', maxProducts: Infinity,
-                subscriptionExpiry: null
-            },
-            s1: {
-                id: 's1', email: 'seller1@test.com', password: '123456',
-                storeName: 'متجر النور', ownerName: 'أحمد', phone: '01012345678',
-                points: 350, verified: true, subscription: 'silver', products: [],
-                country: 'مصر', isAdmin: false, avatar: '🌟', verificationBadge: true,
-                accountType: 'seller', maxProducts: Infinity, subscriptionExpiry: null
-            },
-            s2: {
-                id: 's2', email: 'seller2@test.com', password: '123456',
-                storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة', phone: '01198765432',
-                points: 120, verified: false, subscription: 'free', products: [],
-                country: 'السعودية', isAdmin: false, avatar: '🛒', verificationBadge: false,
-                accountType: 'seller', maxProducts: 10, subscriptionExpiry: null
-            },
-            customer1: {
-                id: 'cust_1', email: 'customer@test.com', password: '123456',
-                storeName: '', ownerName: 'عميل عادي', phone: '01000000000',
-                points: 50, verified: false, subscription: 'free', products: [],
-                createdAt: Date.now(), country: 'مصر', isAdmin: false, avatar: '👤',
-                verificationBadge: false, accountType: 'customer'
+    function HomePage({ products, sellers, currSellerId, onLike, onWhats, onProductClick, onShowOffers, onShowVIP, onRate, onSellerProfile, onImageClick, onCommentsClick, showSearchBar, searchQuery, onSearchQueryChange, onToggleContactPref }) {
+        const [view, setView] = useState('grid');
+        const [cat, setCat] = useState('all');
+        const filtered = Object.values(products).filter(p => {
+            if (cat !== 'all' && p.category !== cat) return false;
+            if (searchQuery.trim()) return p.name.toLowerCase().includes(searchQuery.toLowerCase());
+            return true;
+        });
+        const isLiked = (p) => currSellerId ? p.likedBy.includes(currSellerId) : false;
+        const half = Math.ceil(filtered.length / 2);
+        const row1 = filtered.slice(0, half);
+        const row2 = filtered.slice(half);
+
+        return (
+            <div className="flex flex-col h-full relative">
+                <div className="sticky top-0 z-10 bg-white border-b px-2 py-1.5">
+                    <div className="categories-scroll">
+                        {categories.map(c => (
+                            <button key={c.id} onClick={() => setCat(c.id)}
+                                className={`px-3 py-1.5 rounded-full text-xs whitespace-nowrap flex-shrink-0 flex items-center gap-1 transition-all ${cat===c.id?'bg-orange-500 text-white shadow-md':'bg-gray-100 text-gray-600'}`}>
+                                {c.icon ? <span className="text-sm">{c.icon}</span> : null} {c.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                {showSearchBar && (
+                    <div className="search-overlay">
+                        <div className="flex gap-2 items-center">
+                            <i className="fas fa-search text-gray-400"></i>
+                            <input type="text" className="flex-1 p-2.5 bg-gray-50 rounded-xl text-sm outline-none"
+                                placeholder="ابحث عن منتج..." value={searchQuery}
+                                onChange={e => onSearchQueryChange(e.target.value)} autoFocus />
+                        </div>
+                    </div>
+                )}
+                <div className="flex items-center gap-3 px-3 py-2 bg-white border-b">
+                    <button onClick={onShowOffers} className="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-xl hover:bg-orange-100">🎁 عروض</button>
+                    <button onClick={onShowVIP} className="text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-xl hover:bg-yellow-100">👑 VIP</button>
+                    <div className="flex-1"></div>
+                    {currSellerId && (
+                        <button onClick={onToggleContactPref} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-lg flex items-center gap-1">
+                            <i className={`fab ${sellers[currSellerId]?.contactPreference==='telegram'?'fa-telegram':'fa-whatsapp'}`}></i>
+                            <span>تبديل التواصل</span>
+                        </button>
+                    )}
+                    <button onClick={() => setView('grid')} className={`p-1.5 rounded-lg ${view==='grid'?'bg-orange-500 text-white':'bg-gray-100 text-gray-500'}`}>
+                        <i className="fas fa-th text-sm"></i>
+                    </button>
+                    <button onClick={() => setView('list')} className={`p-1.5 rounded-lg ${view==='list'?'bg-orange-500 text-white':'bg-gray-100 text-gray-500'}`}>
+                        <i className="fas fa-list-ul text-sm"></i>
+                    </button>
+                </div>
+                <div className="flex-1 overflow-auto p-2">
+                    {filtered.length===0 && <div className="text-center py-16 text-gray-400"><i className="fas fa-search text-4xl mb-3 block"></i>لا توجد منتجات مطابقة</div>}
+                    {view==='grid' && (
+                        <div className="space-y-3">
+                            {row1.length>0 && <div className="flex gap-3 overflow-x-auto pb-2 px-1">{row1.map(p => { const s = sellers[p.sellerId]; const cp = s?.contactPreference || 'whatsapp'; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p, cp)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={false} onImageClick={onImageClick} onCommentsClick={onCommentsClick} contactPreference={cp} />; })}</div>}
+                            {row2.length>0 && <div className="flex gap-3 overflow-x-auto pb-2 px-1">{row2.map(p => { const s = sellers[p.sellerId]; const cp = s?.contactPreference || 'whatsapp'; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p, cp)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={false} onImageClick={onImageClick} onCommentsClick={onCommentsClick} contactPreference={cp} />; })}</div>}
+                        </div>
+                    )}
+                    {view==='list' && <div className="flex flex-col gap-2">{filtered.map(p => { const s = sellers[p.sellerId]; const cp = s?.contactPreference || 'whatsapp'; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p, cp)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={true} onImageClick={onImageClick} onCommentsClick={onCommentsClick} contactPreference={cp} />; })}</div>}
+                </div>
+            </div>
+        );
+    }
+
+    function LoginPage({ sellers, onLogin, onGoJoin, onBack, onForgotPassword }) {
+        const [email, setEmail] = useState('');
+        const [pass, setPass] = useState('');
+        const [err, setErr] = useState('');
+        const dologin = () => {
+            const e = email.trim();
+            const p = pass.trim();
+            if(!e || !p) { setErr('يرجى إدخال البريد الإلكتروني وكلمة المرور'); return; }
+            const found = Object.values(sellers).find(s => s.email===e && s.password===p);
+            if(found) { setErr(''); onLogin(found); return; }
+            setErr('بيانات غير صحيحة');
+        };
+
+        // دوال تسجيل الدخول عبر Google و Facebook باستخدام Firebase
+        const signInWithGoogle = async () => {
+            if (!auth) {
+                alert("Firebase غير مهيأ. أضف إعدادات المشروع في الكود.");
+                return;
+            }
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                // تحقق مما إذا كان المستخدم موجودًا بالفعل في قاعدة البيانات المحلية
+                let found = Object.values(sellers).find(s => s.email === user.email);
+                if (!found) {
+                    // إنشاء حساب جديد كعميل مؤقتًا (يمكن سؤاله لاحقًا)
+                    const newUser = createSeller({
+                        email: user.email,
+                        password: 'google-oauth', // كلمة مرور افتراضية
+                        storeName: '',
+                        ownerName: user.displayName || 'مستخدم Google',
+                        phone: user.phoneNumber || '',
+                        avatar: user.photoURL ? '📷' : '👤',
+                        accountType: 'customer',
+                        country: 'مصر'
+                    });
+                    onLogin(newUser);
+                } else {
+                    onLogin(found);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("فشل تسجيل الدخول عبر Google: " + (error.message || "أغلق المستخدم النافذة"));
             }
         };
 
-        const productNames = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر', 'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'];
-        const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧', '🍳', '⚽', '💎', '📷'];
-        const possibleCategories = ['electronics', 'fashion', 'home', 'smart', 'games', 'accessories'];
-
-        const initialProducts = {};
-        for (let i = 1; i <= 14; i++) {
-            const sellerId = i % 2 === 0 ? 's2' : 's1';
-            initialProducts[`p${i}`] = {
-                id: `p${i}`, name: productNames[(i-1)%productNames.length] + (i>10 ? ` ${i}` : ''),
-                price: 80 + i*50, category: possibleCategories[(i-1)%possibleCategories.length],
-                emoji: emojis[(i-1)%emojis.length], sellerId, sellerName: sellerId==='s1'?'متجر النور':'سوبر ماركت الفرح',
-                sellerCountry: sellerId==='s1'?'مصر':'السعودية', likes: (i*7)%19, likedBy: [],
-                description: `وصف المنتج ${i}`, createdAt: Date.now() - i*86400000,
-                vip: i%3===0, comments: [], rating: i%5
-            };
-        }
-        initialSellers.s1.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId==='s1');
-        initialSellers.s2.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId==='s2');
-
-        function getInitialState() {
-            return {
-                sellers: JSON.parse(JSON.stringify(initialSellers)),
-                products: JSON.parse(JSON.stringify(initialProducts)),
-                currentSellerId: null,
-                chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟', ts: Date.now() }]
-            };
-        }
-
-        function loadState() {
+        const signInWithFacebook = async () => {
+            if (!auth) {
+                alert("Firebase غير مهيأ. أضف إعدادات المشروع في الكود.");
+                return;
+            }
             try {
-                const r = localStorage.getItem(STORAGE_KEY);
-                return r ? (JSON.parse(r) || getInitialState()) : getInitialState();
-            } catch {
-                return getInitialState();
+                const provider = new firebase.auth.FacebookAuthProvider();
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                let found = Object.values(sellers).find(s => s.email === user.email);
+                if (!found) {
+                    const newUser = createSeller({
+                        email: user.email,
+                        password: 'facebook-oauth',
+                        storeName: '',
+                        ownerName: user.displayName || 'مستخدم Facebook',
+                        phone: user.phoneNumber || '',
+                        avatar: user.photoURL ? '🖼️' : '👤',
+                        accountType: 'customer',
+                        country: 'مصر'
+                    });
+                    onLogin(newUser);
+                } else {
+                    onLogin(found);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("فشل تسجيل الدخول عبر Facebook: " + (error.message || "أغلق المستخدم النافذة"));
             }
-        }
-        function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+        };
 
-        function createSeller(d) {
-            return {
-                id: 's_'+genId(), ...d, points: 0, verified: false, subscription: 'free',
-                products: [], createdAt: Date.now(), isAdmin: false, verificationBadge: false,
-                avatar: d.accountType==='customer'?'👤':'🛍️', maxProducts: 10, subscriptionExpiry: null
-            };
-        }
-
-        function createProduct(d) {
-            return { id: 'p_'+genId(), ...d, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 };
-        }
-
-        function addMessage(s, m) {
-            return { ...s, chatMessages: [...s.chatMessages, {...m, id: genId(), ts: Date.now()}] };
-        }
-
-        function botReply(t) {
-            const tx = t.toLowerCase();
-            if (tx.includes('سعر')) return 'يمكنك الاطلاع على الأسعار في الصفحة الرئيسية.';
-            if (tx.includes('بائع')) return 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد".';
-            if (tx.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة VIP.';
-            return 'شكراً لتواصلك! كيف يمكنني مساعدتك؟';
-        }
-
-        const countries = [
-            { code: 'AF', name: 'أفغانستان' }, { code: 'AL', name: 'ألبانيا' }, { code: 'DZ', name: 'الجزائر' },
-            { code: 'AD', name: 'أندورا' }, { code: 'AO', name: 'أنغولا' }, { code: 'AR', name: 'الأرجنتين' },
-            { code: 'AM', name: 'أرمينيا' }, { code: 'AU', name: 'أستراليا' }, { code: 'AT', name: 'النمسا' },
-            { code: 'AZ', name: 'أذربيجان' }, { code: 'BH', name: 'البحرين' }, { code: 'BD', name: 'بنغلاديش' },
-            { code: 'BY', name: 'بيلاروسيا' }, { code: 'BE', name: 'بلجيكا' }, { code: 'BJ', name: 'بنين' },
-            { code: 'BT', name: 'بوتان' }, { code: 'BO', name: 'بوليفيا' }, { code: 'BA', name: 'البوسنة والهرسك' },
-            { code: 'BW', name: 'بوتسوانا' }, { code: 'BR', name: 'البرازيل' }, { code: 'BN', name: 'بروناي' },
-            { code: 'BG', name: 'بلغاريا' }, { code: 'BF', name: 'بوركينا فاسو' }, { code: 'BI', name: 'بوروندي' },
-            { code: 'KH', name: 'كمبوديا' }, { code: 'CM', name: 'الكاميرون' }, { code: 'CA', name: 'كندا' },
-            { code: 'CV', name: 'الرأس الأخضر' }, { code: 'CF', name: 'جمهورية أفريقيا الوسطى' }, { code: 'TD', name: 'تشاد' },
-            { code: 'CL', name: 'تشيلي' }, { code: 'CN', name: 'الصين' }, { code: 'CO', name: 'كولومبيا' },
-            { code: 'KM', name: 'جزر القمر' }, { code: 'CG', name: 'الكونغو' }, { code: 'CR', name: 'كوستاريكا' },
-            { code: 'HR', name: 'كرواتيا' }, { code: 'CU', name: 'كوبا' }, { code: 'CY', name: 'قبرص' },
-            { code: 'CZ', name: 'التشيك' }, { code: 'DK', name: 'الدنمارك' }, { code: 'DJ', name: 'جيبوتي' },
-            { code: 'DO', name: 'جمهورية الدومينيكان' }, { code: 'EC', name: 'الإكوادور' }, { code: 'EG', name: 'مصر' },
-            { code: 'SV', name: 'السلفادور' }, { code: 'GQ', name: 'غينيا الاستوائية' }, { code: 'ER', name: 'إريتريا' },
-            { code: 'EE', name: 'إستونيا' }, { code: 'ET', name: 'إثيوبيا' }, { code: 'FJ', name: 'فيجي' },
-            { code: 'FI', name: 'فنلندا' }, { code: 'FR', name: 'فرنسا' }, { code: 'GA', name: 'الغابون' },
-            { code: 'GM', name: 'غامبيا' }, { code: 'GE', name: 'جورجيا' }, { code: 'DE', name: 'ألمانيا' },
-            { code: 'GH', name: 'غانا' }, { code: 'GR', name: 'اليونان' }, { code: 'GT', name: 'غواتيمالا' },
-            { code: 'GN', name: 'غينيا' }, { code: 'GW', name: 'غينيا بيساو' }, { code: 'GY', name: 'غيانا' },
-            { code: 'HT', name: 'هايتي' }, { code: 'HN', name: 'هندوراس' }, { code: 'HU', name: 'المجر' },
-            { code: 'IS', name: 'أيسلندا' }, { code: 'IN', name: 'الهند' }, { code: 'ID', name: 'إندونيسيا' },
-            { code: 'IR', name: 'إيران' }, { code: 'IQ', name: 'العراق' }, { code: 'IE', name: 'أيرلندا' },
-            { code: 'IL', name: 'إسرائيل' }, { code: 'IT', name: 'إيطاليا' }, { code: 'JM', name: 'جامايكا' },
-            { code: 'JP', name: 'اليابان' }, { code: 'JO', name: 'الأردن' }, { code: 'KZ', name: 'كازاخستان' },
-            { code: 'KE', name: 'كينيا' }, { code: 'KI', name: 'كيريباتي' }, { code: 'KP', name: 'كوريا الشمالية' },
-            { code: 'KR', name: 'كوريا الجنوبية' }, { code: 'KW', name: 'الكويت' }, { code: 'KG', name: 'قيرغيزستان' },
-            { code: 'LA', name: 'لاوس' }, { code: 'LV', name: 'لاتفيا' }, { code: 'LB', name: 'لبنان' },
-            { code: 'LS', name: 'ليسوتو' }, { code: 'LR', name: 'ليبيريا' }, { code: 'LY', name: 'ليبيا' },
-            { code: 'LI', name: 'ليختنشتاين' }, { code: 'LT', name: 'ليتوانيا' }, { code: 'LU', name: 'لوكسمبورغ' },
-            { code: 'MG', name: 'مدغشقر' }, { code: 'MW', name: 'مالاوي' }, { code: 'MY', name: 'ماليزيا' },
-            { code: 'MV', name: 'المالديف' }, { code: 'ML', name: 'مالي' }, { code: 'MT', name: 'مالطا' },
-            { code: 'MH', name: 'جزر مارشال' }, { code: 'MR', name: 'موريتانيا' }, { code: 'MU', name: 'موريشيوس' },
-            { code: 'MX', name: 'المكسيك' }, { code: 'FM', name: 'ميكرونيسيا' }, { code: 'MD', name: 'مولدوفا' },
-            { code: 'MC', name: 'موناكو' }, { code: 'MN', name: 'منغوليا' }, { code: 'ME', name: 'الجبل الأسود' },
-            { code: 'MA', name: 'المغرب' }, { code: 'MZ', name: 'موزمبيق' }, { code: 'MM', name: 'ميانمار' },
-            { code: 'NA', name: 'ناميبيا' }, { code: 'NR', name: 'ناورو' }, { code: 'NP', name: 'نيبال' },
-            { code: 'NL', name: 'هولندا' }, { code: 'NZ', name: 'نيوزيلندا' }, { code: 'NI', name: 'نيكاراغوا' },
-            { code: 'NE', name: 'النيجر' }, { code: 'NG', name: 'نيجيريا' }, { code: 'MK', name: 'مقدونيا الشمالية' },
-            { code: 'NO', name: 'النرويج' }, { code: 'OM', name: 'عُمان' }, { code: 'PK', name: 'باكستان' },
-            { code: 'PW', name: 'بالاو' }, { code: 'PS', name: 'فلسطين' }, { code: 'PA', name: 'بنما' },
-            { code: 'PG', name: 'بابوا غينيا الجديدة' }, { code: 'PY', name: 'باراغواي' }, { code: 'PE', name: 'بيرو' },
-            { code: 'PH', name: 'الفلبين' }, { code: 'PL', name: 'بولندا' }, { code: 'PT', name: 'البرتغال' },
-            { code: 'QA', name: 'قطر' }, { code: 'RO', name: 'رومانيا' }, { code: 'RU', name: 'روسيا' },
-            { code: 'RW', name: 'رواندا' }, { code: 'WS', name: 'ساموا' }, { code: 'SM', name: 'سان مارينو' },
-            { code: 'SA', name: 'السعودية' }, { code: 'SN', name: 'السنغال' }, { code: 'RS', name: 'صربيا' },
-            { code: 'SC', name: 'سيشل' }, { code: 'SL', name: 'سيراليون' }, { code: 'SG', name: 'سنغافورة' },
-            { code: 'SK', name: 'سلوفاكيا' }, { code: 'SI', name: 'سلوفينيا' }, { code: 'SB', name: 'جزر سليمان' },
-            { code: 'SO', name: 'الصومال' }, { code: 'ZA', name: 'جنوب أفريقيا' }, { code: 'SS', name: 'جنوب السودان' },
-            { code: 'ES', name: 'إسبانيا' }, { code: 'LK', name: 'سريلانكا' }, { code: 'SD', name: 'السودان' },
-            { code: 'SR', name: 'سورينام' }, { code: 'SE', name: 'السويد' }, { code: 'CH', name: 'سويسرا' },
-            { code: 'SY', name: 'سوريا' }, { code: 'TW', name: 'تايوان' }, { code: 'TJ', name: 'طاجيكستان' },
-            { code: 'TZ', name: 'تنزانيا' }, { code: 'TH', name: 'تايلاند' }, { code: 'TL', name: 'تيمور الشرقية' },
-            { code: 'TG', name: 'توغو' }, { code: 'TO', name: 'تونغا' }, { code: 'TN', name: 'تونس' },
-            { code: 'TR', name: 'تركيا' }, { code: 'TM', name: 'تركمانستان' }, { code: 'TV', name: 'توفالو' },
-            { code: 'UG', name: 'أوغندا' }, { code: 'UA', name: 'أوكرانيا' }, { code: 'AE', name: 'الإمارات العربية المتحدة' },
-            { code: 'GB', name: 'المملكة المتحدة' }, { code: 'US', name: 'الولايات المتحدة' }, { code: 'UY', name: 'أوروغواي' },
-            { code: 'UZ', name: 'أوزبكستان' }, { code: 'VU', name: 'فانواتو' }, { code: 'VE', name: 'فنزويلا' },
-            { code: 'VN', name: 'فيتنام' }, { code: 'YE', name: 'اليمن' }, { code: 'ZM', name: 'زامبيا' },
-            { code: 'ZW', name: 'زيمبابوي' }
-        ];
-
-        // ========== Components ==========
-        function ImagePreviewModal({ emoji, name, onClose }) {
-            useEffect(() => {
-                const esc = (e) => e.key==='Escape' && onClose();
-                document.addEventListener('keydown', esc);
-                document.body.style.overflow = 'hidden';
-                return () => { document.removeEventListener('keydown', esc); document.body.style.overflow = ''; };
-            }, [onClose]);
-            return (
-                <div className="image-preview-backdrop" onClick={onClose}>
-                    <div className="image-preview-container" onClick={e => e.stopPropagation()}>
-                        <button className="image-preview-close" onClick={onClose}><i className="fas fa-times"></i></button>
-                        <div className="flex flex-col items-center justify-center">
-                            <span className="text-[10rem] md:text-[14rem] select-none">{emoji}</span>
-                            {name && <p className="text-white text-lg mt-4 font-semibold opacity-80">{name}</p>}
-                        </div>
-                    </div>
+        return (
+            <div className="flex flex-col h-full bg-white min-h-screen">
+                <div className="flex items-center p-4 border-b">
+                    <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
+                    <h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1>
                 </div>
-            );
-        }
-
-        function ChatPage({ messages, onSend, onBack }) {
-            const [input, setInput] = useState('');
-            const fileRef = useRef(null);
-            const camRef = useRef(null);
-            const endRef = useRef(null);
-            const send = () => { if(input.trim()) { onSend(input.trim()); setInput(''); } };
-            useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
-            return (
-                <div className="flex flex-col relative bg-gray-50" style={{height:'100vh',overflow:'hidden'}}>
-                    <div className="flex items-center p-4 border-b bg-white z-10">
-                        <button onClick={onBack} className="ml-2"><i className="fas fa-arrow-right text-lg"></i></button>
-                        <h1 className="flex-1 text-center font-bold text-lg"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1>
+                <div className="p-6 space-y-4">
+                    {err && <div className="bg-red-50 p-3 rounded-xl text-red-600 text-sm">{err}</div>}
+                    <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="البريد الإلكتروني" value={email} onChange={e=>setEmail(e.target.value)} />
+                    <input type="password" className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="كلمة المرور" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&dologin()} />
+                    <button onClick={dologin} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600">دخول</button>
+                    <div className="text-center">
+                        <button onClick={onForgotPassword} className="text-sm text-orange-500 hover:text-orange-600 underline">نسيت كلمة السر؟</button>
                     </div>
-                    <div className="chat-watermark"><i className="fas fa-robot text-4xl"></i><span className="text-3xl font-bold">VICKS AI</span></div>
-                    <div className="messages-container flex-1" style={{position:'relative',zIndex:5}}>
-                        {messages.map(m => (
-                            <div key={m.id} className={`flex ${m.role==='user'?'justify-end':'justify-start'} mb-3`}>
-                                <div className={`max-w-[75%] p-3 text-sm ${m.role==='user'?'message-bubble-user':'message-bubble-bot'}`}>{m.text}</div>
-                            </div>
-                        ))}
-                        <div ref={endRef} />
-                    </div>
-                    <div className="chat-input-bar">
-                        <button onClick={send} className="chat-icon-btn send-btn"><i className="fas fa-paper-plane"></i></button>
-                        <input type="text" className="chat-input" placeholder="هيا نتحدث.." value={input}
-                            onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send()} />
-                        <div className="flex gap-2">
-                            <button onClick={()=>fileRef.current.click()} className="chat-icon-btn"><i className="fas fa-plus"></i></button>
-                            <button onClick={()=>camRef.current.click()} className="chat-icon-btn"><i className="fas fa-camera"></i></button>
-                        </div>
-                        <input ref={fileRef} type="file" className="hidden" />
-                        <input ref={camRef} type="file" capture="environment" className="hidden" />
-                    </div>
+                    <div className="relative my-4"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div><div className="relative flex justify-center text-xs"><span className="bg-white px-3 text-gray-400">أو سجل الدخول عبر</span></div></div>
+                    <button onClick={signInWithGoogle} className="social-btn google"><i className="fab fa-google text-lg"></i> الدخول عبر جوجل</button>
+                    <button onClick={signInWithFacebook} className="social-btn facebook"><i className="fab fa-facebook-f text-lg"></i> الدخول عبر فيسبوك</button>
+                    <div className="text-center text-gray-400 text-sm mt-4">أو</div>
+                    <button onClick={onGoJoin} className="w-full py-3 border border-gray-200 rounded-xl hover:bg-gray-50 text-sm">انضم كتاجر أو عميل جديد</button>
                 </div>
-            );
-        }
+            </div>
+        );
+    }
 
-        function ProductCard({ prod, liked, onLike, onWhats, onClick, onRate, sellerAvatar, sellerVerification, onSellerClick, isList, onImageClick, onCommentsClick }) {
-            const stars = Array(5).fill(0).map((_, i) =>
-                <i key={i} className={`fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                   style={{fontSize:'10px', cursor:'pointer'}} onClick={e => { e.stopPropagation(); onRate(i+1); }}></i>
-            );
-            const shortName = prod.sellerName.length > 10 ? prod.sellerName.slice(0,8)+'..' : prod.sellerName;
-
-            if (isList) {
-                return (
-                    <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer hover:shadow-md transition-shadow">
-                        <div onClick={e => { e.stopPropagation(); onImageClick && onImageClick(prod); }}
-                             className="w-24 h-24 bg-gray-50 rounded-xl flex items-center justify-center text-5xl flex-shrink-0 cursor-pointer hover:bg-gray-100 transition-colors">
-                            {prod.emoji}
-                        </div>
-                        <div className="flex-1 min-w-0 flex flex-col justify-between">
-                            <div className="font-semibold text-sm truncate mb-1">{prod.name}</div>
-                            <div className="flex justify-between items-center mb-1">
-                                <div className="flex gap-0.5">{stars}</div>
-                                <div className="flex items-center gap-1 cursor-pointer" onClick={e => { e.stopPropagation(); onSellerClick(); }}>
-                                    <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar || '🏪'}</span>
-                                    <span className="text-[10px] text-gray-500 max-w-[60px] truncate">{shortName}</span>
-                                    {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
-                                </div>
-                            </div>
-                            <div className="flex justify-between items-center mt-auto">
-                                <div className="flex items-center gap-2">
-                                    <button onClick={e => { e.stopPropagation(); onWhats(); }} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
-                                    <button onClick={e => { e.stopPropagation(); onCommentsClick && onCommentsClick(prod); }} className="action-btn-sm bg-blue-100 text-blue-600"><i className="fas fa-comment"></i></button>
-                                    <button onClick={e => { e.stopPropagation(); onLike(); }} className={`action-btn-sm ${liked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
-                                </div>
-                                <span className="text-sm font-bold text-orange-600">{prod.price.toLocaleString()} ج.م</span>
-                            </div>
-                        </div>
-                    </div>
-                );
+    function ForgotPasswordPage({ onBack }) {
+        const [email, setEmail] = useState('');
+        const [sent, setSent] = useState(false);
+        const handleSend = () => {
+            if (email.trim()) {
+                setSent(true);
             }
-
-            return (
-                <div onClick={onClick} className="p-3 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md w-[180px] flex-shrink-0 transition-shadow flex flex-col">
-                    <div onClick={e => { e.stopPropagation(); onImageClick && onImageClick(prod); }}
-                         className="h-32 flex items-center justify-center bg-gray-50 rounded-xl text-6xl mb-2 cursor-pointer hover:bg-gray-100 transition-colors">
-                        {prod.emoji}
-                    </div>
-                    <h3 className="font-semibold text-xs truncate text-center mb-1">{prod.name}</h3>
-                    <div className="flex justify-between items-center px-1 mb-1">
-                        <div className="flex gap-0.5">{stars}</div>
-                        <div className="flex items-center gap-1 cursor-pointer" onClick={e => { e.stopPropagation(); onSellerClick(); }}>
-                            <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar || '🏪'}</span>
-                            <span className="text-[10px] text-gray-500 max-w-[50px] truncate">{shortName}</span>
-                            {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
-                        </div>
-                    </div>
-                    <div className="flex justify-between items-center mt-auto px-1">
-                        <div className="flex items-center gap-1.5">
-                            <button onClick={e => { e.stopPropagation(); onWhats(); }} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
-                            <button onClick={e => { e.stopPropagation(); onCommentsClick && onCommentsClick(prod); }} className="action-btn-sm bg-blue-100 text-blue-600"><i className="fas fa-comment"></i></button>
-                            <button onClick={e => { e.stopPropagation(); onLike(); }} className={`action-btn-sm ${liked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
-                        </div>
-                        <span className="text-sm font-bold text-orange-600">{prod.price.toLocaleString()} ج.م</span>
-                    </div>
+        };
+        return (
+            <div className="flex flex-col h-full bg-white min-h-screen">
+                <div className="flex items-center p-4 border-b">
+                    <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
+                    <h1 className="flex-1 text-center font-bold">استعادة كلمة المرور</h1>
                 </div>
-            );
-        }
-
-        function HomePage({ products, sellers, currSellerId, onLike, onWhats, onProductClick, onShowOffers, onShowVIP, onRate, onSellerProfile, onImageClick, onCommentsClick, showSearchBar, searchQuery, onSearchQueryChange }) {
-            const [view, setView] = useState('grid');
-            const [cat, setCat] = useState('all');
-            const filtered = Object.values(products).filter(p => {
-                if (cat !== 'all' && p.category !== cat) return false;
-                if (searchQuery.trim()) return p.name.toLowerCase().includes(searchQuery.toLowerCase());
-                return true;
-            });
-            const isLiked = (p) => currSellerId ? p.likedBy.includes(currSellerId) : false;
-            const half = Math.ceil(filtered.length / 2);
-            const row1 = filtered.slice(0, half);
-            const row2 = filtered.slice(half);
-
-            return (
-                <div className="flex flex-col h-full relative">
-                    <div className="sticky top-0 z-10 bg-white border-b px-2 py-1.5">
-                        <div className="categories-scroll">
-                            {categories.map(c => (
-                                <button key={c.id} onClick={() => setCat(c.id)}
-                                    className={`px-3 py-1.5 rounded-full text-xs whitespace-nowrap flex-shrink-0 flex items-center gap-1 transition-all ${cat===c.id?'bg-orange-500 text-white shadow-md':'bg-gray-100 text-gray-600'}`}>
-                                    {c.icon ? <span className="text-sm">{c.icon}</span> : null} {c.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                    {showSearchBar && (
-                        <div className="search-overlay">
-                            <div className="flex gap-2 items-center">
-                                <i className="fas fa-search text-gray-400"></i>
-                                <input type="text" className="flex-1 p-2.5 bg-gray-50 rounded-xl text-sm outline-none"
-                                    placeholder="ابحث عن منتج..." value={searchQuery}
-                                    onChange={e => onSearchQueryChange(e.target.value)} autoFocus />
-                            </div>
+                <div className="p-6 space-y-4">
+                    {!sent ? (
+                        <>
+                            <p className="text-sm text-gray-600">أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.</p>
+                            <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="البريد الإلكتروني" value={email} onChange={e=>setEmail(e.target.value)} />
+                            <button onClick={handleSend} disabled={!email.trim()} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 disabled:opacity-50">إرسال الرابط</button>
+                        </>
+                    ) : (
+                        <div className="text-center py-8">
+                            <i className="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
+                            <p className="text-gray-700">تم إرسال رابط الاستعادة إلى بريدك الإلكتروني.</p>
+                            <button onClick={onBack} className="mt-4 text-orange-500 underline">العودة لتسجيل الدخول</button>
                         </div>
                     )}
-                    <div className="flex items-center gap-3 px-3 py-2 bg-white border-b">
-                        <button onClick={onShowOffers} className="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-xl hover:bg-orange-100">🎁 عروض</button>
-                        <button onClick={onShowVIP} className="text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-xl hover:bg-yellow-100">👑 VIP</button>
-                        <div className="flex-1"></div>
-                        <button onClick={() => setView('grid')} className={`p-1.5 rounded-lg ${view==='grid'?'bg-orange-500 text-white':'bg-gray-100 text-gray-500'}`}>
-                            <i className="fas fa-th text-sm"></i>
+                </div>
+            </div>
+        );
+    }
+
+    function JoinPage({ onRegister, onBack }) {
+        // ... (existing code unchanged, but contactPreference added in createSeller)
+        const [store, setStore] = useState('');
+        const [owner, setOwner] = useState('');
+        const [email, setEmail] = useState('');
+        const [pass, setPass] = useState('');
+        const [phone, setPhone] = useState('');
+        const [country, setCountry] = useState('مصر');
+        const [accountType, setAccountType] = useState('customer');
+        const [err, setErr] = useState('');
+        const [showCountries, setShowCountries] = useState(false);
+        const countryRef = useRef(null);
+
+        useEffect(() => { if (showCountries) countryRef.current?.focus(); }, [showCountries]);
+
+        const doJoin = () => {
+            if(!email.trim() || !pass.trim() || !owner.trim()) { setErr('البريد الإلكتروني، كلمة المرور، واسم المالك مطلوبون'); return; }
+            if(accountType==='seller' && !store.trim()) { setErr('اسم المتجر مطلوب للتجار'); return; }
+            const newSeller = createSeller({
+                email: email.trim(), password: pass.trim(),
+                storeName: accountType==='seller'?store.trim():'',
+                ownerName: owner.trim(), phone: phone.trim()||'01',
+                country, accountType,
+                avatar: accountType==='customer'?'👤':'🛍️'
+            });
+            onRegister(newSeller);
+        };
+        return (
+            <div className="flex flex-col h-full bg-white min-h-screen">
+                <div className="flex items-center p-4 border-b">
+                    <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
+                    <h1 className="flex-1 text-center font-bold">إنشاء حساب جديد</h1>
+                </div>
+                <div className="p-6 space-y-4 overflow-auto">
+                    {err && <div className="bg-red-50 p-3 rounded-xl text-red-600 text-sm">{err}</div>}
+                    <div className="bg-gray-50 p-4 rounded-xl space-y-2">
+                        <p className="text-sm font-semibold text-gray-700 mb-2">نوع الحساب:</p>
+                        <label className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-white">
+                            <input type="radio" name="accountType" value="customer" checked={accountType==='customer'} onChange={()=>setAccountType('customer')} className="w-4 h-4 text-orange-500" />
+                            <span className="text-sm">👤 حساب عميل</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-white">
+                            <input type="radio" name="accountType" value="seller" checked={accountType==='seller'} onChange={()=>setAccountType('seller')} className="w-4 h-4 text-orange-500" />
+                            <span className="text-sm">🛍️ حساب تاجر</span>
+                        </label>
+                    </div>
+                    <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="اسم المالك *" value={owner} onChange={e=>setOwner(e.target.value)} />
+                    {accountType==='seller' && <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="اسم المتجر *" value={store} onChange={e=>setStore(e.target.value)} />}
+                    <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="البريد الإلكتروني *" value={email} onChange={e=>setEmail(e.target.value)} />
+                    <input type="password" className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="كلمة المرور *" value={pass} onChange={e=>setPass(e.target.value)} />
+                    <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="رقم الهاتف" value={phone} onChange={e=>setPhone(e.target.value)} />
+                    <div className="relative">
+                        <button type="button" onClick={()=>setShowCountries(!showCountries)}
+                            className="w-full p-3 bg-gray-100 rounded-xl text-sm flex justify-between items-center">
+                            <span>{country}</span>
+                            <i className={`fas fa-chevron-${showCountries?'up':'down'} text-gray-400`}></i>
                         </button>
-                        <button onClick={() => setView('list')} className={`p-1.5 rounded-lg ${view==='list'?'bg-orange-500 text-white':'bg-gray-100 text-gray-500'}`}>
-                            <i className="fas fa-list-ul text-sm"></i>
-                        </button>
-                    </div>
-                    <div className="flex-1 overflow-auto p-2">
-                        {filtered.length===0 && <div className="text-center py-16 text-gray-400"><i className="fas fa-search text-4xl mb-3 block"></i>لا توجد منتجات مطابقة</div>}
-                        {view==='grid' && (
-                            <div className="space-y-3">
-                                {row1.length>0 && <div className="flex gap-3 overflow-x-auto pb-2 px-1">{row1.map(p => { const s = sellers[p.sellerId]; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={false} onImageClick={onImageClick} onCommentsClick={onCommentsClick} />; })}</div>}
-                                {row2.length>0 && <div className="flex gap-3 overflow-x-auto pb-2 px-1">{row2.map(p => { const s = sellers[p.sellerId]; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={false} onImageClick={onImageClick} onCommentsClick={onCommentsClick} />; })}</div>}
-                            </div>
-                        )}
-                        {view==='list' && <div className="flex flex-col gap-2">{filtered.map(p => { const s = sellers[p.sellerId]; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={true} onImageClick={onImageClick} onCommentsClick={onCommentsClick} />; })}</div>}
-                    </div>
-                </div>
-            );
-        }
-
-        function LoginPage({ sellers, onLogin, onGoJoin, onBack, onForgotPassword }) {
-            const [email, setEmail] = useState('');
-            const [pass, setPass] = useState('');
-            const [err, setErr] = useState('');
-            const dologin = () => {
-                const e = email.trim();
-                const p = pass.trim();
-                if(!e || !p) { setErr('يرجى إدخال البريد الإلكتروني وكلمة المرور'); return; }
-                const found = Object.values(sellers).find(s => s.email===e && s.password===p);
-                if(found) { setErr(''); onLogin(found); return; }
-                setErr('بيانات غير صحيحة');
-            };
-            return (
-                <div className="flex flex-col h-full bg-white min-h-screen">
-                    <div className="flex items-center p-4 border-b">
-                        <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                        <h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1>
-                    </div>
-                    <div className="p-6 space-y-4">
-                        {err && <div className="bg-red-50 p-3 rounded-xl text-red-600 text-sm">{err}</div>}
-                        <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="البريد الإلكتروني" value={email} onChange={e=>setEmail(e.target.value)} />
-                        <input type="password" className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="كلمة المرور" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&dologin()} />
-                        <button onClick={dologin} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600">دخول</button>
-                        <div className="text-center">
-                            <button onClick={onForgotPassword} className="text-sm text-orange-500 hover:text-orange-600 underline">نسيت كلمة السر؟</button>
-                        </div>
-                        <div className="relative my-4"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div><div className="relative flex justify-center text-xs"><span className="bg-white px-3 text-gray-400">أو سجل الدخول عبر</span></div></div>
-                        <button onClick={()=>alert('سيتم تفعيل تسجيل الدخول عبر Google قريباً.')} className="social-btn google"><i className="fab fa-google text-lg"></i> الدخول عبر جوجل</button>
-                        <button onClick={()=>alert('سيتم تفعيل تسجيل الدخول عبر Facebook قريباً.')} className="social-btn facebook"><i className="fab fa-facebook-f text-lg"></i> الدخول عبر فيسبوك</button>
-                        <div className="text-center text-gray-400 text-sm mt-4">أو</div>
-                        <button onClick={onGoJoin} className="w-full py-3 border border-gray-200 rounded-xl hover:bg-gray-50 text-sm">انضم كتاجر أو عميل جديد</button>
-                    </div>
-                </div>
-            );
-        }
-
-        function ForgotPasswordPage({ onBack }) {
-            const [email, setEmail] = useState('');
-            const [sent, setSent] = useState(false);
-            const handleSend = () => {
-                if (email.trim()) {
-                    setSent(true);
-                }
-            };
-            return (
-                <div className="flex flex-col h-full bg-white min-h-screen">
-                    <div className="flex items-center p-4 border-b">
-                        <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                        <h1 className="flex-1 text-center font-bold">استعادة كلمة المرور</h1>
-                    </div>
-                    <div className="p-6 space-y-4">
-                        {!sent ? (
-                            <>
-                                <p className="text-sm text-gray-600">أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.</p>
-                                <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="البريد الإلكتروني" value={email} onChange={e=>setEmail(e.target.value)} />
-                                <button onClick={handleSend} disabled={!email.trim()} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 disabled:opacity-50">إرسال الرابط</button>
-                            </>
-                        ) : (
-                            <div className="text-center py-8">
-                                <i className="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
-                                <p className="text-gray-700">تم إرسال رابط الاستعادة إلى بريدك الإلكتروني.</p>
-                                <button onClick={onBack} className="mt-4 text-orange-500 underline">العودة لتسجيل الدخول</button>
+                        {showCountries && (
+                            <div className="absolute z-20 mt-1 w-full bg-white border rounded-xl shadow-lg country-dropdown" ref={countryRef} tabIndex={-1}>
+                                {countries.map(c => (
+                                    <div key={c.code} onClick={()=>{ setCountry(c.name); setShowCountries(false); }}
+                                        className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer">{c.name}</div>
+                                ))}
                             </div>
                         )}
                     </div>
+                    <button onClick={doJoin} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600">إنشاء حساب</button>
                 </div>
-            );
-        }
+            </div>
+        );
+    }
 
-        function JoinPage({ onRegister, onBack }) {
-            const [store, setStore] = useState('');
-            const [owner, setOwner] = useState('');
-            const [email, setEmail] = useState('');
-            const [pass, setPass] = useState('');
-            const [phone, setPhone] = useState('');
-            const [country, setCountry] = useState('مصر');
-            const [accountType, setAccountType] = useState('customer');
-            const [err, setErr] = useState('');
-            const [showCountries, setShowCountries] = useState(false);
-            const countryRef = useRef(null);
+    function VIPPage({ seller, onBack, onPurchase, onAddPoints }) {
+        // ... (existing code unchanged)
+        const [showAddPoints, setShowAddPoints] = useState(false);
+        const [pointsAmount, setPointsAmount] = useState(50);
 
-            useEffect(() => { if (showCountries) countryRef.current?.focus(); }, [showCountries]);
+        const handleAddPoints = () => {
+            const amount = parseInt(pointsAmount) || 0;
+            if (amount > 0) {
+                onAddPoints(amount);
+                setShowAddPoints(false);
+                alert(`تمت إضافة ${amount} نقطة بنجاح!`);
+            }
+        };
 
-            const doJoin = () => {
-                if(!email.trim() || !pass.trim() || !owner.trim()) { setErr('البريد الإلكتروني، كلمة المرور، واسم المالك مطلوبون'); return; }
-                if(accountType==='seller' && !store.trim()) { setErr('اسم المتجر مطلوب للتجار'); return; }
-                const newSeller = createSeller({
-                    email: email.trim(), password: pass.trim(),
-                    storeName: accountType==='seller'?store.trim():'',
-                    ownerName: owner.trim(), phone: phone.trim()||'01',
-                    country, accountType,
-                    avatar: accountType==='customer'?'👤':'🛍️'
-                });
-                onRegister(newSeller);
-            };
-            return (
-                <div className="flex flex-col h-full bg-white min-h-screen">
-                    <div className="flex items-center p-4 border-b">
-                        <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                        <h1 className="flex-1 text-center font-bold">إنشاء حساب جديد</h1>
-                    </div>
-                    <div className="p-6 space-y-4 overflow-auto">
-                        {err && <div className="bg-red-50 p-3 rounded-xl text-red-600 text-sm">{err}</div>}
-                        <div className="bg-gray-50 p-4 rounded-xl space-y-2">
-                            <p className="text-sm font-semibold text-gray-700 mb-2">نوع الحساب:</p>
-                            <label className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-white">
-                                <input type="radio" name="accountType" value="customer" checked={accountType==='customer'} onChange={()=>setAccountType('customer')} className="w-4 h-4 text-orange-500" />
-                                <span className="text-sm">👤 حساب عميل</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-white">
-                                <input type="radio" name="accountType" value="seller" checked={accountType==='seller'} onChange={()=>setAccountType('seller')} className="w-4 h-4 text-orange-500" />
-                                <span className="text-sm">🛍️ حساب تاجر</span>
-                            </label>
-                        </div>
-                        <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="اسم المالك *" value={owner} onChange={e=>setOwner(e.target.value)} />
-                        {accountType==='seller' && <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="اسم المتجر *" value={store} onChange={e=>setStore(e.target.value)} />}
-                        <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="البريد الإلكتروني *" value={email} onChange={e=>setEmail(e.target.value)} />
-                        <input type="password" className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="كلمة المرور *" value={pass} onChange={e=>setPass(e.target.value)} />
-                        <input className="w-full p-3 bg-gray-100 rounded-xl text-sm" placeholder="رقم الهاتف" value={phone} onChange={e=>setPhone(e.target.value)} />
-                        <div className="relative">
-                            <button type="button" onClick={()=>setShowCountries(!showCountries)}
-                                className="w-full p-3 bg-gray-100 rounded-xl text-sm flex justify-between items-center">
-                                <span>{country}</span>
-                                <i className={`fas fa-chevron-${showCountries?'up':'down'} text-gray-400`}></i>
-                            </button>
-                            {showCountries && (
-                                <div className="absolute z-20 mt-1 w-full bg-white border rounded-xl shadow-lg country-dropdown" ref={countryRef} tabIndex={-1}>
-                                    {countries.map(c => (
-                                        <div key={c.code} onClick={()=>{ setCountry(c.name); setShowCountries(false); }}
-                                            className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer">{c.name}</div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                        <button onClick={doJoin} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600">إنشاء حساب</button>
-                    </div>
+        const subscriptionOptions = [
+            { months: 1, cost: 200, label: 'شهر' },
+            { months: 3, cost: 500, label: '3 شهور' },
+            { months: 6, cost: 900, label: '6 شهور' },
+            { months: 10, cost: 1400, label: '10 شهور' },
+            { months: 12, cost: 1600, label: 'سنة' }
+        ];
+
+        return (
+            <div className="flex flex-col h-full bg-white min-h-screen">
+                <div className="flex items-center p-4 border-b">
+                    <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
+                    <h1 className="flex-1 text-center font-bold">VIP Dashboard</h1>
                 </div>
-            );
-        }
-
-        function VIPPage({ seller, onBack, onPurchase, onAddPoints }) {
-            const [showAddPoints, setShowAddPoints] = useState(false);
-            const [pointsAmount, setPointsAmount] = useState(50);
-
-            const handleAddPoints = () => {
-                const amount = parseInt(pointsAmount) || 0;
-                if (amount > 0) {
-                    onAddPoints(amount);
-                    setShowAddPoints(false);
-                    alert(`تمت إضافة ${amount} نقطة بنجاح!`);
-                }
-            };
-
-            const subscriptionOptions = [
-                { months: 1, cost: 200, label: 'شهر' },
-                { months: 3, cost: 500, label: '3 شهور' },
-                { months: 6, cost: 900, label: '6 شهور' },
-                { months: 10, cost: 1400, label: '10 شهور' },
-                { months: 12, cost: 1600, label: 'سنة' }
-            ];
-
-            return (
-                <div className="flex flex-col h-full bg-white min-h-screen">
-                    <div className="flex items-center p-4 border-b">
-                        <button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                        <h1 className="flex-1 text-center font-bold">VIP Dashboard</h1>
-                    </div>
-                    <div className="p-4 space-y-6">
-                        <div className="flex justify-between items-center bg-orange-50 p-4 rounded-xl">
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-500">رصيد النقاط</span>
-                                <button onClick={()=>setShowAddPoints(true)} className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center hover:bg-orange-600">+</button>
-                            </div>
-                            <p className="text-2xl font-bold text-orange-600">{seller.points} نقطة</p>
-                        </div>
-
-                        {showAddPoints && (
-                            <div className="bg-gray-50 p-4 rounded-xl space-y-3">
-                                <p className="font-semibold text-sm">إضافة رصيد نقاط (محاكاة)</p>
-                                <input type="number" className="w-full p-2 rounded-lg border" value={pointsAmount} onChange={e=>setPointsAmount(e.target.value)} min="1" />
-                                <button onClick={handleAddPoints} className="w-full py-2 bg-green-500 text-white rounded-lg">تأكيد الإضافة</button>
-                            </div>
-                        )}
-
-                        <div className="space-y-3">
-                            <h3 className="font-bold text-lg">متجر الخدمات</h3>
-                            <div className="border rounded-xl p-4 flex justify-between items-center">
-                                <div>
-                                    <p className="font-semibold">✅ توثيق الحساب (العلامة الزرقاء)</p>
-                                    <p className="text-xs text-gray-500">70 نقطة</p>
-                                </div>
-                                <button onClick={()=>onPurchase('verify')} disabled={seller.verificationBadge || seller.points < 70}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.verificationBadge ? 'bg-gray-200 text-gray-400' : seller.points >= 70 ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-200 text-gray-400'}`}>
-                                    {seller.verificationBadge ? 'مفعل' : 'شراء'}
-                                </button>
-                            </div>
-                            <div className="border rounded-xl p-4 flex justify-between items-center">
-                                <div>
-                                    <p className="font-semibold">📦 باقة 100 منتج</p>
-                                    <p className="text-xs text-gray-500">50 نقطة</p>
-                                </div>
-                                <button onClick={()=>onPurchase('max100')} disabled={seller.maxProducts >= 100 || seller.points < 50}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.maxProducts >= 100 ? 'bg-gray-200 text-gray-400' : seller.points >= 50 ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-200 text-gray-400'}`}>
-                                    {seller.maxProducts >= 100 ? 'مفعل' : 'شراء'}
-                                </button>
-                            </div>
-                            <div className="border rounded-xl p-4 flex justify-between items-center">
-                                <div>
-                                    <p className="font-semibold">🌟 اشتراك VIP</p>
-                                    <p className="text-xs text-gray-500">50 نقطة (صلاحيات إضافية)</p>
-                                </div>
-                                <button onClick={()=>onPurchase('vip')} disabled={seller.subscription === 'vip' || seller.points < 50}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.subscription === 'vip' ? 'bg-gray-200 text-gray-400' : seller.points >= 50 ? 'bg-purple-500 text-white hover:bg-purple-600' : 'bg-gray-200 text-gray-400'}`}>
-                                    {seller.subscription === 'vip' ? 'مفعل' : 'شراء'}
-                                </button>
-                            </div>
-                            <div className="border rounded-xl p-4 space-y-2">
-                                <p className="font-semibold">🚀 اشتراك مفتوح (Unlimited)</p>
-                                <div className="grid grid-cols-5 gap-2">
-                                    {subscriptionOptions.map(opt => (
-                                        <button key={opt.months} onClick={()=>onPurchase('unlimited', opt.months)} disabled={seller.points < opt.cost}
-                                            className={`py-2 rounded-lg text-xs font-semibold ${seller.points >= opt.cost ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'bg-gray-200 text-gray-400'}`}>
-                                            {opt.label}<br/>{opt.cost} نقطة
-                                        </button>
-                                    ))}
-                                </div>
-                                <p className="text-xs text-gray-500">تنتهي الصلاحية: {seller.subscriptionExpiry ? new Date(seller.subscriptionExpiry).toLocaleDateString('ar-EG') : 'غير مفعل'}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        function App() {
-            const [state, setState] = useState(null);
-            const [page, setPage] = useState('home');
-            const [previewImg, setPreviewImg] = useState(null);
-            const [dark, setDark] = useState(() => localStorage.getItem(THEME_KEY)==='dark');
-            const [showSearchBar, setShowSearchBar] = useState(false);
-            const [searchQuery, setSearchQuery] = useState('');
-
-            useEffect(() => {
-                setState(loadState());
-            }, []);
-
-            useEffect(() => {
-                if (state) saveState(state);
-            }, [state]);
-
-            useEffect(() => {
-                document.body.classList.toggle('dark', dark);
-                localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
-            }, [dark]);
-
-            if (!state) {
-                return (
-                    <div className="min-h-screen flex items-center justify-center">
-                        <div className="animate-pulse text-orange-500 text-xl">
-                            <i className="fas fa-spinner fa-spin ml-2"></i> جار التحميل...
-                        </div>
-                    </div>
-                );
-            }
-
-            const currentSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
-            const isSeller = currentSeller && currentSeller.accountType === 'seller';
-
-            const handleLogin = (seller) => {
-                setState(prev => ({ ...prev, currentSellerId: seller.id }));
-                setPage('home');
-            };
-            const handleLogout = () => {
-                setState(prev => ({ ...prev, currentSellerId: null }));
-                setPage('home');
-            };
-            const handleRegister = (newSeller) => {
-                setState(prev => {
-                    const sellers = { ...prev.sellers, [newSeller.id]: newSeller };
-                    return { ...prev, sellers, currentSellerId: newSeller.id };
-                });
-                setPage('home');
-            };
-            const handleSendMessage = (text) => {
-                setState(prev => {
-                    const withUser = addMessage(prev, { role: 'user', text });
-                    return addMessage(withUser, { role: 'bot', text: botReply(text) });
-                });
-            };
-            const handleLike = (prodId) => {
-                if (!currentSeller) return alert('يرجى تسجيل الدخول أولاً');
-                setState(prev => {
-                    const products = { ...prev.products };
-                    const prod = { ...products[prodId] };
-                    const idx = prod.likedBy.indexOf(currentSeller.id);
-                    if (idx >= 0) {
-                        prod.likedBy = prod.likedBy.filter(id => id !== currentSeller.id);
-                        prod.likes = Math.max(0, prod.likes - 1);
-                    } else {
-                        prod.likedBy = [...prod.likedBy, currentSeller.id];
-                        prod.likes += 1;
-                    }
-                    products[prodId] = prod;
-                    return { ...prev, products };
-                });
-            };
-            const handleWhats = (prod) => {
-                const seller = state.sellers[prod.sellerId];
-                if (!seller) return;
-                window.open(`https://wa.me/+2${seller.phone}?text=مرحباً، أنا مهتم بمنتج: ${prod.name}`, '_blank');
-            };
-            const handleRate = (prodId, rating) => {
-                setState(prev => {
-                    const products = { ...prev.products };
-                    products[prodId] = { ...products[prodId], rating };
-                    return { ...prev, products };
-                });
-            };
-            const handleShowVIP = () => {
-                if (!currentSeller) return alert('يرجى تسجيل الدخول أولاً');
-                if (currentSeller.accountType !== 'seller') return alert('خدمة VIP متاحة للتجار فقط');
-                setPage('vip');
-            };
-            const handlePurchase = (service, months) => {
-                setState(prev => {
-                    const sellers = { ...prev.sellers };
-                    const seller = { ...sellers[currentSeller.id] };
-                    switch (service) {
-                        case 'verify':
-                            if (seller.points >= 70 && !seller.verificationBadge) {
-                                seller.points -= 70;
-                                seller.verificationBadge = true;
-                            }
-                            break;
-                        case 'max100':
-                            if (seller.points >= 50 && seller.maxProducts < 100) {
-                                seller.points -= 50;
-                                seller.maxProducts = 100;
-                            }
-                            break;
-                        case 'vip':
-                            if (seller.points >= 50 && seller.subscription !== 'vip') {
-                                seller.points -= 50;
-                                seller.subscription = 'vip';
-                            }
-                            break;
-                        case 'unlimited':
-                            const cost = months === 1 ? 200 : months === 3 ? 500 : months === 6 ? 900 : months === 10 ? 1400 : 1600;
-                            if (seller.points >= cost) {
-                                seller.points -= cost;
-                                const expiry = new Date();
-                                expiry.setMonth(expiry.getMonth() + months);
-                                seller.subscriptionExpiry = expiry.getTime();
-                                seller.subscription = 'unlimited';
-                            }
-                            break;
-                        default: break;
-                    }
-                    sellers[currentSeller.id] = seller;
-                    return { ...prev, sellers };
-                });
-            };
-            const handleAddPoints = (amount) => {
-                setState(prev => {
-                    const sellers = { ...prev.sellers };
-                    sellers[currentSeller.id] = { ...sellers[currentSeller.id], points: sellers[currentSeller.id].points + amount };
-                    return { ...prev, sellers };
-                });
-            };
-            const handleSellerProfile = (sellerId) => {
-                alert(`ملف التاجر: ${state.sellers[sellerId]?.storeName || 'مستخدم'}`);
-            };
-            const handleImageClick = (prod) => setPreviewImg(prod);
-            const handleCommentsClick = (prod) => alert(`التعليقات على ${prod.name} (قيد التطوير)`);
-
-            if (page === 'chat') {
-                return <ChatPage messages={state.chatMessages} onSend={handleSendMessage} onBack={() => setPage('home')} />;
-            }
-            if (page === 'login') {
-                return <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={() => setPage('join')} onBack={() => setPage('home')} onForgotPassword={() => setPage('forgot-password')} />;
-            }
-            if (page === 'join') {
-                return <JoinPage onRegister={handleRegister} onBack={() => setPage('login')} />;
-            }
-            if (page === 'forgot-password') {
-                return <ForgotPasswordPage onBack={() => setPage('login')} />;
-            }
-            if (page === 'vip') {
-                if (!currentSeller || currentSeller.accountType !== 'seller') {
-                    setPage('home');
-                    return null;
-                }
-                return <VIPPage seller={state.sellers[currentSeller.id]} onBack={() => setPage('home')} onPurchase={handlePurchase} onAddPoints={handleAddPoints} />;
-            }
-
-            return (
-                <div className="flex flex-col h-screen bg-gray-50">
-                    {previewImg && <ImagePreviewModal emoji={previewImg.emoji} name={previewImg.name} onClose={() => setPreviewImg(null)} />}
-                    <div className="flex items-center justify-between p-3 bg-white border-b shadow-sm">
+                <div className="p-4 space-y-6">
+                    <div className="flex justify-between items-center bg-orange-50 p-4 rounded-xl">
                         <div className="flex items-center gap-2">
-                            <button onClick={() => setPage('chat')} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
-                                <i className="fas fa-robot"></i>
-                            </button>
-                            <button onClick={() => setShowSearchBar(!showSearchBar)} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
-                                <i className="fas fa-search"></i>
-                            </button>
+                            <span className="text-sm text-gray-500">رصيد النقاط</span>
+                            <button onClick={()=>setShowAddPoints(true)} className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center hover:bg-orange-600">+</button>
                         </div>
-                        <h1 className="text-xl font-bold text-orange-600">VICKS MARKET</h1>
-                        <div className="flex items-center gap-2">
-                            <button onClick={() => setDark(!dark)} className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
-                                <i className={`fas ${dark ? 'fa-sun' : 'fa-moon'}`}></i>
-                            </button>
-                            {currentSeller ? (
-                                <button onClick={handleLogout} className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 hover:bg-red-200" title="تسجيل الخروج">
-                                    <i className="fas fa-sign-out-alt"></i>
-                                </button>
-                            ) : (
-                                <button onClick={() => setPage('login')} className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 hover:bg-orange-200">
-                                    <i className="fas fa-user"></i>
-                                </button>
-                            )}
-                        </div>
+                        <p className="text-2xl font-bold text-orange-600">{seller.points} نقطة</p>
                     </div>
-                    <div className="flex-1 overflow-hidden">
+
+                    {showAddPoints && (
+                        <div className="bg-gray-50 p-4 rounded-xl space-y-3">
+                            <p className="font-semibold text-sm">إضافة رصيد نقاط (محاكاة)</p>
+                            <input type="number" className="w-full p-2 rounded-lg border" value={pointsAmount} onChange={e=>setPointsAmount(e.target.value)} min="1" />
+                            <button onClick={handleAddPoints} className="w-full py-2 bg-green-500 text-white rounded-lg">تأكيد الإضافة</button>
+                        </div>
+                    )}
+
+                    <div className="space-y-3">
+                        <h3 className="font-bold text-lg">متجر الخدمات</h3>
+                        <div className="border rounded-xl p-4 flex justify-between items-center">
+                            <div>
+                                <p className="font-semibold">✅ توثيق الحساب (العلامة الزرقاء)</p>
+                                <p className="text-xs text-gray-500">70 نقطة</p>
+                            </div>
+                            <button onClick={()=>onPurchase('verify')} disabled={seller.verificationBadge || seller.points < 70}
+                                className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.verificationBadge ? 'bg-gray-200 text-gray-400' : seller.points >= 70 ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-200 text-gray-400'}`}>
+                                {seller.verificationBadge ? 'مفعل' : 'شراء'}
+                            </button>
+                        </div>
+                        <div className="border rounded-xl p-4 flex justify-between items-center">
+                            <div>
+                                <p className="font-semibold">📦 باقة 100 منتج</p>
+                                <p className="text-xs text-gray-500">50 نقطة</p>
+                            </div>
+                            <button onClick={()=>onPurchase('max100')} disabled={seller.maxProducts >= 100 || seller.points < 50}
+                                className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.maxProducts >= 100 ? 'bg-gray-200 text-gray-400' : seller.points >= 50 ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-200 text-gray-400'}`}>
+                                {seller.maxProducts >= 100 ? 'مفعل' : 'شراء'}
+                            </button>
+                        </div>
+                        <div className="border rounded-xl p-4 flex justify-between items-center">
+                            <div>
+                                <p className="font-semibold">🌟 اشتراك VIP</p>
+                                <p className="text-xs text-gray-500">50 نقطة (صلاحيات إضافية)</p>
+                            </div>
+                            <button onClick={()=>onPurchase('vip')} disabled={seller.subscription === 'vip' || seller.points < 50}
+                                className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.subscription === 'vip' ? 'bg-gray-200 text-gray-400' : seller.points >= 50 ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-200 text-gray-400'}`}>
+                                {seller.subscription === 'vip' ? 'مفعل' : 'شراء'}
+                            </button>
+                        </div>
+                        {subscriptionOptions.map(opt => (
+                            <div key={opt.months} className="border rounded-xl p-4 flex justify-between items-center">
+                                <div>
+                                    <p className="font-semibold">📅 اشتراك {opt.label}</p>
+                                    <p className="text-xs text-gray-500">{opt.cost} نقطة</p>
+                                </div>
+                                <button onClick={()=>onPurchase('sub', opt)} disabled={seller.points < opt.cost}
+                                    className={`px-4 py-2 rounded-lg text-sm font-semibold ${seller.points >= opt.cost ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-200 text-gray-400'}`}>
+                                    شراء
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ========== Main App ==========
+    function App() {
+        const [state, setState] = useState(loadState);
+        const [page, setPage] = useState('home'); // home, chat, login, join, vip, product, sellerProfile, forgot
+        const [selectedProduct, setSelectedProduct] = useState(null);
+        const [selectedSellerId, setSelectedSellerId] = useState(null);
+        const [showSearchBar, setShowSearchBar] = useState(false);
+        const [searchQuery, setSearchQuery] = useState('');
+        const [imagePreview, setImagePreview] = useState(null);
+        const [darkMode, setDarkMode] = useState(() => localStorage.getItem(THEME_KEY)==='dark');
+
+        const currSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
+
+        useEffect(() => {
+            saveState(state);
+        }, [state]);
+
+        useEffect(() => {
+            if (darkMode) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+            localStorage.setItem(THEME_KEY, darkMode?'dark':'light');
+        }, [darkMode]);
+
+        const updateSeller = (id, updates) => {
+            setState(prev => ({
+                ...prev,
+                sellers: { ...prev.sellers, [id]: { ...prev.sellers[id], ...updates } }
+            }));
+        };
+
+        const handleLogin = (seller) => {
+            setState(prev => ({ ...prev, currentSellerId: seller.id }));
+            setPage('home');
+        };
+
+        const handleLogout = () => {
+            setState(prev => ({ ...prev, currentSellerId: null }));
+            setPage('home');
+        };
+
+        const handleRegister = (newSeller) => {
+            setState(prev => ({
+                ...prev,
+                sellers: { ...prev.sellers, [newSeller.id]: newSeller },
+                currentSellerId: newSeller.id
+            }));
+            setPage('home');
+        };
+
+        const handleLike = (productId) => {
+            if (!state.currentSellerId) return;
+            setState(prev => {
+                const prods = { ...prev.products };
+                const p = { ...prods[productId] };
+                if (p.likedBy.includes(prev.currentSellerId)) {
+                    p.likedBy = p.likedBy.filter(id => id !== prev.currentSellerId);
+                    p.likes--;
+                } else {
+                    p.likedBy.push(prev.currentSellerId);
+                    p.likes++;
+                }
+                prods[productId] = p;
+                return { ...prev, products: prods };
+            });
+        };
+
+        const handleRate = (productId, rating) => {
+            if (!state.currentSellerId) return;
+            setState(prev => {
+                const prods = { ...prev.products };
+                prods[productId] = { ...prods[productId], rating };
+                return { ...prev, products: prods };
+            });
+        };
+
+        const handleWhatsapp = (product, contactPref) => {
+            if (!state.currentSellerId) return;
+            const seller = state.sellers[product.sellerId];
+            const phone = seller.phone || '01';
+            if (contactPref === 'telegram') {
+                window.open(`https://t.me/${phone}`, '_blank');
+            } else {
+                window.open(`https://wa.me/${phone}`, '_blank');
+            }
+        };
+
+        const handleSendMessage = (text) => {
+            setState(prev => addMessage(prev, { role: 'user', text }));
+            setTimeout(() => {
+                setState(prev => addMessage(prev, { role: 'bot', text: botReply(text) }));
+            }, 800);
+        };
+
+        const handlePurchase = (type, opt) => {
+            if (!currSeller) return;
+            let cost = 0;
+            let updates = {};
+            if (type === 'verify') { cost = 70; updates = { verificationBadge: true }; }
+            else if (type === 'max100') { cost = 50; updates = { maxProducts: 100 }; }
+            else if (type === 'vip') { cost = 50; updates = { subscription: 'vip' }; }
+            else if (type === 'sub' && opt) { cost = opt.cost; updates = { subscriptionExpiry: Date.now() + opt.months*30*86400000 }; }
+            if (currSeller.points >= cost) {
+                updateSeller(currSeller.id, { points: currSeller.points - cost, ...updates });
+                alert('تمت العملية بنجاح!');
+            } else {
+                alert('لا يوجد لديك نقاط كافية');
+            }
+        };
+
+        const handleAddPoints = (amount) => {
+                if (currSeller) {
+                updateSeller(currSeller.id, { points: currSeller.points + amount });
+            }
+        };
+
+        const handleToggleContactPref = () => {
+            if (!currSeller) return;
+            const newPref = currSeller.contactPreference === 'whatsapp' ? 'telegram' : 'whatsapp';
+            updateSeller(currSeller.id, { contactPreference: newPref });
+        };
+
+        // Navigation renderer
+        const renderPage = () => {
+            switch (page) {
+                case 'chat':
+                    return <ChatPage messages={state.chatMessages} onSend={handleSendMessage} onBack={() => setPage('home')} />;
+                case 'login':
+                    return <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={() => setPage('join')} onBack={() => setPage('home')} onForgotPassword={() => setPage('forgot')} />;
+                case 'join':
+                    return <JoinPage onRegister={handleRegister} onBack={() => setPage('login')} />;
+                case 'forgot':
+                    return <ForgotPasswordPage onBack={() => setPage('login')} />;
+                case 'vip':
+                    return currSeller ? <VIPPage seller={currSeller} onBack={() => setPage('home')} onPurchase={handlePurchase} onAddPoints={handleAddPoints} /> : null;
+                case 'product':
+                    return selectedProduct ? (
+                        <div className="flex flex-col h-full bg-white min-h-screen">
+                            <div className="flex items-center p-4 border-b">
+                                <button onClick={() => { setSelectedProduct(null); setPage('home'); }}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
+                                <h1 className="flex-1 text-center font-bold truncate">{selectedProduct.name}</h1>
+                            </div>
+                            <div className="p-6 flex flex-col items-center">
+                                <span className="text-9xl mb-4">{selectedProduct.emoji}</span>
+                                <p className="text-2xl font-bold text-orange-600 mb-2">{selectedProduct.price.toLocaleString()} ج.م</p>
+                                <p className="text-gray-600 text-center mb-4">{selectedProduct.description}</p>
+                                <div className="flex gap-2">
+                                    <button onClick={() => handleWhatsapp(selectedProduct, currSeller?.contactPreference || 'whatsapp')} className="px-4 py-2 bg-green-500 text-white rounded-lg"><i className="fab fa-whatsapp ml-1"></i> تواصل</button>
+                                    <button onClick={() => handleLike(selectedProduct.id)} className="px-4 py-2 bg-orange-500 text-white rounded-lg"><i className="fas fa-heart ml-1"></i> إعجاب</button>
+                                </div>
+                            </div>
+                        </div>
+                    ) : null;
+                case 'sellerProfile':
+                    const seller = selectedSellerId ? state.sellers[selectedSellerId] : null;
+                    return seller ? (
+                        <div className="flex flex-col h-full bg-white min-h-screen">
+                            <div className="flex items-center p-4 border-b">
+                                <button onClick={() => { setSelectedSellerId(null); setPage('home'); }}><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
+                                <h1 className="flex-1 text-center font-bold">ملف التاجر</h1>
+                            </div>
+                            <div className="p-6 text-center">
+                                <span className="text-6xl">{seller.avatar}</span>
+                                <h2 className="text-xl font-bold mt-2">{seller.storeName || seller.ownerName}</h2>
+                                {seller.verificationBadge && <i className="fas fa-check-circle text-blue-500 mt-1"></i>}
+                                <p className="text-gray-500 text-sm mt-1">{seller.email}</p>
+                                <p className="text-gray-500 text-sm mt-1">{seller.country}</p>
+                            </div>
+                        </div>
+                    ) : null;
+                default:
+                    return (
                         <HomePage
                             products={state.products}
                             sellers={state.sellers}
                             currSellerId={state.currentSellerId}
                             onLike={handleLike}
-                            onWhats={handleWhats}
-                            onProductClick={prod => alert(`تفاصيل ${prod.name}`)}
-                            onShowOffers={() => alert('قسم العروض قيد التطوير')}
-                            onShowVIP={handleShowVIP}
+                            onWhats={handleWhatsapp}
+                            onProductClick={(p) => { setSelectedProduct(p); setPage('product'); }}
+                            onShowOffers={() => alert('عروض قريبا!')}
+                            onShowVIP={() => setPage('vip')}
                             onRate={handleRate}
-                            onSellerProfile={handleSellerProfile}
-                            onImageClick={handleImageClick}
-                            onCommentsClick={handleCommentsClick}
+                            onSellerProfile={(id) => { setSelectedSellerId(id); setPage('sellerProfile'); }}
+                            onImageClick={(p) => setImagePreview({ emoji: p.emoji, name: p.name })}
+                            onCommentsClick={(p) => alert('التعليقات قيد التطوير')}
                             showSearchBar={showSearchBar}
                             searchQuery={searchQuery}
                             onSearchQueryChange={setSearchQuery}
+                            onToggleContactPref={handleToggleContactPref}
                         />
+                    );
+            }
+        };
+
+        return (
+            <div className="max-w-md mx-auto bg-white min-h-screen relative shadow-lg">
+                {/* Header */}
+                <div className="sticky top-0 z-30 bg-white border-b px-4 py-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <i className="fas fa-store text-orange-500 text-2xl"></i>
+                        <h1 className="text-lg font-bold">VICKS MARKET</h1>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => setDarkMode(!darkMode)} className="text-gray-500 hover:text-orange-500 transition">
+                            <i className={`fas ${darkMode ? 'fa-sun' : 'fa-moon'} text-lg`}></i>
+                        </button>
+                        <button onClick={() => setShowSearchBar(!showSearchBar)} className="text-gray-500 hover:text-orange-500 transition">
+                            <i className="fas fa-search text-lg"></i>
+                        </button>
+                        <button onClick={() => setPage('chat')} className="text-gray-500 hover:text-orange-500 transition">
+                            <i className="fas fa-comment-dots text-lg"></i>
+                        </button>
+                        {state.currentSellerId ? (
+                            <button onClick={() => setPage('vip')} className="flex items-center gap-1 text-sm font-semibold text-orange-600">
+                                <i className="fas fa-user-circle text-lg"></i>
+                                <span className="hidden sm:inline">{currSeller?.ownerName}</span>
+                            </button>
+                        ) : (
+                            <div className="guest-badge" onClick={() => setPage('login')}>
+                                <i className="fas fa-user-circle text-lg text-gray-400"></i>
+                                <span>ضيف</span>
+                            </div>
+                        )}
                     </div>
                 </div>
-            );
-        }
 
-        ReactDOM.render(<App />, document.getElementById('root'));
-    </script>
-</body>
-</html>
+                {/* Content */}
+                {renderPage()}
+
+                {/* Bottom Navigation */}
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-20 max-w-md mx-auto">
+                    <button onClick={() => setPage('home')} className={`flex flex-col items-center text-xs ${page==='home'?'text-orange-500':'text-gray-500'}`}>
+                        <i className="fas fa-home text-lg"></i> الرئيسية
+                    </button>
+                    <button onClick={() => setShowSearchBar(!showSearchBar)} className="flex flex-col items-center text-xs text-gray-500">
+                        <i className="fas fa-search text-lg"></i> بحث
+                    </button>
+                    <button onClick={() => setPage('chat')} className={`flex flex-col items-center text-xs ${page==='chat'?'text-orange-500':'text-gray-500'}`}>
+                        <i className="fas fa-robot text-lg"></i> الذكاء
+                    </button>
+                    <button onClick={() => {
+                        if (state.currentSellerId) {
+                            setPage('vip');
+                        } else {
+                            setPage('login');
+                        }
+                    }} className={`flex flex-col items-center text-xs ${page==='vip'?'text-orange-500':'text-gray-500'}`}>
+                        <i className="fas fa-user-circle text-lg"></i> {state.currentSellerId ? 'حسابي' : 'دخول'}
+                    </button>
+                </div>
+
+                {/* Image Preview Modal */}
+                {imagePreview && (
+                    <ImagePreviewModal
+                        emoji={imagePreview.emoji}
+                        name={imagePreview.name}
+                        onClose={() => setImagePreview(null)}
+                    />
+                )}
+            </div>
+        );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+</script>
