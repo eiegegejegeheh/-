@@ -49,12 +49,12 @@
             s2: { id: 's2', email: 'seller2@test.com', password: '123456', storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة حسن', phone: '01198765432', district: 'الأحياء 1', points: 120, verified: false, subscription: 'free', products: ['p3','p4','p6'], createdAt: Date.now() - 86400000 * 5 },
         };
         const SAMPLE_PRODUCTS = {
-            p1: { id: 'p1', name: 'ايفون 14 Pro مستعمل', price: 18000, category: 'used', emoji: '📱', sellerId: 's1', sellerName: 'متجر النور', likes: 8, likedBy: [], description: 'بطارية 92%', createdAt: Date.now() - 86400000 * 2, vip: true },
-            p2: { id: 'p2', name: 'زيت زيتون بكر 1 لتر', price: 185, category: 'screens', emoji: '🫒', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 5, likedBy: [], description: 'زيت طبيعي', createdAt: Date.now() - 86400000, vip: false },
-            p3: { id: 'p3', name: 'شاشة سامسونج 55 بوصة', price: 4500, category: 'used', emoji: '📺', sellerId: 's1', sellerName: 'متجر النور', likes: 12, likedBy: [], description: 'شاشة ممتازة', createdAt: Date.now() - 86400000 * 3, vip: true },
-            p4: { id: 'p4', name: 'كريم مرطب للبشرة', price: 95, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 3, likedBy: [], description: 'ترطيب عميق', createdAt: Date.now() - 86400000 * 4, vip: false },
-            p5: { id: 'p5', name: 'لاب توب ديل Inspiron', price: 12000, category: 'used', emoji: '💻', sellerId: 's1', sellerName: 'متجر النور', likes: 7, likedBy: [], description: 'Core i7', createdAt: Date.now() - 86400000 * 6, vip: true },
-            p6: { id: 'p6', name: 'عطر رجالي فاخر', price: 320, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 15, likedBy: [], description: 'عطر خشبي', createdAt: Date.now() - 86400000 * 2, vip: false },
+            p1: { id: 'p1', name: 'ايفون 14 Pro مستعمل', price: 18000, category: 'used', emoji: '📱', sellerId: 's1', sellerName: 'متجر النور', likes: 8, likedBy: [], description: 'بطارية 92%', createdAt: Date.now() - 86400000 * 2, vip: true, comments: [], rating: 0 },
+            p2: { id: 'p2', name: 'زيت زيتون بكر 1 لتر', price: 185, category: 'screens', emoji: '🫒', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 5, likedBy: [], description: 'زيت طبيعي', createdAt: Date.now() - 86400000, vip: false, comments: [], rating: 0 },
+            p3: { id: 'p3', name: 'شاشة سامسونج 55 بوصة', price: 4500, category: 'used', emoji: '📺', sellerId: 's1', sellerName: 'متجر النور', likes: 12, likedBy: [], description: 'شاشة ممتازة', createdAt: Date.now() - 86400000 * 3, vip: true, comments: [], rating: 0 },
+            p4: { id: 'p4', name: 'كريم مرطب للبشرة', price: 95, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 3, likedBy: [], description: 'ترطيب عميق', createdAt: Date.now() - 86400000 * 4, vip: false, comments: [], rating: 0 },
+            p5: { id: 'p5', name: 'لاب توب ديل Inspiron', price: 12000, category: 'used', emoji: '💻', sellerId: 's1', sellerName: 'متجر النور', likes: 7, likedBy: [], description: 'Core i7', createdAt: Date.now() - 86400000 * 6, vip: true, comments: [], rating: 0 },
+            p6: { id: 'p6', name: 'عطر رجالي فاخر', price: 320, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 15, likedBy: [], description: 'عطر خشبي', createdAt: Date.now() - 86400000 * 2, vip: false, comments: [], rating: 0 },
         };
         SAMPLE_SELLERS.owner.products = Object.keys(SAMPLE_PRODUCTS);
 
@@ -63,7 +63,7 @@
         function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
         function isOwner(seller) { return seller?.email === OWNER_EMAIL; }
         function createSeller(data) { return { id: 's_' + generateId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now() }; }
-        function createProduct(data) { return { id: 'p_' + generateId(), ...data, likes: 0, likedBy: [], createdAt: Date.now(), vip: false }; }
+        function createProduct(data) { return { id: 'p_' + generateId(), ...data, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 }; }
         function addChatMessage(state, msg) { return { ...state, chatMessages: [...state.chatMessages, { ...msg, id: generateId(), ts: Date.now() }] }; }
         function getBotResponse(msg) {
             const m = msg.toLowerCase();
@@ -76,9 +76,16 @@
 
         const { useState, useEffect, useCallback, useRef } = React;
 
-        // ==================== مكون بطاقة المنتج ====================
-        const ProductCard = ({ product, isLiked, onLike, onWhatsApp, onClick, listMode }) => {
+        // ==================== مكون بطاقة المنتج (مع أيقونات تعليق وتقييم) ====================
+        const ProductCard = ({ product, isLiked, onLike, onWhatsApp, onClick, listMode, onComment, onRate }) => {
             const vipIcon = product.vip ? <i className="fas fa-crown text-yellow-500 text-sm ml-1"></i> : null;
+            const ratingStars = (rating) => {
+                let stars = [];
+                for (let i = 1; i <= 5; i++) {
+                    stars.push(<i key={i} className={`fas fa-star ${i <= rating ? 'text-yellow-400' : 'text-gray-300'} text-xs cursor-pointer`} onClick={(e) => { e.stopPropagation(); onRate(i); }}></i>);
+                }
+                return stars;
+            };
             if (listMode) {
                 return (
                     <div onClick={onClick} className="flex gap-4 p-3 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md transition">
@@ -90,6 +97,7 @@
                             <h3 className="font-semibold flex items-center gap-1">{vipIcon} {product.name}</h3>
                             <p className="text-blue-600 font-bold">{product.price.toLocaleString()} ج.م</p>
                             <p className="text-xs text-gray-500">{product.sellerName}</p>
+                            <div className="flex gap-1 mt-1">{ratingStars(product.rating)}</div>
                         </div>
                         <div className="flex flex-col gap-2 items-end">
                             <button onClick={(e) => { e.stopPropagation(); onLike(); }} className={`p-2 rounded-full w-9 h-9 flex items-center justify-center transition ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}>
@@ -98,11 +106,15 @@
                             <button onClick={(e) => { e.stopPropagation(); onWhatsApp(); }} className="p-2 rounded-full bg-green-100 text-green-600 w-9 h-9 flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
                                 <i className="fab fa-whatsapp"></i>
                             </button>
+                            <button onClick={(e) => { e.stopPropagation(); onComment(); }} className="p-2 rounded-full bg-blue-100 text-blue-600 w-9 h-9 flex items-center justify-center hover:bg-orange-500 hover:text-white transition">
+                                <i className="fas fa-comment"></i>
+                            </button>
                             {product.vip && <div className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">VIP</div>}
                         </div>
                     </div>
                 );
             }
+            // وضع الشبكة
             return (
                 <div onClick={onClick} className="bg-white rounded-xl border shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition relative">
                     {product.vip && <span className="absolute top-2 right-2 bg-yellow-400 text-white rounded-full px-2 py-0.5 text-xs z-10"><i className="fas fa-crown"></i> VIP</span>}
@@ -122,24 +134,27 @@
                                 <button onClick={(e) => { e.stopPropagation(); onWhatsApp(); }} className="p-1.5 rounded-full bg-green-100 text-green-600 hover:bg-orange-500 hover:text-white transition">
                                     <i className="fab fa-whatsapp text-sm"></i>
                                 </button>
+                                <button onClick={(e) => { e.stopPropagation(); onComment(); }} className="p-1.5 rounded-full bg-blue-100 text-blue-600 hover:bg-orange-500 hover:text-white transition">
+                                    <i className="fas fa-comment text-sm"></i>
+                                </button>
                             </div>
                         </div>
+                        <div className="flex gap-1 mt-2 justify-center">{ratingStars(product.rating)}</div>
                     </div>
                 </div>
             );
         };
 
-        // ==================== صفحة الرئيسية (تم إزالة شريط البحث وأيقونة السلة واستبدالها بـ VIP) ====================
-        const HomePage = ({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIP, imgSearchResults, onClearImgSearch }) => {
+        // ==================== صفحة الرئيسية (تم إزالة VIP و Offers من القائمة العلوية) ====================
+        const HomePage = ({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIPPage, imgSearchResults, onClearImgSearch, onComment, onRate }) => {
             const [category, setCategory] = useState('all');
             const [viewMode, setViewMode] = useState('grid');
+            // الفئات بدون VIP وبدون عروض (تم نقلهما إلى أزرار منفصلة)
             const categories = [
                 { id: 'all', label: 'الكل', icon: 'fa-grid' },
                 { id: 'used', label: 'مستعمل', icon: 'fa-tag' },
                 { id: 'screens', label: 'سوبر ماركت', icon: 'fa-store' },
-                { id: 'new', label: 'جمال وعناية', icon: 'fa-spa' },
-                { id: 'offers', label: 'عروض', icon: 'fa-fire' },
-                { id: 'vip', label: 'VIP', icon: 'fa-crown' }
+                { id: 'new', label: 'جمال وعناية', icon: 'fa-spa' }
             ];
             const filtered = React.useMemo(() => {
                 let arr = Object.values(products);
@@ -166,7 +181,7 @@
                     <div className="flex items-center gap-3 px-4 py-3 bg-white border-b">
                         <button onClick={onAccountBtn} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 text-gray-800 text-sm hover:bg-orange-100 hover:text-orange-600 transition"><i className="fas fa-user-circle"></i> حسابي</button>
                         <button onClick={onShowOffers} className="flex gap-2 px-4 py-2 rounded-xl bg-orange-50 text-orange-600 text-sm hover:bg-orange-500 hover:text-white transition"><i className="fas fa-tag"></i> عروض</button>
-                        <button onClick={onShowVIP} className="flex gap-2 px-4 py-2 rounded-xl bg-yellow-50 text-yellow-700 text-sm hover:bg-orange-500 hover:text-white transition"><i className="fas fa-crown"></i> VIP</button>
+                        <button onClick={onShowVIPPage} className="flex gap-2 px-4 py-2 rounded-xl bg-yellow-50 text-yellow-700 text-sm hover:bg-orange-500 hover:text-white transition"><i className="fas fa-crown"></i> اشتراكات VIP</button>
                         <div className="flex-1"></div>
                         <button onClick={() => { setViewMode('grid'); onClearImgSearch(); }} className={`p-2 rounded-xl transition ${viewMode === 'grid' && !isImg ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}><i className="fas fa-th-large"></i></button>
                         <button onClick={() => { setViewMode('list'); onClearImgSearch(); }} className={`p-2 rounded-xl transition ${viewMode === 'list' && !isImg ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}><i className="fas fa-list-ul"></i></button>
@@ -175,15 +190,15 @@
                     <div className="flex-1 overflow-auto p-4">
                         {display.length === 0 ? <div className="text-center py-20 text-gray-400"><i className="fas fa-box-open text-5xl"></i><p>لا توجد منتجات</p></div> :
                             viewMode === 'grid' || isImg ?
-                                <div className="grid grid-cols-2 gap-4">{display.map(p => <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={() => onLike(p.id)} onWhatsApp={() => onWhatsApp(p)} onClick={() => onProductClick(p)} listMode={false} />)}</div> :
-                                <div className="flex flex-col gap-3">{display.map(p => <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={() => onLike(p.id)} onWhatsApp={() => onWhatsApp(p)} onClick={() => onProductClick(p)} listMode={true} />)}</div>
+                                <div className="grid grid-cols-2 gap-4">{display.map(p => <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={() => onLike(p.id)} onWhatsApp={() => onWhatsApp(p)} onClick={() => onProductClick(p)} listMode={false} onComment={() => onComment(p.id)} onRate={(rating) => onRate(p.id, rating)} />)}</div> :
+                                <div className="flex flex-col gap-3">{display.map(p => <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={() => onLike(p.id)} onWhatsApp={() => onWhatsApp(p)} onClick={() => onProductClick(p)} listMode={true} onComment={() => onComment(p.id)} onRate={(rating) => onRate(p.id, rating)} />)}</div>
                         }
                     </div>
                 </div>
             );
         };
 
-        // ==================== صفحة الدردشة (شريط الإدخال ثابت) ====================
+        // ==================== صفحة الدردشة ====================
         const ChatPage = ({ messages, onSendMessage, onBack }) => {
             const [input, setInput] = useState('');
             const send = () => { if (input.trim()) { onSendMessage(input); setInput(''); } };
@@ -204,6 +219,42 @@
                     <div className="p-3 border-t flex gap-2 bg-white z-10 flex-shrink-0">
                         <input className="flex-1 p-3 bg-gray-100 rounded-xl" placeholder="اكتب رسالتك..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} />
                         <button onClick={send} className="px-5 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition"><i className="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            );
+        };
+
+        // ==================== صفحة الاشتراكات VIP ====================
+        const VIPPage = ({ seller, onBack, onPurchaseSubscription }) => {
+            const [selected, setSelected] = useState(null);
+            const plans = [
+                { id: 'silver', name: 'فضي', price: 99, productsLimit: 50, color: 'bg-gray-200', textColor: 'text-gray-800' },
+                { id: 'gold', name: 'ذهبي', price: 199, productsLimit: 'غير محدود', color: 'bg-yellow-100', textColor: 'text-yellow-800' },
+                { id: 'platinum', name: 'بلاتيني', price: 299, productsLimit: 'غير محدود + مميزات خاصة', color: 'bg-purple-100', textColor: 'text-purple-800' }
+            ];
+            const buySubscription = (plan) => {
+                if (confirm(`شراء باقة ${plan.name} بـ ${plan.price} ج.م؟ ستتم ترقية اشتراكك فوراً.`)) {
+                    onPurchaseSubscription(plan.id, plan.price);
+                    setSelected(plan.id);
+                }
+            };
+            return (
+                <div className="flex flex-col h-full bg-white">
+                    <div className="flex items-center p-4 border-b">
+                        <button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
+                        <h1 className="flex-1 text-center font-bold"><i className="fas fa-crown text-yellow-500 ml-2"></i> باقات العضوية VIP</h1>
+                    </div>
+                    <div className="p-4 space-y-4 overflow-auto">
+                        <p className="text-gray-600 text-center">اشترك في إحدى الباقات واحصل على مميزات حصرية</p>
+                        {plans.map(plan => (
+                            <div key={plan.id} className={`rounded-2xl p-5 ${plan.color} shadow-md`}>
+                                <h2 className={`text-xl font-bold ${plan.textColor}`}>باقة {plan.name}</h2>
+                                <p className="text-3xl font-bold mt-2">{plan.price} ج.م <span className="text-sm">/ شهرياً</span></p>
+                                <p className="mt-2">عدد المنتجات: {plan.productsLimit}</p>
+                                <button onClick={() => buySubscription(plan)} className="mt-4 w-full py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600 transition">اشترك الآن</button>
+                            </div>
+                        ))}
+                        <p className="text-xs text-center text-gray-400 mt-4">الباقة المجانية: 10 منتجات كحد أقصى</p>
                     </div>
                 </div>
             );
@@ -237,11 +288,21 @@
             const submit = () => { if (!name || !price) return; onSave({ name, price: Number(price), category, emoji, description: desc, vip: isVip }); };
             return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white p-5 rounded-2xl shadow space-y-3"><h2 className="text-xl font-bold">{editProduct ? 'تعديل منتج' : 'إضافة منتج'}</h2><input placeholder="اسم المنتج" className="w-full p-3 border rounded-xl" value={name} onChange={e => setName(e.target.value)} /><input type="number" placeholder="السعر" className="w-full p-3 border rounded-xl" value={price} onChange={e => setPrice(e.target.value)} /><select className="w-full p-3 border rounded-xl" value={category} onChange={e => setCategory(e.target.value)}><option value="used">مستعمل</option><option value="screens">سوبر ماركت</option><option value="new">جمال وعناية</option></select><input placeholder="رمز تعبيري" className="w-full p-3 border rounded-xl" value={emoji} onChange={e => setEmoji(e.target.value)} /><textarea placeholder="وصف المنتج" rows="3" className="w-full p-3 border rounded-xl" value={desc} onChange={e => setDesc(e.target.value)}></textarea><label className="flex items-center gap-2"><input type="checkbox" checked={isVip} onChange={e => setIsVip(e.target.checked)} /> <i className="fas fa-crown text-yellow-500"></i> منتج VIP</label><button onClick={submit} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">حفظ</button></div></div>);
         };
-        const ProductDetailPage = ({ product, seller, isLiked, onLike, onBack }) => {
-            return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white rounded-2xl p-5"><div className="text-8xl text-center mb-4 relative">{product.emoji}{product.vip && <span className="absolute top-0 right-1/2 bg-yellow-400 rounded-full px-2 py-0.5 text-xs"><i className="fas fa-crown"></i> VIP</span>}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} ج.م</p><p className="text-gray-600 mt-3">{product.description || 'لا يوجد وصف'}</p><div className="mt-5 flex justify-between"><div><i className="fas fa-store"></i> {seller?.storeName}</div><button onClick={onLike} className={`flex gap-2 px-5 py-2 rounded-full transition ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}><i className={`fas fa-heart ${isLiked ? 'text-white' : ''}`}></i> {product.likes}</button></div></div></div>);
+        const ProductDetailPage = ({ product, seller, isLiked, onLike, onBack, onComment, onRate }) => {
+            const [showCommentBox, setShowCommentBox] = useState(false);
+            const [newComment, setNewComment] = useState('');
+            const ratingStars = () => {
+                let stars = [];
+                for (let i = 1; i <= 5; i++) {
+                    stars.push(<i key={i} className={`fas fa-star ${i <= product.rating ? 'text-yellow-400' : 'text-gray-300'} text-xl cursor-pointer`} onClick={() => onRate(i)}></i>);
+                }
+                return stars;
+            };
+            const addComment = () => { if (newComment.trim()) { onComment(newComment); setNewComment(''); setShowCommentBox(false); } };
+            return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white rounded-2xl p-5"><div className="text-8xl text-center mb-4 relative">{product.emoji}{product.vip && <span className="absolute top-0 right-1/2 bg-yellow-400 rounded-full px-2 py-0.5 text-xs"><i className="fas fa-crown"></i> VIP</span>}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} ج.م</p><div className="flex gap-2 mt-2 justify-center">{ratingStars()}</div><p className="text-gray-600 mt-3">{product.description || 'لا يوجد وصف'}</p><div className="mt-5 flex justify-between flex-wrap gap-2"><div><i className="fas fa-store"></i> {seller?.storeName}</div><div className="flex gap-2"><button onClick={onLike} className={`flex gap-2 px-5 py-2 rounded-full transition ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}><i className={`fas fa-heart ${isLiked ? 'text-white' : ''}`}></i> {product.likes}</button><button onClick={() => setShowCommentBox(true)} className="flex gap-2 px-5 py-2 rounded-full bg-blue-100 text-blue-600"><i className="fas fa-comment"></i> تعليق</button></div></div>{showCommentBox && (<div className="mt-4 p-3 bg-gray-100 rounded-xl"><textarea className="w-full p-2 border rounded-lg" rows="2" placeholder="اكتب تعليقك..." value={newComment} onChange={e => setNewComment(e.target.value)}></textarea><div className="flex gap-2 mt-2"><button onClick={addComment} className="px-4 py-2 bg-green-500 text-white rounded-lg">نشر</button><button onClick={() => setShowCommentBox(false)} className="px-4 py-2 bg-gray-300 rounded-lg">إلغاء</button></div></div>)}<div className="mt-4"><h3 className="font-semibold">التعليقات:</h3>{product.comments?.length === 0 ? <p className="text-gray-400">لا توجد تعليقات بعد</p> : product.comments?.map((c, idx) => <div key={idx} className="border-t pt-2 mt-2 text-sm">{c}</div>)}</div></div></div>);
         };
 
-        // ==================== التطبيق الرئيسي (تم إزالة الإطار البرتقالي، شريط البحث، زر الزائد، واستبدال السلة بـ VIP) ====================
+        // ==================== التطبيق الرئيسي ====================
         const App = () => {
             const [state, setState] = useState(null);
             const [page, setPage] = useState('home');
@@ -270,20 +331,20 @@
             const handleDeleteProduct = (pid) => { if (confirm('حذف المنتج؟')) updateState(s => { const np = { ...s.products }; delete np[pid]; const ns = { ...s.sellers }; if (ns[currentSeller.id]) ns[currentSeller.id].products = ns[currentSeller.id].products.filter(id => id !== pid); return { ...s, products: np, sellers: ns }; }); };
             const handleSendMessage = (text) => { updateState(s => { let ns = addChatMessage(s, { role: 'user', text }); ns = addChatMessage(ns, { role: 'bot', text: getBotResponse(text) }); return ns; }); };
             const handlePurchaseComplete = (type, amt, pts) => { updateState(s => { const seller = s.sellers[currentSeller.id]; return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...seller, points: seller.points + (pts || 0), verified: type === 'verify' ? true : seller.verified } } }; }); };
+            const handleSubscriptionPurchase = (planId, price) => { updateState(s => { const seller = s.sellers[currentSeller.id]; return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...seller, subscription: planId } } }; }); alert(`تم الترقية إلى باقة ${planId} بنجاح!`); setPage('seller'); };
             const handleCameraSearch = (e) => { const file = e.target.files[0]; if (!file) return; setImgSearchLoading(true); setTimeout(() => { const filtered = Object.values(state.products).filter(p => p.name.includes(searchText) || (!searchText)); setImgSearchResults(filtered.slice(0, 12)); setImgSearchLoading(false); }, 1000); if (cameraInputRef.current) cameraInputRef.current.value = ''; };
             const handleSearchChange = (e) => { const val = e.target.value; setSearchText(val); if (val.trim() === '') setImgSearchResults(null); else { const filtered = Object.values(state.products).filter(p => p.name.includes(val) || p.sellerName.includes(val)); setImgSearchResults(filtered); } };
             const showHome = () => { setPage('home'); setDetailProduct(null); setImgSearchResults(null); setSearchText(''); };
+            const handleComment = (pid, commentText) => { updateState(s => { const p = s.products[pid]; const newComments = [...(p.comments || []), commentText]; return { ...s, products: { ...s.products, [pid]: { ...p, comments: newComments } } }; }); };
+            const handleRate = (pid, rating) => { updateState(s => { const p = s.products[pid]; return { ...s, products: { ...s.products, [pid]: { ...p, rating: rating } } }; }); };
             const isLiked = (p) => currentSeller ? p.likedBy.includes(currentSeller.id) : false;
             const offersProducts = Object.values(state.products).filter(p => p.likes > 0 || p.price < 300);
-            // إزالة handleQuickAdd نهائياً
-            const handleShowVIP = () => { setPage('home'); setTimeout(() => { const vipBtn = document.querySelector('.fa-crown')?.closest('button'); if(vipBtn) vipBtn.click(); }, 50); };
 
             return (
                 <div className={`min-h-screen flex flex-col bg-gray-50 ${ownerMode ? 'ring-2 ring-yellow-400' : ''}`}>
                     {page === 'home' && (
                         <>
                             <header className="sticky top-0 z-20 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
-                                {/* الشعار بدون إطار برتقالي */}
                                 <div className="flex items-center gap-2">
                                     <i className="fas fa-store text-orange-500 text-xl"></i>
                                     <span className="text-lg font-bold text-orange-600">VICKS MARKET</span>
@@ -294,12 +355,11 @@
                                     <button onClick={() => currentSeller ? setPage('seller') : setPage('login')} className="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition-all duration-200"><i className="fas fa-user-circle"></i></button>
                                 </div>
                                 <input ref={cameraInputRef} type="file" accept="image/*" className="hidden" onChange={handleCameraSearch} />
-                                {/* حقل البحث مخفي ولكن نتركه للبحث النصي عبر زر البحث، نضعه خارج الشاشة */}
                                 <input id="searchInput" type="text" className="fixed -left-full opacity-0" value={searchText} onChange={handleSearchChange} />
                             </header>
                             {imgSearchLoading && <div className="bg-blue-50 p-2 text-center text-blue-600 text-sm"><i className="fas fa-spinner fa-pulse"></i> جاري البحث بالصورة...</div>}
                             <main className="flex-1 overflow-hidden">
-                                <HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p => { setDetailProduct(p); setPage('detail'); }} onAccountBtn={() => currentSeller ? setPage('seller') : setPage('login')} onShowOffers={() => setShowOffersModal(true)} onShowVIP={handleShowVIP} imgSearchResults={imgSearchResults} onClearImgSearch={() => { setImgSearchResults(null); setSearchText(''); }} />
+                                <HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p => { setDetailProduct(p); setPage('detail'); }} onAccountBtn={() => currentSeller ? setPage('seller') : setPage('login')} onShowOffers={() => setShowOffersModal(true)} onShowVIPPage={() => setPage('vip')} imgSearchResults={imgSearchResults} onClearImgSearch={() => { setImgSearchResults(null); setSearchText(''); }} onComment={(pid) => { const comment = prompt('أدخل تعليقك:'); if (comment) handleComment(pid, comment); }} onRate={(pid, rating) => handleRate(pid, rating)} />
                             </main>
                             <button onClick={() => setPage('chat')} className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-orange-500 text-white shadow-lg flex items-center justify-center hover:bg-orange-600 transition-all duration-200 z-30"><i className="fas fa-robot text-2xl"></i></button>
                         </>
@@ -308,9 +368,10 @@
                     {page === 'join' && <JoinPage sellers={state.sellers} onRegister={handleRegister} onBack={() => setPage('login')} />}
                     {page === 'seller' && currentSeller && <SellerPage seller={state.sellers[currentSeller.id]} products={state.products} onGoStore={() => setPage('store')} onGoChat={() => setPage('chat')} onAddProduct={() => { setEditingProduct(null); setPage('addProduct'); }} onEditProduct={p => { setEditingProduct(p); setPage('addProduct'); }} onDeleteProduct={handleDeleteProduct} onLogout={handleLogout} onBack={showHome} />}
                     {page === 'store' && currentSeller && <StorePage seller={state.sellers[currentSeller.id]} onBack={() => setPage('seller')} onPurchaseComplete={handlePurchaseComplete} />}
+                    {page === 'vip' && currentSeller && <VIPPage seller={currentSeller} onBack={() => setPage('home')} onPurchaseSubscription={handleSubscriptionPurchase} />}
                     {page === 'chat' && <ChatPage messages={state.chatMessages} onSendMessage={handleSendMessage} onBack={() => setPage(currentSeller ? 'seller' : 'home')} />}
                     {page === 'addProduct' && currentSeller && <AddProductPage onSave={handleAddProduct} onBack={() => { setEditingProduct(null); setPage('seller'); }} editProduct={editingProduct} />}
-                    {page === 'detail' && detailProduct && <ProductDetailPage product={state.products[detailProduct.id] || detailProduct} seller={state.sellers[detailProduct.sellerId] || null} isLiked={isLiked(state.products[detailProduct.id] || detailProduct)} onLike={() => handleLike(detailProduct.id)} onBack={showHome} />}
+                    {page === 'detail' && detailProduct && <ProductDetailPage product={state.products[detailProduct.id] || detailProduct} seller={state.sellers[detailProduct.sellerId] || null} isLiked={isLiked(state.products[detailProduct.id] || detailProduct)} onLike={() => handleLike(detailProduct.id)} onBack={showHome} onComment={(text) => handleComment(detailProduct.id, text)} onRate={(rating) => handleRate(detailProduct.id, rating)} />}
                     {showOffersModal && (<div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50" onClick={() => setShowOffersModal(false)}><div className="bg-white w-full max-w-md rounded-t-3xl p-6 max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}><div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div><h2 className="text-xl font-bold mb-3"><i className="fas fa-fire text-orange-500 ml-2"></i>العروض</h2>{offersProducts.map(p => <div key={p.id} onClick={() => { setShowOffersModal(false); setDetailProduct(p); setPage('detail'); }} className="flex gap-3 p-3 bg-gray-50 rounded-xl mb-2 cursor-pointer hover:bg-orange-50 transition"><div className="text-4xl">{p.emoji}</div><div><div className="font-semibold">{p.name}</div><div className="text-blue-600">{p.price} ج.م</div></div></div>)}</div></div>)}
                 </div>
             );
