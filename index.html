@@ -144,8 +144,8 @@
             );
         };
 
-        // ==================== صفحة الرئيسية (تم إزالة أيقونة حسابي من الشريط السفلي) ====================
-        const HomePage = ({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIPPage, imgSearchResults, onClearImgSearch, onComment, onRate }) => {
+        // ==================== صفحة الرئيسية (مع شريط بحث منبثق عند الضغط على أيقونة البحث) ====================
+        const HomePage = ({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIPPage, imgSearchResults, onClearImgSearch, onComment, onRate, searchText, onSearchChange, showSearchBar }) => {
             const [category, setCategory] = useState('all');
             const [viewMode, setViewMode] = useState('grid');
             const categories = [
@@ -166,6 +166,26 @@
             const isLiked = (p) => currentSellerId ? p.likedBy.includes(currentSellerId) : false;
             return (
                 <div className="flex flex-col h-full">
+                    {showSearchBar && (
+                        <div className="bg-white px-4 pb-3 pt-2 border-b border-gray-100">
+                            <div className="relative">
+                                <i className="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                                <input
+                                    type="text"
+                                    placeholder="ابحث عن منتج..."
+                                    className="w-full p-3 pr-10 bg-gray-100 rounded-xl focus:ring-2 focus:ring-orange-300 outline-none"
+                                    value={searchText}
+                                    onChange={(e) => onSearchChange(e.target.value)}
+                                    autoFocus
+                                />
+                                {searchText && (
+                                    <button onClick={() => onSearchChange('')} className="absolute left-3 top-3 text-gray-400">
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    )}
                     <div className="sticky top-0 z-10 bg-white border-b px-2 py-2">
                         <div className="flex gap-2 overflow-x-auto scrollbar-hide">
                             {categories.map(cat => (
@@ -176,7 +196,6 @@
                             ))}
                         </div>
                     </div>
-                    {/* الشريط السفلي للأزرار: عروض و VIP فقط (تم إزالة حسابي) */}
                     <div className="flex items-center gap-3 px-4 py-3 bg-white border-b">
                         <button onClick={onShowOffers} className="flex gap-2 px-4 py-2 rounded-xl bg-orange-50 text-orange-600 text-sm hover:bg-orange-500 hover:text-white transition"><i className="fas fa-tag"></i> عروض</button>
                         <button onClick={onShowVIPPage} className="flex gap-2 px-4 py-2 rounded-xl bg-yellow-50 text-yellow-700 text-sm hover:bg-orange-500 hover:text-white transition"><i className="fas fa-crown"></i> اشتراكات VIP</button>
@@ -310,6 +329,7 @@
             const [imgSearchLoading, setImgSearchLoading] = useState(false);
             const [showOffersModal, setShowOffersModal] = useState(false);
             const [searchText, setSearchText] = useState('');
+            const [showSearchBar, setShowSearchBar] = useState(false);
             const cameraInputRef = useRef(null);
 
             useEffect(() => { setState(loadState()); }, []);
@@ -331,8 +351,8 @@
             const handlePurchaseComplete = (type, amt, pts) => { updateState(s => { const seller = s.sellers[currentSeller.id]; return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...seller, points: seller.points + (pts || 0), verified: type === 'verify' ? true : seller.verified } } }; }); };
             const handleSubscriptionPurchase = (planId, price) => { updateState(s => { const seller = s.sellers[currentSeller.id]; return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...seller, subscription: planId } } }; }); alert(`تم الترقية إلى باقة ${planId} بنجاح!`); setPage('seller'); };
             const handleCameraSearch = (e) => { const file = e.target.files[0]; if (!file) return; setImgSearchLoading(true); setTimeout(() => { const filtered = Object.values(state.products).filter(p => p.name.includes(searchText) || (!searchText)); setImgSearchResults(filtered.slice(0, 12)); setImgSearchLoading(false); }, 1000); if (cameraInputRef.current) cameraInputRef.current.value = ''; };
-            const handleSearchChange = (e) => { const val = e.target.value; setSearchText(val); if (val.trim() === '') setImgSearchResults(null); else { const filtered = Object.values(state.products).filter(p => p.name.includes(val) || p.sellerName.includes(val)); setImgSearchResults(filtered); } };
-            const showHome = () => { setPage('home'); setDetailProduct(null); setImgSearchResults(null); setSearchText(''); };
+            const handleSearchTextChange = (val) => { setSearchText(val); if (val.trim() === '') setImgSearchResults(null); else { const filtered = Object.values(state.products).filter(p => p.name.includes(val) || p.sellerName.includes(val)); setImgSearchResults(filtered); } };
+            const showHome = () => { setPage('home'); setDetailProduct(null); setImgSearchResults(null); setSearchText(''); setShowSearchBar(false); };
             const handleComment = (pid, commentText) => { updateState(s => { const p = s.products[pid]; const newComments = [...(p.comments || []), commentText]; return { ...s, products: { ...s.products, [pid]: { ...p, comments: newComments } } }; }); };
             const handleRate = (pid, rating) => { updateState(s => { const p = s.products[pid]; return { ...s, products: { ...s.products, [pid]: { ...p, rating: rating } } }; }); };
             const isLiked = (p) => currentSeller ? p.likedBy.includes(currentSeller.id) : false;
@@ -342,23 +362,37 @@
                 <div className={`min-h-screen flex flex-col bg-gray-50 ${ownerMode ? 'ring-2 ring-yellow-400' : ''}`}>
                     {page === 'home' && (
                         <>
-                            <header className="sticky top-0 z-20 bg-white border-b border-gray-100 px-4 py-2 flex items-center justify-between">
-                                {/* اسم الموقع مصغر قليلاً ليتسع للأيقونات */}
+                            <header className="sticky top-0 z-20 bg-white border-b border-gray-100 px-3 py-2 flex items-center justify-between">
                                 <div className="flex items-center gap-1">
-                                    <i className="fas fa-store text-orange-500 text-lg"></i>
-                                    <span className="text-md font-bold text-orange-600">VICKS MARKET</span>
+                                    <i className="fas fa-store text-orange-500 text-base"></i>
+                                    <span className="text-sm font-bold text-orange-600">VICKS MARKET</span>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button onClick={() => cameraInputRef.current?.click()} className="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-camera"></i></button>
-                                    <button onClick={() => { setSearchText(''); document.getElementById('searchInput')?.focus(); }} className="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-search"></i></button>
-                                    <button onClick={() => currentSeller ? setPage('seller') : setPage('login')} className="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-user-circle"></i></button>
+                                    <button onClick={() => cameraInputRef.current?.click()} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-camera text-sm"></i></button>
+                                    <button onClick={() => setShowSearchBar(!showSearchBar)} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-search text-sm"></i></button>
+                                    <button onClick={() => currentSeller ? setPage('seller') : setPage('login')} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-user-circle text-sm"></i></button>
                                 </div>
                                 <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleCameraSearch} />
-                                <input id="searchInput" type="text" className="fixed -left-full opacity-0" value={searchText} onChange={handleSearchChange} />
                             </header>
                             {imgSearchLoading && <div className="bg-blue-50 p-2 text-center text-blue-600 text-sm"><i className="fas fa-spinner fa-pulse"></i> جاري البحث بالصورة...</div>}
                             <main className="flex-1 overflow-hidden">
-                                <HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p => { setDetailProduct(p); setPage('detail'); }} onAccountBtn={() => currentSeller ? setPage('seller') : setPage('login')} onShowOffers={() => setShowOffersModal(true)} onShowVIPPage={() => setPage('vip')} imgSearchResults={imgSearchResults} onClearImgSearch={() => { setImgSearchResults(null); setSearchText(''); }} onComment={(pid) => { const comment = prompt('أدخل تعليقك:'); if (comment) handleComment(pid, comment); }} onRate={(pid, rating) => handleRate(pid, rating)} />
+                                <HomePage 
+                                    products={state.products} 
+                                    currentSellerId={state.currentSellerId} 
+                                    onLike={handleLike} 
+                                    onWhatsApp={handleWhatsApp} 
+                                    onProductClick={p => { setDetailProduct(p); setPage('detail'); }} 
+                                    onAccountBtn={() => currentSeller ? setPage('seller') : setPage('login')} 
+                                    onShowOffers={() => setShowOffersModal(true)} 
+                                    onShowVIPPage={() => setPage('vip')} 
+                                    imgSearchResults={imgSearchResults} 
+                                    onClearImgSearch={() => { setImgSearchResults(null); setSearchText(''); setShowSearchBar(false); }} 
+                                    onComment={(pid) => { const comment = prompt('أدخل تعليقك:'); if (comment) handleComment(pid, comment); }} 
+                                    onRate={(pid, rating) => handleRate(pid, rating)} 
+                                    searchText={searchText} 
+                                    onSearchChange={handleSearchTextChange} 
+                                    showSearchBar={showSearchBar} 
+                                />
                             </main>
                             <button onClick={() => setPage('chat')} className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-orange-500 text-white shadow-lg flex items-center justify-center hover:bg-orange-600 z-30"><i className="fas fa-robot text-2xl"></i></button>
                         </>
