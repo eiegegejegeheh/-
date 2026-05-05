@@ -2,55 +2,69 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>VICKS MARKET | منصة تجارة عالمية</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <!-- Tailwind + Font Awesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --orange: #ff6600;
+            --bg-light: #f9fafb;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+            --border: #e5e7eb;
+        }
+        body.dark {
+            --bg-light: #000000;
+            --card-bg: #121212;
+            --text-main: #ff6600;
+            --text-sub: #ff6600;
+            --border: #ff6600;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            background-color: #f9fafb;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            max-width: 100%;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            max-width: 100vw;
             overflow-x: hidden;
-        }
-        body.dark {
-            background-color: #000000;
-        }
-        body.dark .bg-white {
-            background-color: #121212 !important;
-        }
-        body.dark .bg-gray-50,
-        body.dark .bg-gray-100 {
-            background-color: #1e1e1e !important;
-        }
-        body.dark .text-gray-800,
-        body.dark .text-gray-600,
-        body.dark .text-gray-500,
-        body.dark .text-blue-600,
-        body.dark span,
-        body.dark p,
-        body.dark h1,
-        body.dark h2,
-        body.dark h3,
-        body.dark .product-name,
-        body.dark .seller-name,
-        body.dark .price {
-            color: #ff6600 !important;
-        }
-        body.dark .border,
-        body.dark .border-gray-100,
-        body.dark .border-t {
-            border-color: #ff6600 !important;
-            border-width: 0.5px;
+            transition: background 0.3s, color 0.3s;
         }
 
-        /* ========== بطاقات المنتج ========== */
+        /* ========= LAYOUT ========= */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        .header {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+        .content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 20px;
+        }
+
+        /* ========= PRODUCT CARDS ========= */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -63,46 +77,26 @@
             gap: 8px;
             padding: 8px;
         }
-        .product-card-grid {
-            background: white;
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            border: 1px solid #e5e7eb;
             padding: 10px;
             display: flex;
             flex-direction: column;
             cursor: pointer;
             transition: box-shadow 0.2s;
-            max-width: 100%;
+            position: relative;
             overflow: hidden;
         }
-        .product-card-grid:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        .product-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        body.dark .product-card-grid {
-            background: #121212;
-            border-color: #ff6600;
-        }
-        .product-card-list {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            padding: 10px;
-            display: flex;
+        .product-card.list-view {
             flex-direction: row;
             gap: 10px;
-            cursor: pointer;
-            transition: box-shadow 0.2s;
-            max-width: 100%;
-            overflow: hidden;
+            padding: 12px;
         }
-        .product-card-list:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        body.dark .product-card-list {
-            background: #121212;
-            border-color: #ff6600;
-        }
-
         .product-image {
             background: #f3f4f6;
             border-radius: 10px;
@@ -110,23 +104,19 @@
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            cursor: pointer;
-            transition: background 0.2s;
             flex-shrink: 0;
+            transition: background 0.2s;
+            cursor: pointer;
         }
-        .product-image:hover {
-            background: #e5e7eb;
-        }
-        .product-card-grid .product-image {
+        .grid-card .product-image {
             height: 120px;
             margin-bottom: 6px;
         }
-        .product-card-list .product-image {
+        .list-card .product-image {
             width: 80px;
             height: 80px;
             font-size: 2.5rem;
         }
-
         .product-name {
             font-weight: 600;
             font-size: 0.8rem;
@@ -134,37 +124,34 @@
             overflow: hidden;
             text-overflow: ellipsis;
             text-align: center;
+            margin-bottom: 6px;
+        }
+        .list-card .product-name {
+            text-align: right;
             margin-bottom: 4px;
         }
-        .product-card-list .product-name {
-            text-align: right;
-            margin-bottom: 2px;
-        }
-
-        .product-meta-row {
+        .meta-row {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
-
-        .stars-container {
+        .stars {
             display: flex;
             gap: 1px;
         }
-        .seller-mini {
+        .seller-info {
             display: flex;
             align-items: center;
             gap: 4px;
             cursor: pointer;
-            font-size: 0.65rem;
-            color: #6b7280;
-            max-width: 70px;
+            max-width: 80px;
             overflow: hidden;
+            font-size: 0.65rem;
+            color: var(--text-sub);
         }
-        .seller-mini-avatar {
+        .seller-avatar {
             width: 18px;
             height: 18px;
             border-radius: 50%;
@@ -175,61 +162,48 @@
             font-size: 0.6rem;
             flex-shrink: 0;
         }
-
-        .product-bottom-row {
+        .bottom-row {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
             margin-top: auto;
-            padding: 0 2px;
         }
         .action-btns {
             display: flex;
             gap: 6px;
-            align-items: center;
         }
-        .action-btn-sm {
+        .action-btn {
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 11px;
             cursor: pointer;
-            transition: 0.2s;
             border: none;
+            transition: 0.2s;
         }
-        .price-tag {
+        .price {
             font-weight: bold;
-            color: #ff6600;
+            color: var(--orange);
             font-size: 0.85rem;
             white-space: nowrap;
         }
 
-        /* ========== بحث ========== */
+        /* ========= SEARCH OVERLAY ========= */
         .search-overlay {
-            background: white;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
             padding: 8px 12px;
-            border-bottom: 1px solid #e5e7eb;
-            animation: slideDown 0.25s ease;
-        }
-        body.dark .search-overlay {
-            background: #121212;
-            border-color: #ff6600;
+            animation: slideDown 0.2s ease;
         }
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .search-input-wrapper {
+        .search-wrapper {
             display: flex;
             align-items: center;
             background: #f3f4f6;
@@ -237,38 +211,36 @@
             padding: 0 10px;
             gap: 6px;
         }
-        body.dark .search-input-wrapper {
+        body.dark .search-wrapper {
             background: #2a2a2a;
         }
-        .search-input-wrapper input {
+        .search-wrapper input {
             flex: 1;
             border: none;
             background: transparent;
             padding: 10px 4px;
             outline: none;
             font-size: 0.85rem;
+            color: var(--text-main);
         }
-        body.dark .search-input-wrapper input {
-            color: #ff6600;
-        }
-        .search-icon-btn {
+        .search-icon {
             background: none;
             border: none;
-            color: #6b7280;
+            color: var(--text-sub);
             cursor: pointer;
             font-size: 1rem;
             padding: 4px;
         }
 
-        /* ========== شات بوت عائم ========== */
-        .floating-bot-btn {
+        /* ========= BOT FLOATING ========= */
+        .floating-bot {
             position: fixed;
             bottom: 20px;
             right: 20px;
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #ff6600;
+            background: var(--orange);
             color: white;
             display: flex;
             align-items: center;
@@ -276,26 +248,26 @@
             font-size: 1.4rem;
             cursor: pointer;
             z-index: 50;
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(255,102,0,0.4);
             border: none;
             transition: transform 0.2s;
         }
-        .floating-bot-btn:hover {
+        .floating-bot:hover {
             transform: scale(1.1);
         }
 
-        /* ========== نافذة التعليقات (30%) ========== */
+        /* ========= COMMENTS PANEL (30vh) ========= */
         .comments-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 90;
             display: flex;
             align-items: flex-end;
             justify-content: center;
         }
         .comments-panel {
-            background: white;
+            background: var(--card-bg);
             border-radius: 16px 16px 0 0;
             width: 100%;
             max-height: 30vh;
@@ -303,846 +275,713 @@
             padding: 16px;
             animation: slideUp 0.3s ease;
         }
-        body.dark .comments-panel {
-            background: #121212;
-        }
         @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-            }
-            to {
-                transform: translateY(0);
-            }
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
 
-        /* ========== قائمة الدول ========== */
+        /* ========= COUNTRY DROPDOWN ========= */
         .country-dropdown {
             max-height: 200px;
             overflow-y: auto;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border);
             border-radius: 12px;
             margin-top: 4px;
-            background: white;
+            background: var(--card-bg);
             position: absolute;
             width: 100%;
             z-index: 20;
         }
-        body.dark .country-dropdown {
-            background: #1e1e1e;
-            border-color: #ff6600;
-        }
 
-        /* ========== منع التمدد الطولي ========== */
-        .app-container {
-            max-width: 100%;
-            overflow-x: hidden;
+        /* ========= MISC ========= */
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            color: #4b5563;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .dark .icon-btn {
+            background: #2a2a2a;
+            color: #ff6600;
+        }
+        .btn-primary {
+            background: var(--orange);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            height: 380px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            z-index: 55;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            overflow: hidden;
         }
-        .header-fixed {
-            flex-shrink: 0;
+        .dark .chat-window {
+            background: #121212;
+            color: #ff6600;
         }
-        .content-scroll {
+        .chat-header {
+            background: var(--orange);
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+        .chat-messages {
             flex: 1;
             overflow-y: auto;
-            overflow-x: hidden;
-            max-width: 100%;
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+        .chat-input-area {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #eee;
+        }
+        .dark .chat-input-area {
+            border-color: #ff6600;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            outline: none;
+        }
+        .msg-user {
+            background: var(--orange);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 16px 16px 4px 16px;
+            max-width: 80%;
+            margin-bottom: 8px;
+            align-self: flex-end;
+        }
+        .msg-bot {
+            background: #e5e7eb;
+            padding: 8px 12px;
+            border-radius: 16px 16px 16px 4px;
+            max-width: 80%;
+            margin-bottom: 8px;
+            align-self: flex-start;
+        }
+        .dark .msg-bot {
+            background: #2a2a2a;
+            color: #ff6600;
+        }
+        .disabled-btn {
+            opacity: 0.5;
+            pointer-events: none;
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans antialiased">
-    <div id="root"></div>
+<body>
 
-    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js">
-    </script>
+<div id="app" class="app-container"></div>
 
-    <script type="text/babel" data-presets="react">
-        const { useState, useEffect, useRef } = React;
+<script>
+    // ========== DATA & STATE ==========
+    const STORAGE_KEY = 'vicks_vanilla_v1';
+    const THEME_KEY = 'vicks_vanilla_theme';
 
-        // ========== Constants ==========
-        const STORAGE_KEY = 'vicks_v10';
-        const THEME_KEY = 'vicks_theme_v10';
+    // Initial sellers & products (same as before)
+    const initialSellers = {
+        admin: { id:'admin1', email:'mom1113694362@gmail.com', password:'momMOM2023#', storeName:'VICKS MARKET', ownerName:'محمد المالك', phone:'01113694362', points:50000, verified:true, subscription:'platinum', products:[], country:'مصر', isAdmin:true, avatar:'👑', verificationBadge:true, accountType:'seller', maxProducts:Infinity, subscriptionExpiry:null },
+        s1: { id:'s1', email:'seller1@test.com', password:'123456', storeName:'متجر النور', ownerName:'أحمد', phone:'01012345678', points:350, verified:true, subscription:'silver', products:[], country:'مصر', isAdmin:false, avatar:'🌟', verificationBadge:true, accountType:'seller', maxProducts:Infinity, subscriptionExpiry:null },
+        s2: { id:'s2', email:'seller2@test.com', password:'123456', storeName:'سوبر ماركت الفرح', ownerName:'فاطمة', phone:'01198765432', points:120, verified:false, subscription:'free', products:[], country:'السعودية', isAdmin:false, avatar:'🛒', verificationBadge:false, accountType:'seller', maxProducts:10, subscriptionExpiry:null },
+        cust1: { id:'cust1', email:'customer@test.com', password:'123456', storeName:'', ownerName:'عميل عادي', phone:'01000000000', points:50, verified:false, subscription:'free', products:[], country:'مصر', isAdmin:false, avatar:'👤', verificationBadge:false, accountType:'customer' }
+    };
 
-        function genId() {
-            return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const productsList = [];
+    for(let i=1; i<=14; i++){
+        const sid = i%2===0?'s2':'s1';
+        productsList.push({
+            id:`p${i}`, name:['ايفون 14 Pro','زيت زيتون','شاشة سامسونج','بلاي ستيشن 5','لاب توب ديل','عطر فاخر','ساعة ذكية','سماعة لاسلكية','طقم مطبخ','لعبة فيفا','سوار ذهبي','كاميرا مراقبة'][(i-1)%12]+(i>10?` ${i}`:''),
+            price:80+i*50, category:['electronics','fashion','home','smart','games','accessories'][(i-1)%6],
+            emoji:['📱','🫒','📺','🎮','💻','🧴','⌚','🎧','🍳','⚽','💎','📷'][(i-1)%12],
+            sellerId:sid, sellerName:sid==='s1'?'متجر النور':'سوبر ماركت الفرح',
+            likes:(i*7)%19, likedBy:[], comments:['جيد جداً','ممتاز','سعر مناسب'].slice(0, i%3+1), rating:i%5
+        });
+    }
+
+    function getInitialState(){
+        const s = JSON.parse(JSON.stringify(initialSellers));
+        s.s1.products = productsList.filter(p=>p.sellerId==='s1').map(p=>p.id);
+        s.s2.products = productsList.filter(p=>p.sellerId==='s2').map(p=>p.id);
+        const prods = {};
+        productsList.forEach(p=>prods[p.id]=p);
+        return { sellers: s, products: prods, currentSellerId: null, chatMessages:[{id:'1',role:'bot',text:'أهلاً بك في VICKS MARKET!', ts:Date.now()}] };
+    }
+
+    function loadState(){
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : getInitialState();
+    }
+    function saveState(st){ localStorage.setItem(STORAGE_KEY, JSON.stringify(st)); }
+
+    // Global state
+    let state = loadState();
+    let currentPage = 'home';
+    let viewMode = 'grid';
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let showSearch = false;
+    let showChat = false;
+    let commentsProduct = null;
+    let previewProduct = null;
+
+    // DOM elements
+    const appEl = document.getElementById('app');
+
+    // Helper functions
+    function render(){ appEl.innerHTML = ''; appEl.appendChild(buildPage()); }
+
+    function buildPage(){
+        if(currentPage === 'login') return buildLoginPage();
+        if(currentPage === 'join') return buildJoinPage();
+        if(currentPage === 'vip') return buildVIPPage();
+        return buildHomePage();
+    }
+
+    // ========== HOME PAGE ==========
+    function buildHomePage(){
+        const container = document.createElement('div');
+        container.className = 'app-container';
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'header';
+        header.innerHTML = `
+            <div style="display:flex; gap:8px;">
+                <button class="icon-btn" id="chatToggle"><i class="fas fa-robot"></i></button>
+                <button class="icon-btn" id="searchToggle"><i class="fas fa-search"></i></button>
+            </div>
+            <h1 style="font-size:1.2rem; font-weight:bold; color:var(--orange);">VICKS MARKET</h1>
+            <div style="display:flex; gap:8px;">
+                <button class="icon-btn" id="themeToggle"><i class="fas ${document.body.classList.contains('dark')?'fa-sun':'fa-moon'}"></i></button>
+                ${state.currentSellerId ? 
+                    '<button class="icon-btn" id="logoutBtn" style="background:#fef2f2;color:#dc2626;"><i class="fas fa-sign-out-alt"></i></button>' :
+                    '<button class="icon-btn" id="loginBtn" style="background:#fff7ed;color:#ff6600;"><i class="fas fa-user"></i></button>'}
+            </div>
+        `;
+        container.appendChild(header);
+
+        // Search overlay
+        if(showSearch){
+            const searchDiv = document.createElement('div');
+            searchDiv.className = 'search-overlay';
+            searchDiv.innerHTML = `
+                <div class="search-wrapper">
+                    <i class="fas fa-search text-gray-400" style="font-size:0.9rem;"></i>
+                    <input type="text" placeholder="ابحث عن منتج..." id="searchInput" value="${searchQuery}">
+                    <button class="search-icon" id="camBtn"><i class="fas fa-camera"></i></button>
+                    <button class="search-icon" id="uploadBtn"><i class="fas fa-plus"></i></button>
+                    <button class="search-icon" id="closeSearch"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+            container.appendChild(searchDiv);
         }
 
+        // Categories bar
+        const catBar = document.createElement('div');
+        catBar.style.cssText = 'display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:var(--card-bg);border-bottom:1px solid var(--border);flex-shrink:0;';
         const categories = [
-            { id: 'all', label: 'الكل', icon: '' },
-            { id: 'electronics', label: 'إلكترونيات', icon: '📱' },
-            { id: 'fashion', label: 'موضة', icon: '👗' },
-            { id: 'home', label: 'المنزل', icon: '🏠' },
-            { id: 'smart', label: 'أدوات ذكية', icon: '🤖' },
-            { id: 'games', label: 'ألعاب', icon: '🎮' },
-            { id: 'accessories', label: 'إكسسوارات', icon: '💍' }
+            {id:'all', label:'الكل', icon:''},{id:'electronics', label:'إلكترونيات', icon:'📱'},{id:'fashion', label:'موضة', icon:'👗'},
+            {id:'home', label:'المنزل', icon:'🏠'},{id:'smart', label:'أدوات ذكية', icon:'🤖'},{id:'games', label:'ألعاب', icon:'🎮'},{id:'accessories', label:'إكسسوارات', icon:'💍'}
         ];
+        categories.forEach(cat=>{
+            const btn = document.createElement('button');
+            btn.className = `category-btn ${activeCategory===cat.id ? 'active' : ''}`;
+            btn.textContent = (cat.icon?cat.icon+' ':'') + cat.label;
+            btn.dataset.cat = cat.id;
+            btn.style.cssText = `padding:6px 14px;border-radius:20px;border:none;cursor:pointer;white-space:nowrap;font-size:0.8rem;background:${activeCategory===cat.id?'#ff6600':'#f3f4f6'};color:${activeCategory===cat.id?'white':'#4b5563'};font-weight:${activeCategory===cat.id?'bold':'normal'};flex-shrink:0;`;
+            catBar.appendChild(btn);
+        });
+        container.appendChild(catBar);
 
-        const initialSellers = {
-            admin: {
-                id: 'admin1',
-                email: 'mom1113694362@gmail.com',
-                password: 'momMOM2023#',
-                storeName: 'VICKS MARKET',
-                ownerName: 'محمد المالك',
-                phone: '01113694362',
-                points: 50000,
-                verified: true,
-                subscription: 'platinum',
-                products: [],
-                country: 'مصر',
-                isAdmin: true,
-                avatar: '👑',
-                verificationBadge: true,
-                accountType: 'seller',
-                maxProducts: Infinity,
-                subscriptionExpiry: null
-            },
-            s1: {
-                id: 's1',
-                email: 'seller1@test.com',
-                password: '123456',
-                storeName: 'متجر النور',
-                ownerName: 'أحمد',
-                phone: '01012345678',
-                points: 350,
-                verified: true,
-                subscription: 'silver',
-                products: [],
-                country: 'مصر',
-                isAdmin: false,
-                avatar: '🌟',
-                verificationBadge: true,
-                accountType: 'seller',
-                maxProducts: Infinity,
-                subscriptionExpiry: null
-            },
-            s2: {
-                id: 's2',
-                email: 'seller2@test.com',
-                password: '123456',
-                storeName: 'سوبر ماركت الفرح',
-                ownerName: 'فاطمة',
-                phone: '01198765432',
-                points: 120,
-                verified: false,
-                subscription: 'free',
-                products: [],
-                country: 'السعودية',
-                isAdmin: false,
-                avatar: '🛒',
-                verificationBadge: false,
-                accountType: 'seller',
-                maxProducts: 10,
-                subscriptionExpiry: null
-            },
-            customer1: {
-                id: 'cust1',
-                email: 'customer@test.com',
-                password: '123456',
-                storeName: '',
-                ownerName: 'عميل عادي',
-                phone: '01000000000',
-                points: 50,
-                verified: false,
-                subscription: 'free',
-                products: [],
-                country: 'مصر',
-                isAdmin: false,
-                avatar: '👤',
-                verificationBadge: false,
-                accountType: 'customer'
+        // View toggle + actions
+        const toolbar = document.createElement('div');
+        toolbar.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card-bg);border-bottom:1px solid var(--border);flex-shrink:0;';
+        toolbar.innerHTML = `
+            <button id="offersBtn" style="padding:6px 12px;border-radius:20px;background:#fff7ed;color:#ff6600;border:none;cursor:pointer;font-size:0.75rem;">🎁 عروض</button>
+            <button id="vipBtn" style="padding:6px 12px;border-radius:20px;background:#fefce8;color:#a16207;border:none;cursor:pointer;font-size:0.75rem;">👑 VIP</button>
+            <div style="flex:1;"></div>
+            <button id="gridViewBtn" style="width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;background:${viewMode==='grid'?'#ff6600':'#f3f4f6'};color:${viewMode==='grid'?'white':'#6b7280'};"><i class="fas fa-th"></i></button>
+            <button id="listViewBtn" style="width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;background:${viewMode==='list'?'#ff6600':'#f3f4f6'};color:${viewMode==='list'?'white':'#6b7280'};"><i class="fas fa-list-ul"></i></button>
+        `;
+        container.appendChild(toolbar);
+
+        // Products area
+        const content = document.createElement('div');
+        content.className = 'content-scroll';
+        const filtered = Object.values(state.products).filter(p=>{
+            if(activeCategory!=='all' && p.category!==activeCategory) return false;
+            if(searchQuery.trim()) return p.name.includes(searchQuery.trim());
+            return true;
+        });
+        if(filtered.length===0){
+            content.innerHTML = `<div style="text-align:center;padding:60px 20px;color:#9ca3af;"><i class="fas fa-search" style="font-size:3rem;display:block;margin-bottom:12px;"></i>لا توجد منتجات</div>`;
+        } else {
+            const grid = document.createElement('div');
+            grid.className = viewMode==='grid' ? 'product-grid' : 'product-list';
+            filtered.forEach(prod => {
+                const card = createProductCard(prod);
+                grid.appendChild(card);
+            });
+            content.appendChild(grid);
+        }
+        container.appendChild(content);
+
+        // Floating bot button
+        const botBtn = document.createElement('button');
+        botBtn.className = 'floating-bot';
+        botBtn.innerHTML = '<i class="fas fa-robot"></i>';
+        botBtn.onclick = ()=> { showChat = !showChat; render(); };
+        container.appendChild(botBtn);
+
+        // Chat window
+        if(showChat){
+            const chatWin = buildChatWindow();
+            container.appendChild(chatWin);
+        }
+
+        // Comments
+        if(commentsProduct){
+            const commentsOverlay = document.createElement('div');
+            commentsOverlay.className = 'comments-overlay';
+            commentsOverlay.onclick = (e)=>{ if(e.target===commentsOverlay){ commentsProduct=null; render(); } };
+            const panel = document.createElement('div');
+            panel.className = 'comments-panel';
+            panel.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><h3 style="font-weight:bold;">تعليقات ${commentsProduct.name}</h3><button style="background:none;border:none;font-size:1.2rem;cursor:pointer;" id="closeComments"><i class="fas fa-times"></i></button></div>`;
+            (commentsProduct.comments||[]).forEach(c=>{
+                panel.innerHTML += `<div style="padding:8px;background:#f3f4f6;border-radius:8px;margin-bottom:6px;font-size:0.85rem;">${c}</div>`;
+            });
+            commentsOverlay.appendChild(panel);
+            container.appendChild(commentsOverlay);
+        }
+
+        // Preview image
+        if(previewProduct){
+            const prevDiv = document.createElement('div');
+            prevDiv.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;';
+            prevDiv.onclick = ()=>{ previewProduct=null; render(); };
+            prevDiv.innerHTML = `<span style="font-size:8rem;">${previewProduct.emoji}</span><p style="color:white;margin-top:16px;">${previewProduct.name}</p>`;
+            container.appendChild(prevDiv);
+        }
+
+        return container;
+    }
+
+    function createProductCard(prod){
+        const seller = state.sellers[prod.sellerId] || {};
+        const liked = state.currentSellerId ? prod.likedBy.includes(state.currentSellerId) : false;
+        const shortName = (seller.storeName||'متجر').length>10? (seller.storeName||'متجر').slice(0,8)+'..':(seller.storeName||'متجر');
+
+        const card = document.createElement('div');
+        card.className = `product-card ${viewMode==='list'?'list-view':'grid-card'}`;
+        card.onclick = ()=> alert(`تفاصيل ${prod.name}`);
+
+        // Image
+        const imgDiv = document.createElement('div');
+        imgDiv.className = 'product-image';
+        imgDiv.textContent = prod.emoji;
+        imgDiv.onclick = (e)=>{ e.stopPropagation(); previewProduct=prod; render(); };
+        card.appendChild(imgDiv);
+
+        // Right side container for list view
+        const rightSide = document.createElement('div');
+        if(viewMode==='list') rightSide.style.cssText = 'flex:1;min-width:0;display:flex;flex-direction:column;';
+
+        // Name
+        const nameEl = document.createElement('div');
+        nameEl.className = 'product-name';
+        nameEl.textContent = prod.name;
+        (viewMode==='list'?rightSide:card).appendChild(nameEl);
+
+        // Meta row (stars + seller)
+        const metaRow = document.createElement('div');
+        metaRow.className = 'meta-row';
+        // Stars
+        const starsDiv = document.createElement('div');
+        starsDiv.className = 'stars';
+        for(let i=0;i<5;i++){
+            const star = document.createElement('i');
+            star.className = `fas fa-star ${i<prod.rating?'text-yellow-400':'text-gray-300'}`;
+            star.style.cssText = 'font-size:10px;cursor:pointer;';
+            star.onclick = (e)=>{ e.stopPropagation(); prod.rating=i+1; saveState(state); render(); };
+            starsDiv.appendChild(star);
+        }
+        metaRow.appendChild(starsDiv);
+        // Seller info
+        const sellerDiv = document.createElement('div');
+        sellerDiv.className = 'seller-info';
+        sellerDiv.innerHTML = `<span class="seller-avatar">${seller.avatar||'🏪'}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${shortName}</span>${seller.verificationBadge?'<i class="fas fa-check-circle text-blue-500" style="font-size:9px;"></i>':''}`;
+        sellerDiv.onclick = (e)=>{ e.stopPropagation(); alert(`ملف التاجر: ${seller.storeName||'مستخدم'}`); };
+        metaRow.appendChild(sellerDiv);
+        (viewMode==='list'?rightSide:card).appendChild(metaRow);
+
+        // Bottom row (actions + price)
+        const bottomRow = document.createElement('div');
+        bottomRow.className = 'bottom-row';
+        const actions = document.createElement('div');
+        actions.className = 'action-btns';
+        // Whatsapp
+        const waBtn = document.createElement('button');
+        waBtn.className = 'action-btn';
+        waBtn.style.cssText = 'background:#dcfce7;color:#16a34a;';
+        waBtn.innerHTML = '<i class="fab fa-whatsapp"></i>';
+        waBtn.onclick = (e)=>{ e.stopPropagation(); window.open(`https://wa.me/+2${seller.phone}?text=مرحباً، أنا مهتم بمنتج: ${prod.name}`, '_blank'); };
+        actions.appendChild(waBtn);
+        // Comments
+        const commBtn = document.createElement('button');
+        commBtn.className = 'action-btn';
+        commBtn.style.cssText = 'background:#dbeafe;color:#2563eb;';
+        commBtn.innerHTML = '<i class="fas fa-comment"></i>';
+        commBtn.onclick = (e)=>{ e.stopPropagation(); commentsProduct=prod; render(); };
+        actions.appendChild(commBtn);
+        // Like
+        const likeBtn = document.createElement('button');
+        likeBtn.className = 'action-btn';
+        likeBtn.style.cssText = `background:${liked?'#ff6600':'#f3f4f6'};color:${liked?'white':'#6b7280'};`;
+        likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
+        likeBtn.onclick = (e)=>{ e.stopPropagation();
+            if(!state.currentSellerId) return alert('سجل الدخول أولاً');
+            const idx = prod.likedBy.indexOf(state.currentSellerId);
+            if(idx>=0){ prod.likedBy.splice(idx,1); prod.likes = Math.max(0, prod.likes-1); }
+            else { prod.likedBy.push(state.currentSellerId); prod.likes++; }
+            saveState(state); render(); };
+        actions.appendChild(likeBtn);
+        bottomRow.appendChild(actions);
+        // Price
+        const priceEl = document.createElement('span');
+        priceEl.className = 'price';
+        priceEl.textContent = prod.price.toLocaleString()+' ج.م';
+        bottomRow.appendChild(priceEl);
+
+        (viewMode==='list'?rightSide:card).appendChild(bottomRow);
+
+        if(viewMode==='list'){
+            card.appendChild(rightSide);
+        }
+
+        return card;
+    }
+
+    function buildChatWindow(){
+        const win = document.createElement('div');
+        win.className = 'chat-window';
+        win.innerHTML = `
+            <div class="chat-header"><span>🤖 VICKS AI</span><button style="background:none;border:none;color:white;cursor:pointer;" id="closeChat">✕</button></div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="اكتب رسالتك...">
+                <button style="background:#ff6600;color:white;border:none;border-radius:50%;width:36px;height:36px;margin-right:6px;cursor:pointer;" id="sendMsg"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        `;
+        return win;
+    }
+
+    function setupChatEvents(){
+        const msgContainer = document.getElementById('chatMessages');
+        if(!msgContainer) return;
+        msgContainer.innerHTML = '';
+        state.chatMessages.forEach(m=>{
+            const div = document.createElement('div');
+            div.className = m.role==='user'?'msg-user':'msg-bot';
+            div.textContent = m.text;
+            msgContainer.appendChild(div);
+        });
+        document.getElementById('sendMsg')?.addEventListener('click', ()=>{
+            const input = document.getElementById('chatInput');
+            if(!input.value.trim()) return;
+            state.chatMessages.push({id:Date.now().toString(), role:'user', text:input.value.trim()});
+            // Bot reply
+            const txt = input.value.toLowerCase();
+            let reply = 'شكراً لتواصلك!';
+            if(txt.includes('سعر')) reply = 'يمكنك الاطلاع على الأسعار في الصفحة الرئيسية.';
+            else if(txt.includes('بائع')) reply = 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد".';
+            state.chatMessages.push({id:(Date.now()+1).toString(), role:'bot', text:reply});
+            saveState(state);
+            input.value = '';
+            render();
+        });
+        document.getElementById('closeChat')?.addEventListener('click', ()=>{ showChat=false; render(); });
+    }
+
+    // ========== LOGIN PAGE ==========
+    function buildLoginPage(){
+        const container = document.createElement('div');
+        container.className = 'app-container';
+        container.innerHTML = `
+            <div class="header"><button class="icon-btn" id="backHome"><i class="fas fa-arrow-right"></i></button><h1 style="font-weight:bold;">تسجيل الدخول</h1><div></div></div>
+            <div class="content-scroll" style="padding:24px;">
+                <div id="loginError" style="background:#fef2f2;padding:12px;border-radius:12px;color:#dc2626;font-size:0.85rem;margin-bottom:16px;display:none;"></div>
+                <input id="loginEmail" placeholder="البريد الإلكتروني" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;margin-bottom:12px;font-size:0.85rem;">
+                <input type="password" id="loginPass" placeholder="كلمة المرور" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;margin-bottom:12px;font-size:0.85rem;">
+                <button id="doLogin" class="btn-primary" style="width:100%;">دخول</button>
+                <div style="text-align:center;margin:16px 0;"><button id="forgotPass" style="background:none;border:none;color:#ff6600;text-decoration:underline;cursor:pointer;">نسيت كلمة السر؟</button></div>
+                <div style="text-align:center;color:#9ca3af;">أو</div>
+                <button id="goJoin" style="width:100%;padding:14px;background:white;border:1px solid #e5e7eb;border-radius:12px;cursor:pointer;margin-top:16px;">انضم كتاجر أو عميل جديد</button>
+            </div>
+        `;
+        return container;
+    }
+
+    function setupLoginEvents(){
+        document.getElementById('backHome')?.addEventListener('click', ()=>{ currentPage='home'; render(); });
+        document.getElementById('doLogin')?.addEventListener('click', ()=>{
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const found = Object.values(state.sellers).find(s=>s.email===email && s.password===pass);
+            if(found){
+                state.currentSellerId = found.id;
+                saveState(state);
+                currentPage='home';
+                render();
+            } else {
+                document.getElementById('loginError').style.display='block';
+                document.getElementById('loginError').textContent = 'بيانات غير صحيحة';
             }
-        };
+        });
+        document.getElementById('goJoin')?.addEventListener('click', ()=>{ currentPage='join'; render(); });
+        document.getElementById('forgotPass')?.addEventListener('click', ()=> alert('سيتم إرسال رابط استعادة.'));
+    }
 
-        const productNames = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر',
-            'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'
+    // ========== JOIN PAGE ==========
+    function buildJoinPage(){
+        const container = document.createElement('div');
+        container.className = 'app-container';
+        container.innerHTML = `
+            <div class="header"><button class="icon-btn" id="backLogin"><i class="fas fa-arrow-right"></i></button><h1 style="font-weight:bold;">إنشاء حساب</h1><div></div></div>
+            <div class="content-scroll" style="padding:24px;">
+                <div id="joinError" style="background:#fef2f2;padding:12px;border-radius:12px;color:#dc2626;font-size:0.85rem;margin-bottom:16px;display:none;"></div>
+                <div style="background:#f9fafb;padding:16px;border-radius:12px;margin-bottom:16px;">
+                    <p style="font-weight:bold;margin-bottom:8px;">نوع الحساب:</p>
+                    <label style="display:flex;align-items:center;gap:8px;padding:8px;"><input type="radio" name="accType" value="customer" checked>👤 حساب عميل</label>
+                    <label style="display:flex;align-items:center;gap:8px;padding:8px;"><input type="radio" name="accType" value="seller">🛍️ حساب تاجر</label>
+                </div>
+                <input id="joinOwner" placeholder="اسم المالك *" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;margin-bottom:12px;font-size:0.85rem;">
+                <input id="joinStore" placeholder="اسم المتجر (للتجار)" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;margin-bottom:12px;font-size:0.85rem;display:none;">
+                <input id="joinEmail" placeholder="البريد الإلكتروني *" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;margin-bottom:12px;font-size:0.85rem;">
+                <input type="password" id="joinPass" placeholder="كلمة المرور *" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;margin-bottom:12px;font-size:0.85rem;">
+                <input id="joinPhone" placeholder="رقم الهاتف" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;margin-bottom:12px;font-size:0.85rem;">
+                <div style="position:relative;margin-bottom:12px;">
+                    <button id="countryBtn" style="width:100%;padding:12px;background:#f3f4f6;border:none;border-radius:12px;text-align:right;display:flex;justify-content:space-between;">مصر <i class="fas fa-chevron-down"></i></button>
+                    <div id="countryList" class="country-dropdown" style="display:none;"></div>
+                </div>
+                <button id="doJoin" class="btn-primary" style="width:100%;">إنشاء حساب</button>
+            </div>
+        `;
+        return container;
+    }
+
+    function setupJoinEvents(){
+        document.getElementById('backLogin')?.addEventListener('click', ()=>{ currentPage='login'; render(); });
+        document.querySelectorAll('input[name="accType"]').forEach(r=>{
+            r.addEventListener('change', (e)=>{
+                document.getElementById('joinStore').style.display = e.target.value==='seller'?'block':'none';
+            });
+        });
+        // Country dropdown
+        const countryBtn = document.getElementById('countryBtn');
+        const countryList = document.getElementById('countryList');
+        const countries = ['مصر','السعودية','الإمارات','الكويت','قطر','البحرين','عُمان','الأردن','لبنان','العراق','سوريا','فلسطين','ليبيا','تونس','الجزائر','المغرب','السودان','اليمن'];
+        countries.forEach(c=>{
+            const div = document.createElement('div');
+            div.style.cssText = 'padding:10px 16px;cursor:pointer;font-size:0.85rem;border-bottom:1px solid #f3f4f6;';
+            div.textContent = c;
+            div.onclick = ()=>{ countryBtn.childNodes[0].textContent = c; countryList.style.display='none'; };
+            countryList.appendChild(div);
+        });
+        countryBtn.addEventListener('click', ()=> countryList.style.display = countryList.style.display==='none'?'block':'none');
+
+        document.getElementById('doJoin')?.addEventListener('click', ()=>{
+            const accType = document.querySelector('input[name="accType"]:checked').value;
+            const owner = document.getElementById('joinOwner').value.trim();
+            const store = document.getElementById('joinStore').value.trim();
+            const email = document.getElementById('joinEmail').value.trim();
+            const pass = document.getElementById('joinPass').value.trim();
+            const phone = document.getElementById('joinPhone').value.trim()||'01';
+            if(!email||!pass||!owner) return alert('املأ الحقول المطلوبة');
+            if(accType==='seller'&&!store) return alert('اسم المتجر مطلوب للتجار');
+            const newId = 's_'+Date.now();
+            const newSeller = {
+                id:newId, email, password:pass, storeName:accType==='seller'?store:'', ownerName:owner,
+                phone, country: countryBtn.childNodes[0].textContent, accountType:accType,
+                avatar: accType==='customer'?'👤':'🛍️', points:0, verified:false, subscription:'free',
+                products:[], verificationBadge:false, maxProducts:10, subscriptionExpiry:null
+            };
+            state.sellers[newId] = newSeller;
+            state.currentSellerId = newId;
+            saveState(state);
+            currentPage='home';
+            render();
+        });
+    }
+
+    // ========== VIP PAGE ==========
+    function buildVIPPage(){
+        const seller = state.sellers[state.currentSellerId];
+        if(!seller || seller.accountType!=='seller'){ currentPage='home'; render(); return document.createElement('div'); }
+        const container = document.createElement('div');
+        container.className = 'app-container';
+        container.innerHTML = `
+            <div class="header"><button class="icon-btn" id="backHome"><i class="fas fa-arrow-right"></i></button><h1 style="font-weight:bold;">VIP Dashboard</h1><div></div></div>
+            <div class="content-scroll" style="padding:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;background:#fff7ed;padding:16px;border-radius:12px;margin-bottom:16px;">
+                    <div style="display:flex;align-items:center;gap:8px;"><span>رصيد النقاط</span><button id="addPointsBtn" style="width:30px;height:30px;border-radius:50%;background:#ff6600;color:white;border:none;cursor:pointer;">+</button></div>
+                    <span style="font-size:1.5rem;font-weight:bold;color:#ff6600;">${seller.points} نقطة</span>
+                </div>
+                <div id="addPointsForm" style="display:none;background:#f9fafb;padding:16px;border-radius:12px;margin-bottom:16px;">
+                    <input type="number" id="pointsAmount" value="50" min="1" style="width:100%;padding:8px;border-radius:8px;border:1px solid #d1d5db;margin-bottom:8px;">
+                    <button id="confirmAddPoints" style="width:100%;padding:10px;background:#22c55e;color:white;border:none;border-radius:8px;cursor:pointer;">تأكيد الإضافة</button>
+                </div>
+                <h3 style="font-weight:bold;margin-bottom:12px;">متجر الخدمات</h3>
+                <div id="services"></div>
+            </div>
+        `;
+
+        const services = [
+            {title:'✅ توثيق الحساب', cost:70, key:'verify', disabled: seller.verificationBadge || seller.points<70, active: seller.verificationBadge},
+            {title:'📦 باقة 100 منتج', cost:50, key:'max100', disabled: seller.maxProducts>=100 || seller.points<50, active: seller.maxProducts>=100},
+            {title:'🌟 اشتراك VIP', cost:50, key:'vip', disabled: seller.subscription==='vip'||seller.points<50, active: seller.subscription==='vip'},
         ];
-        const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧', '🍳', '⚽', '💎', '📷'];
-        const possibleCategories = ['electronics', 'fashion', 'home', 'smart', 'games', 'accessories'];
-
-        const initialProducts = {};
-        for (let i = 1; i <= 14; i++) {
-            const sellerId = i % 2 === 0 ? 's2' : 's1';
-            initialProducts[`p${i}`] = {
-                id: `p${i}`,
-                name: productNames[(i - 1) % productNames.length] + (i > 10 ? ` ${i}` : ''),
-                price: 80 + i * 50,
-                category: possibleCategories[(i - 1) % possibleCategories.length],
-                emoji: emojis[(i - 1) % emojis.length],
-                sellerId,
-                sellerName: sellerId === 's1' ? 'متجر النور' : 'سوبر ماركت الفرح',
-                likes: (i * 7) % 19,
-                likedBy: [],
-                description: `وصف المنتج ${i}`,
-                vip: i % 3 === 0,
-                comments: ['منتج رائع!', 'جودة ممتازة', 'سعر مناسب'].slice(0, i % 3 + 1),
-                rating: i % 5
+        const servicesDiv = document.getElementById('services');
+        services.forEach(svc=>{
+            const row = document.createElement('div');
+            row.style.cssText = 'border:1px solid #e5e7eb;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;';
+            row.innerHTML = `<div><p style="font-weight:bold;">${svc.title}</p><p style="font-size:0.75rem;color:#6b7280;">${svc.cost} نقطة</p></div>`;
+            const btn = document.createElement('button');
+            btn.textContent = svc.active?'مفعل':'شراء';
+            btn.disabled = svc.disabled;
+            btn.style.cssText = `padding:8px 16px;border-radius:8px;border:none;cursor:${svc.disabled?'not-allowed':'pointer'};background:${svc.active||svc.disabled?'#e5e7eb':'#3b82f6'};color:${svc.active||svc.disabled?'#9ca3af':'white'};`;
+            btn.onclick = ()=>{
+                if(svc.key==='verify'){ seller.points-=70; seller.verificationBadge=true; }
+                else if(svc.key==='max100'){ seller.points-=50; seller.maxProducts=100; }
+                else if(svc.key==='vip'){ seller.points-=50; seller.subscription='vip'; }
+                saveState(state); render();
             };
-        }
-        initialSellers.s1.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId === 's1');
-        initialSellers.s2.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId === 's2');
+            row.appendChild(btn);
+            servicesDiv.appendChild(row);
+        });
 
-        function getInitialState() {
-            return {
-                sellers: JSON.parse(JSON.stringify(initialSellers)),
-                products: JSON.parse(JSON.stringify(initialProducts)),
-                currentSellerId: null,
-                chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟', ts: Date
-                        .now() }]
+        // Unlimited subscriptions
+        const unlimDiv = document.createElement('div');
+        unlimDiv.style.cssText = 'border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-top:12px;';
+        unlimDiv.innerHTML = '<p style="font-weight:bold;margin-bottom:8px;">🚀 اشتراك مفتوح</p><div id="unlimBtns" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;"></div>';
+        const opts = [{m:1,cost:200,l:'شهر'},{m:3,cost:500,l:'3 شهور'},{m:6,cost:900,l:'6 شهور'},{m:10,cost:1400,l:'10 شهور'},{m:12,cost:1600,l:'سنة'}];
+        const unlimBtns = unlimDiv.querySelector('#unlimBtns');
+        opts.forEach(o=>{
+            const b = document.createElement('button');
+            b.innerHTML = `${o.l}<br>${o.cost} نقطة`;
+            b.disabled = seller.points < o.cost;
+            b.style.cssText = `padding:8px 4px;border-radius:8px;border:none;cursor:${b.disabled?'not-allowed':'pointer'};background:${b.disabled?'#e5e7eb':'#6366f1'};color:${b.disabled?'#9ca3af':'white'};font-size:0.7rem;font-weight:bold;`;
+            b.onclick = ()=>{
+                seller.points-=o.cost;
+                const exp = new Date(); exp.setMonth(exp.getMonth()+o.m);
+                seller.subscriptionExpiry = exp.getTime();
+                seller.subscription='unlimited';
+                saveState(state); render();
             };
-        }
+            unlimBtns.appendChild(b);
+        });
+        servicesDiv.appendChild(unlimDiv);
 
-        function loadState() {
-            try {
-                const r = localStorage.getItem(STORAGE_KEY);
-                return r ? JSON.parse(r) : getInitialState();
-            } catch {
-                return getInitialState();
+        return container;
+    }
+
+    function setupVIPEvents(){
+        document.getElementById('backHome')?.addEventListener('click', ()=>{ currentPage='home'; render(); });
+        document.getElementById('addPointsBtn')?.addEventListener('click', ()=>{
+            document.getElementById('addPointsForm').style.display='block';
+        });
+        document.getElementById('confirmAddPoints')?.addEventListener('click', ()=>{
+            const amt = parseInt(document.getElementById('pointsAmount').value)||0;
+            if(amt>0){
+                const seller = state.sellers[state.currentSellerId];
+                seller.points += amt;
+                saveState(state);
+                render();
             }
+        });
+    }
+
+    // Global event delegation
+    document.addEventListener('click', function(e){
+        const target = e.target.closest('button');
+        if(!target) return;
+        if(target.id==='chatToggle'){ showChat = !showChat; render(); }
+        else if(target.id==='searchToggle'){ showSearch = !showSearch; render(); }
+        else if(target.id==='themeToggle'){ document.body.classList.toggle('dark'); localStorage.setItem(THEME_KEY, document.body.classList.contains('dark')?'dark':'light'); render(); }
+        else if(target.id==='logoutBtn'){ state.currentSellerId=null; saveState(state); currentPage='home'; render(); }
+        else if(target.id==='loginBtn'){ currentPage='login'; render(); }
+        else if(target.classList.contains('category-btn')){ activeCategory = target.dataset.cat; render(); }
+        else if(target.id==='gridViewBtn'){ viewMode='grid'; render(); }
+        else if(target.id==='listViewBtn'){ viewMode='list'; render(); }
+        else if(target.id==='vipBtn'){
+            if(!state.currentSellerId) alert('سجل الدخول أولاً');
+            else if(state.sellers[state.currentSellerId].accountType!=='seller') alert('VIP للتجار فقط');
+            else { currentPage='vip'; render(); }
         }
+        else if(target.id==='offersBtn') alert('قسم العروض قيد التطوير');
+        else if(target.id==='closeSearch'){ showSearch=false; searchQuery=''; render(); }
+        else if(target.id==='camBtn') alert('الكاميرا قيد التطوير');
+        else if(target.id==='uploadBtn') alert('رفع الصور قيد التطوير');
+        else if(target.id==='closeComments'){ commentsProduct=null; render(); }
+    });
 
-        function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
-
-        function createSeller(d) {
-            return {
-                id: 's_' + genId(),
-                ...d,
-                points: 0,
-                verified: false,
-                subscription: 'free',
-                products: [],
-                createdAt: Date.now(),
-                isAdmin: false,
-                verificationBadge: false,
-                avatar: d.accountType === 'customer' ? '👤' : '🛍️',
-                maxProducts: 10,
-                subscriptionExpiry: null
-            };
+    document.addEventListener('input', function(e){
+        if(e.target.id==='searchInput'){
+            searchQuery = e.target.value;
+            render();
         }
+    });
 
-        function addMessage(s, m) {
-            return { ...s, chatMessages: [...s.chatMessages, { ...m, id: genId(), ts: Date.now() }] };
-        }
+    // Initialize
+    function init(){
+        if(localStorage.getItem(THEME_KEY)==='dark') document.body.classList.add('dark');
+        render();
+        // Setup page-specific events after render
+        setTimeout(()=>{
+            if(currentPage==='login') setupLoginEvents();
+            else if(currentPage==='join') setupJoinEvents();
+            else if(currentPage==='vip') setupVIPEvents();
+            else if(showChat) setupChatEvents();
+        }, 0);
+    }
 
-        function botReply(t) {
-            const tx = t.toLowerCase();
-            if (tx.includes('سعر')) return 'يمكنك الاطلاع على الأسعار في الصفحة الرئيسية.';
-            if (tx.includes('بائع')) return 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد".';
-            if (tx.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة VIP.';
-            return 'شكراً لتواصلك! كيف يمكنني مساعدتك؟';
-        }
+    // Re-render observer (simplified)
+    const origRender = render;
+    render = function(){
+        origRender();
+        setTimeout(()=>{
+            if(currentPage==='login') setupLoginEvents();
+            else if(currentPage==='join') setupJoinEvents();
+            else if(currentPage==='vip') setupVIPEvents();
+            else if(showChat) setupChatEvents();
+        }, 10);
+    };
 
-        const countries = [
-            { code: 'AF', name: 'أفغانستان' }, { code: 'AL', name: 'ألبانيا' }, { code: 'DZ', name: 'الجزائر' },
-            { code: 'AD', name: 'أندورا' }, { code: 'AO', name: 'أنغولا' }, { code: 'AR', name: 'الأرجنتين' },
-            { code: 'AM', name: 'أرمينيا' }, { code: 'AU', name: 'أستراليا' }, { code: 'AT', name: 'النمسا' },
-            { code: 'AZ', name: 'أذربيجان' }, { code: 'BH', name: 'البحرين' }, { code: 'BD', name: 'بنغلاديش' },
-            { code: 'BY', name: 'بيلاروسيا' }, { code: 'BE', name: 'بلجيكا' }, { code: 'BJ', name: 'بنين' },
-            { code: 'BT', name: 'بوتان' }, { code: 'BO', name: 'بوليفيا' }, { code: 'BA', name: 'البوسنة والهرسك' },
-            { code: 'BW', name: 'بوتسوانا' }, { code: 'BR', name: 'البرازيل' }, { code: 'BN', name: 'بروناي' },
-            { code: 'BG', name: 'بلغاريا' }, { code: 'BF', name: 'بوركينا فاسو' }, { code: 'BI', name: 'بوروندي' },
-            { code: 'KH', name: 'كمبوديا' }, { code: 'CM', name: 'الكاميرون' }, { code: 'CA', name: 'كندا' },
-            { code: 'CV', name: 'الرأس الأخضر' }, { code: 'CF', name: 'جمهورية أفريقيا الوسطى' }, { code: 'TD',
-            name: 'تشاد' },
-            { code: 'CL', name: 'تشيلي' }, { code: 'CN', name: 'الصين' }, { code: 'CO', name: 'كولومبيا' },
-            { code: 'KM', name: 'جزر القمر' }, { code: 'CG', name: 'الكونغو' }, { code: 'CR', name: 'كوستاريكا' },
-            { code: 'HR', name: 'كرواتيا' }, { code: 'CU', name: 'كوبا' }, { code: 'CY', name: 'قبرص' },
-            { code: 'CZ', name: 'التشيك' }, { code: 'DK', name: 'الدنمارك' }, { code: 'DJ', name: 'جيبوتي' },
-            { code: 'DO', name: 'جمهورية الدومينيكان' }, { code: 'EC', name: 'الإكوادور' }, { code: 'EG',
-            name: 'مصر' },
-            { code: 'SV', name: 'السلفادور' }, { code: 'GQ', name: 'غينيا الاستوائية' }, { code: 'ER',
-            name: 'إريتريا' },
-            { code: 'EE', name: 'إستونيا' }, { code: 'ET', name: 'إثيوبيا' }, { code: 'FJ', name: 'فيجي' },
-            { code: 'FI', name: 'فنلندا' }, { code: 'FR', name: 'فرنسا' }, { code: 'GA', name: 'الغابون' },
-            { code: 'GM', name: 'غامبيا' }, { code: 'GE', name: 'جورجيا' }, { code: 'DE', name: 'ألمانيا' },
-            { code: 'GH', name: 'غانا' }, { code: 'GR', name: 'اليونان' }, { code: 'GT', name: 'غواتيمالا' },
-            { code: 'GN', name: 'غينيا' }, { code: 'GW', name: 'غينيا بيساو' }, { code: 'GY', name: 'غيانا' },
-            { code: 'HT', name: 'هايتي' }, { code: 'HN', name: 'هندوراس' }, { code: 'HU', name: 'المجر' },
-            { code: 'IS', name: 'أيسلندا' }, { code: 'IN', name: 'الهند' }, { code: 'ID', name: 'إندونيسيا' },
-            { code: 'IR', name: 'إيران' }, { code: 'IQ', name: 'العراق' }, { code: 'IE', name: 'أيرلندا' },
-            { code: 'IL', name: 'إسرائيل' }, { code: 'IT', name: 'إيطاليا' }, { code: 'JM', name: 'جامايكا' },
-            { code: 'JP', name: 'اليابان' }, { code: 'JO', name: 'الأردن' }, { code: 'KZ', name: 'كازاخستان' },
-            { code: 'KE', name: 'كينيا' }, { code: 'KI', name: 'كيريباتي' }, { code: 'KP', name: 'كوريا الشمالية' },
-            { code: 'KR', name: 'كوريا الجنوبية' }, { code: 'KW', name: 'الكويت' }, { code: 'KG',
-            name: 'قيرغيزستان' },
-            { code: 'LA', name: 'لاوس' }, { code: 'LV', name: 'لاتفيا' }, { code: 'LB', name: 'لبنان' },
-            { code: 'LS', name: 'ليسوتو' }, { code: 'LR', name: 'ليبيريا' }, { code: 'LY', name: 'ليبيا' },
-            { code: 'LI', name: 'ليختنشتاين' }, { code: 'LT', name: 'ليتوانيا' }, { code: 'LU',
-            name: 'لوكسمبورغ' },
-            { code: 'MG', name: 'مدغشقر' }, { code: 'MW', name: 'مالاوي' }, { code: 'MY', name: 'ماليزيا' },
-            { code: 'MV', name: 'المالديف' }, { code: 'ML', name: 'مالي' }, { code: 'MT', name: 'مالطا' },
-            { code: 'MH', name: 'جزر مارشال' }, { code: 'MR', name: 'موريتانيا' }, { code: 'MU',
-            name: 'موريشيوس' },
-            { code: 'MX', name: 'المكسيك' }, { code: 'FM', name: 'ميكرونيسيا' }, { code: 'MD', name: 'مولدوفا' },
-            { code: 'MC', name: 'موناكو' }, { code: 'MN', name: 'منغوليا' }, { code: 'ME', name: 'الجبل الأسود' },
-            { code: 'MA', name: 'المغرب' }, { code: 'MZ', name: 'موزمبيق' }, { code: 'MM', name: 'ميانمار' },
-            { code: 'NA', name: 'ناميبيا' }, { code: 'NR', name: 'ناورو' }, { code: 'NP', name: 'نيبال' },
-            { code: 'NL', name: 'هولندا' }, { code: 'NZ', name: 'نيوزيلندا' }, { code: 'NI', name: 'نيكاراغوا' },
-            { code: 'NE', name: 'النيجر' }, { code: 'NG', name: 'نيجيريا' }, { code: 'MK',
-            name: 'مقدونيا الشمالية' },
-            { code: 'NO', name: 'النرويج' }, { code: 'OM', name: 'عُمان' }, { code: 'PK', name: 'باكستان' },
-            { code: 'PW', name: 'بالاو' }, { code: 'PS', name: 'فلسطين' }, { code: 'PA', name: 'بنما' },
-            { code: 'PG', name: 'بابوا غينيا الجديدة' }, { code: 'PY', name: 'باراغواي' }, { code: 'PE',
-            name: 'بيرو' },
-            { code: 'PH', name: 'الفلبين' }, { code: 'PL', name: 'بولندا' }, { code: 'PT', name: 'البرتغال' },
-            { code: 'QA', name: 'قطر' }, { code: 'RO', name: 'رومانيا' }, { code: 'RU', name: 'روسيا' },
-            { code: 'RW', name: 'رواندا' }, { code: 'WS', name: 'ساموا' }, { code: 'SM', name: 'سان مارينو' },
-            { code: 'SA', name: 'السعودية' }, { code: 'SN', name: 'السنغال' }, { code: 'RS', name: 'صربيا' },
-            { code: 'SC', name: 'سيشل' }, { code: 'SL', name: 'سيراليون' }, { code: 'SG', name: 'سنغافورة' },
-            { code: 'SK', name: 'سلوفاكيا' }, { code: 'SI', name: 'سلوفينيا' }, { code: 'SB',
-            name: 'جزر سليمان' },
-            { code: 'SO', name: 'الصومال' }, { code: 'ZA', name: 'جنوب أفريقيا' }, { code: 'SS',
-            name: 'جنوب السودان' },
-            { code: 'ES', name: 'إسبانيا' }, { code: 'LK', name: 'سريلانكا' }, { code: 'SD', name: 'السودان' },
-            { code: 'SR', name: 'سورينام' }, { code: 'SE', name: 'السويد' }, { code: 'CH', name: 'سويسرا' },
-            { code: 'SY', name: 'سوريا' }, { code: 'TW', name: 'تايوان' }, { code: 'TJ', name: 'طاجيكستان' },
-            { code: 'TZ', name: 'تنزانيا' }, { code: 'TH', name: 'تايلاند' }, { code: 'TL',
-            name: 'تيمور الشرقية' },
-            { code: 'TG', name: 'توغو' }, { code: 'TO', name: 'تونغا' }, { code: 'TN', name: 'تونس' },
-            { code: 'TR', name: 'تركيا' }, { code: 'TM', name: 'تركمانستان' }, { code: 'TV', name: 'توفالو' },
-            { code: 'UG', name: 'أوغندا' }, { code: 'UA', name: 'أوكرانيا' }, { code: 'AE',
-            name: 'الإمارات العربية المتحدة' },
-            { code: 'GB', name: 'المملكة المتحدة' }, { code: 'US', name: 'الولايات المتحدة' }, { code: 'UY',
-                name: 'أوروغواي' },
-            { code: 'UZ', name: 'أوزبكستان' }, { code: 'VU', name: 'فانواتو' }, { code: 'VE', name: 'فنزويلا' },
-            { code: 'VN', name: 'فيتنام' }, { code: 'YE', name: 'اليمن' }, { code: 'ZM', name: 'زامبيا' },
-            { code: 'ZW', name: 'زيمبابوي' }
-        ];
-
-        // ========== ProductCard Component ==========
-        function ProductCard({ prod, liked, onLike, onWhats, onProductClick, onRate, sellers, onSellerClick,
-            onImageClick, onCommentsClick, viewMode }) {
-
-            const seller = sellers[prod.sellerId] || {};
-            const stars = Array(5).fill(0).map((_, i) =>
-                React.createElement('i', {
-                    key: i,
-                    className: `fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'}`,
-                    style: { fontSize: '10px', cursor: 'pointer' },
-                    onClick: (e) => { e.stopPropagation();
-                        onRate(i + 1); }
-                })
-            );
-            const shortName = (seller.storeName || 'متجر').length > 10 ?
-                (seller.storeName || 'متجر').slice(0, 8) + '..' :
-                (seller.storeName || 'متجر');
-
-            const imageSection = React.createElement('div', {
-                className: 'product-image',
-                onClick: (e) => { e.stopPropagation();
-                    onImageClick(prod); }
-            }, prod.emoji);
-
-            const nameSection = React.createElement('div', { className: 'product-name' }, prod.name);
-
-            const starsSection = React.createElement('div', { className: 'stars-container' }, stars);
-
-            const sellerSection = React.createElement('div', {
-                className: 'seller-mini',
-                onClick: (e) => { e.stopPropagation();
-                    onSellerClick(prod.sellerId); }
-            },
-                React.createElement('span', { className: 'seller-mini-avatar' }, seller.avatar || '🏪'),
-                React.createElement('span', { style: { overflow: 'hidden', textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap' } }, shortName),
-                seller.verificationBadge && React.createElement('i', {
-                    className: 'fas fa-check-circle text-blue-500',
-                    style: { fontSize: '9px' }
-                })
-            );
-
-            const metaRow = React.createElement('div', { className: 'product-meta-row' },
-                starsSection,
-                sellerSection
-            );
-
-            const actionBtns = React.createElement('div', { className: 'action-btns' },
-                React.createElement('button', {
-                    className: 'action-btn-sm',
-                    style: { background: '#dcfce7', color: '#16a34a' },
-                    onClick: (e) => { e.stopPropagation();
-                        onWhats(prod); }
-                }, React.createElement('i', { className: 'fab fa-whatsapp' })),
-                React.createElement('button', {
-                    className: 'action-btn-sm',
-                    style: { background: '#dbeafe', color: '#2563eb' },
-                    onClick: (e) => { e.stopPropagation();
-                        onCommentsClick(prod); }
-                }, React.createElement('i', { className: 'fas fa-comment' })),
-                React.createElement('button', {
-                    className: 'action-btn-sm',
-                    style: {
-                        background: liked ? '#ff6600' : '#f3f4f6',
-                        color: liked ? 'white' : '#6b7280'
-                    },
-                    onClick: (e) => { e.stopPropagation();
-                        onLike(prod.id); }
-                }, React.createElement('i', { className: 'fas fa-heart' }))
-            );
-
-            const priceSection = React.createElement('span', { className: 'price-tag' },
-                prod.price.toLocaleString() + ' ج.م'
-            );
-
-            const bottomRow = React.createElement('div', { className: 'product-bottom-row' },
-                actionBtns,
-                priceSection
-            );
-
-            if (viewMode === 'list') {
-                return React.createElement('div', {
-                        className: 'product-card-list',
-                        onClick: () => onProductClick(prod)
-                    },
-                    imageSection,
-                    React.createElement('div', {
-                        style: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }
-                    },
-                        nameSection,
-                        metaRow,
-                        bottomRow
-                    )
-                );
-            }
-
-            return React.createElement('div', {
-                    className: 'product-card-grid',
-                    onClick: () => onProductClick(prod)
-                },
-                imageSection,
-                nameSection,
-                metaRow,
-                bottomRow
-            );
-        }
-
-        // ========== SearchOverlay Component ==========
-        function SearchOverlay({ searchQuery, onSearchQueryChange, onClose }) {
-            const fileRef = useRef(null);
-            const camRef = useRef(null);
-
-            return React.createElement('div', { className: 'search-overlay' },
-                React.createElement('div', { className: 'search-input-wrapper' },
-                    React.createElement('i', { className: 'fas fa-search text-gray-400', style: { fontSize: '0.9rem' } }),
-                    React.createElement('input', {
-                        type: 'text',
-                        placeholder: 'ابحث عن منتج...',
-                        value: searchQuery,
-                        onChange: (e) => onSearchQueryChange(e.target.value),
-                        autoFocus: true
-                    }),
-                    React.createElement('button', {
-                        className: 'search-icon-btn',
-                        onClick: () => camRef.current.click(),
-                        title: 'التقاط صورة'
-                    }, React.createElement('i', { className: 'fas fa-camera' })),
-                    React.createElement('button', {
-                        className: 'search-icon-btn',
-                        onClick: () => fileRef.current.click(),
-                        title: 'رفع صورة'
-                    }, React.createElement('i', { className: 'fas fa-plus' })),
-                    React.createElement('button', {
-                        className: 'search-icon-btn',
-                        onClick: onClose,
-                        title: 'إغلاق'
-                    }, React.createElement('i', { className: 'fas fa-times' })),
-                    React.createElement('input', { ref: fileRef, type: 'file', style: { display: 'none' } }),
-                    React.createElement('input', { ref: camRef, type: 'file', capture: 'environment',
-                        style: { display: 'none' } })
-                )
-            );
-        }
-
-        // ========== CommentsPanel Component ==========
-        function CommentsPanel({ product, onClose }) {
-            return React.createElement('div', { className: 'comments-overlay', onClick: onClose },
-                React.createElement('div', { className: 'comments-panel', onClick: (e) => e.stopPropagation() },
-                    React.createElement('div', {
-                        style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                            marginBottom: '12px' }
-                    },
-                        React.createElement('h3', { style: { fontWeight: 'bold' } }, 'تعليقات على ' + product.name),
-                        React.createElement('button', {
-                            onClick: onClose,
-                            style: { background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer' }
-                        }, React.createElement('i', { className: 'fas fa-times' }))
-                    ),
-                    (product.comments && product.comments.length > 0) ?
-                    product.comments.map((c, i) =>
-                        React.createElement('div', {
-                            key: i,
-                            style: {
-                                padding: '8px',
-                                background: '#f3f4f6',
-                                borderRadius: '8px',
-                                marginBottom: '6px',
-                                fontSize: '0.85rem'
-                            }
-                        }, c)
-                    ) :
-                    React.createElement('p', { style: { color: '#9ca3af', fontSize: '0.85rem' } }, 'لا توجد تعليقات بعد.')
-                )
-            );
-        }
-
-        // ========== VIPPage Component ==========
-        function VIPPage({ seller, onBack, onPurchase, onAddPoints }) {
-            const [showAddPoints, setShowAddPoints] = useState(false);
-            const [pointsAmount, setPointsAmount] = useState(50);
-
-            const subscriptionOptions = [
-                { months: 1, cost: 200, label: 'شهر' },
-                { months: 3, cost: 500, label: '3 شهور' },
-                { months: 6, cost: 900, label: '6 شهور' },
-                { months: 10, cost: 1400, label: '10 شهور' },
-                { months: 12, cost: 1600, label: 'سنة' }
-            ];
-
-            return React.createElement('div', { className: 'app-container' },
-                React.createElement('div', {
-                    className: 'header-fixed bg-white border-b p-3',
-                    style: { display: 'flex', alignItems: 'center' }
-                },
-                    React.createElement('button', { onClick: onBack, style: { background: 'none', border: 'none',
-                            cursor: 'pointer' } },
-                        React.createElement('i', { className: 'fas fa-arrow-right ml-2' }), ' رجوع'
-                    ),
-                    React.createElement('h1', {
-                        style: { flex: 1, textAlign: 'center', fontWeight: 'bold' }
-                    }, 'VIP Dashboard')
-                ),
-                React.createElement('div', { className: 'content-scroll', style: { padding: '16px' } },
-                    React.createElement('div', {
-                        style: {
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            background: '#fff7ed',
-                            padding: '16px',
-                            borderRadius: '12px',
-                            marginBottom: '16px'
-                        }
-                    },
-                        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
-                            React.createElement('span', { style: { fontSize: '0.85rem', color: '#6b7280' } },
-                                'رصيد النقاط'),
-                            React.createElement('button', {
-                                onClick: () => setShowAddPoints(true),
-                                style: {
-                                    width: '30px',
-                                    height: '30px',
-                                    borderRadius: '50%',
-                                    background: '#ff6600',
-                                    color: 'white',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }
-                            }, '+')
-                        ),
-                        React.createElement('p', { style: { fontSize: '1.5rem', fontWeight: 'bold',
-                                color: '#ff6600' } }, seller.points + ' نقطة')
-                    ),
-                    showAddPoints && React.createElement('div', {
-                            style: {
-                                background: '#f9fafb',
-                                padding: '16px',
-                                borderRadius: '12px',
-                                marginBottom: '16px'
-                            }
-                        },
-                        React.createElement('p', { style: { fontWeight: 'bold', marginBottom: '8px',
-                                fontSize: '0.9rem' } }, 'إضافة رصيد نقاط (محاكاة)'),
-                        React.createElement('input', {
-                            type: 'number',
-                            value: pointsAmount,
-                            onChange: (e) => setPointsAmount(e.target.value),
-                            min: 1,
-                            style: {
-                                width: '100%',
-                                padding: '8px',
-                                borderRadius: '8px',
-                                border: '1px solid #d1d5db',
-                                marginBottom: '8px'
-                            }
-                        }),
-                        React.createElement('button', {
-                            onClick: () => {
-                                const amt = parseInt(pointsAmount) || 0;
-                                if (amt > 0) { onAddPoints(amt);
-                                    setShowAddPoints(false);
-                                    alert('تمت إضافة ' + amt + ' نقطة بنجاح!'); }
-                            },
-                            style: {
-                                width: '100%',
-                                padding: '10px',
-                                background: '#22c55e',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                cursor: 'pointer'
-                            }
-                        }, 'تأكيد الإضافة')
-                    ),
-                    React.createElement('h3', { style: { fontWeight: 'bold', fontSize: '1.1rem',
-                            marginBottom: '12px' } }, 'متجر الخدمات'),
-                    // Service cards...
-                    React.createElement(ServiceCard, {
-                        title: '✅ توثيق الحساب (العلامة الزرقاء)',
-                        cost: '70 نقطة',
-                        disabled: seller.verificationBadge || seller.points < 70,
-                        active: seller.verificationBadge,
-                        onPurchase: () => onPurchase('verify')
-                    }),
-                    React.createElement(ServiceCard, {
-                        title: '📦 باقة 100 منتج',
-                        cost: '50 نقطة',
-                        disabled: seller.maxProducts >= 100 || seller.points < 50,
-                        active: seller.maxProducts >= 100,
-                        onPurchase: () => onPurchase('max100')
-                    }),
-                    React.createElement(ServiceCard, {
-                        title: '🌟 اشتراك VIP',
-                        cost: '50 نقطة',
-                        disabled: seller.subscription === 'vip' || seller.points < 50,
-                        active: seller.subscription === 'vip',
-                        onPurchase: () => onPurchase('vip')
-                    }),
-                    React.createElement('div', {
-                        style: {
-                            border: '1px solid #e5e7eb',
-                            borderRadius: '12px',
-                            padding: '16px',
-                            marginTop: '12px'
-                        }
-                    },
-                        React.createElement('p', { style: { fontWeight: 'bold', marginBottom: '8px' } },
-                            '🚀 اشتراك مفتوح (Unlimited)'),
-                        React.createElement('div', {
-                            style: {
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(5, 1fr)',
-                                gap: '6px'
-                            }
-                        }, subscriptionOptions.map(opt =>
-                            React.createElement('button', {
-                                key: opt.months,
-                                onClick: () => onPurchase('unlimited', opt.months),
-                                disabled: seller.points < opt.cost,
-                                style: {
-                                    padding: '8px 4px',
-                                    borderRadius: '8px',
-                                    border: 'none',
-                                    cursor: seller.points >= opt.cost ? 'pointer' : 'not-allowed',
-                                    background: seller.points >= opt.cost ? '#6366f1' :
-                                        '#e5e7eb',
-                                    color: seller.points >= opt.cost ? 'white' : '#9ca3af',
-                                    fontSize: '0.7rem',
-                                    fontWeight: 'bold'
-                                }
-                            }, opt.label, React.createElement('br'), opt.cost + ' نقطة')
-                        )),
-                        React.createElement('p', { style: { fontSize: '0.75rem', color: '#6b7280',
-                                marginTop: '8px' } },
-                            'تنتهي الصلاحية: ' + (seller.subscriptionExpiry ? new Date(seller
-                                .subscriptionExpiry).toLocaleDateString('ar-EG') : 'غير مفعل'))
-                    )
-                )
-            );
-        }
-
-        function ServiceCard({ title, cost, disabled, active, onPurchase }) {
-            return React.createElement('div', {
-                style: {
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '12px',
-                    padding: '12px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '8px'
-                }
-            },
-                React.createElement('div', null,
-                    React.createElement('p', { style: { fontWeight: 'bold', fontSize: '0.9rem' } }, title),
-                    React.createElement('p', { style: { fontSize: '0.75rem', color: '#6b7280' } }, cost)
-                ),
-                React.createElement('button', {
-                    onClick: onPurchase,
-                    disabled: disabled,
-                    style: {
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        border: 'none',
-                        cursor: disabled ? 'not-allowed' : 'pointer',
-                        background: active ? '#e5e7eb' : disabled ? '#e5e7eb' : '#3b82f6',
-                        color: active ? '#9ca3af' : disabled ? '#9ca3af' : 'white',
-                        fontSize: '0.8rem',
-                        fontWeight: 'bold'
-                    }
-                }, active ? 'مفعل' : 'شراء')
-            );
-        }
-
-        // ========== LoginPage Component ==========
-        function LoginPage({ sellers, onLogin, onGoJoin, onBack, onForgotPassword }) {
-            const [email, setEmail] = useState('');
-            const [pass, setPass] = useState('');
-            const [err, setErr] = useState('');
-
-            const dologin = () => {
-                const e = email.trim();
-                const p = pass.trim();
-                if (!e || !p) { setErr('يرجى إدخال البريد الإلكتروني وكلمة المرور'); return; }
-                const found = Object.values(sellers).find(s => s.email === e && s.password === p);
-                if (found) { setErr('');
-                    onLogin(found); return; }
-                setErr('بيانات غير صحيحة');
-            };
-
-            return React.createElement('div', { className: 'app-container' },
-                React.createElement('div', {
-                    className: 'header-fixed bg-white border-b p-3',
-                    style: { display: 'flex', alignItems: 'center' }
-                },
-                    React.createElement('button', { onClick: onBack, style: { background: 'none', border: 'none',
-                            cursor: 'pointer' } },
-                        React.createElement('i', { className: 'fas fa-arrow-right ml-2' }), ' رجوع'
-                    ),
-                    React.createElement('h1', {
-                        style: { flex: 1, textAlign: 'center', fontWeight: 'bold' }
-                    }, 'تسجيل الدخول')
-                ),
-                React.createElement('div', { className: 'content-scroll', style: { padding: '24px' } },
-                    err && React.createElement('div', {
-                        style: {
-                            background: '#fef2f2',
-                            padding: '12px',
-                            borderRadius: '12px',
-                            color: '#dc2626',
-                            fontSize: '0.85rem',
-                            marginBottom: '16px'
-                        }
-                    }, err),
-                    React.createElement('input', {
-                        placeholder: 'البريد الإلكتروني',
-                        value: email,
-                        onChange: (e) => setEmail(e.target.value),
-                        style: {
-                            width: '100%',
-                            padding: '12px',
-                            background: '#f3f4f6',
-                            border: 'none',
-                            borderRadius: '12px',
-                            marginBottom: '12px',
-                            fontSize: '0.85rem'
-                        }
-                    }),
-                    React.createElement('input', {
-                        type: 'password',
-                        placeholder: 'كلمة المرور',
-                        value: pass,
-                        onChange: (e) => setPass(e.target.value),
-                        onKeyDown: (e) => e.key === 'Enter' && dologin(),
-                        style: {
-                            width: '100%',
-                            padding: '12px',
-                            background: '#f3f4f6',
-                            border: 'none',
-                            borderRadius: '12px',
-                            marginBottom: '12px',
-                            fontSize: '0.85rem'
-                        }
-                    }),
-                    React.createElement('button', {
-                        onClick: dologin,
-                        style: {
-                            width: '100%',
-                            padding: '14px',
-                            background: '#ff6600',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '12px',
-                            fontWeight: 'bold',
-                            cursor: 'pointer',
-                            marginBottom: '12px'
-                        }
-                    }, 'دخول'),
-                    React.createElement('div', { style: { textAlign: 'center', marginBottom: '16px' } },
-                        React.createElement('button', {
-                            onClick: onForgotPassword,
-                            style: {
-                                background: 'none',
-                                border: 'none',
-                                color: '#ff6600',
-                                cursor: 'pointer',
-                                textDecoration: 'underline',
-                                fontSize: '0.85rem'
-                            }
-                        }, 'نسيت كلمة السر؟')
-                    ),
-                    React.createElement('div', {
-                        style: {
-                            textAlign: 'center',
-                            color: '#9ca3af',
-                            fontSize: '0.85rem',
-                            margin: '16px 0'
-                        }
-                    }, 'أو'),
-                    React.createElement('button', {
-                        onClick: onGoJoin,
-                        style: {
-                            width: '100%',
-                            padding: '14px',
-                            background: 'white',
-                            border: '1px solid #e5e7eb',
-                            borderRadius: '12px',
-                            cursor: 'pointer',
-                            fontSize: '0.85rem'
-                        }
-                    }, 'انضم كتاجر أو عميل جديد')
-                )
-            );
-        }
-
-        // ========== JoinPage Component ==========
-        function JoinPage({ onRegister, onBack }) {
-            const [store, setStore] = useState('');
-            const [owner, setOwner] = useState('');
-            const [email, setEmail] = useState('');
-            const [pass, setPass] = useState('');
-            const [phone, setPhone] = useState('');
-            const [country, setCountry] = useState('مصر');
-            const [accountType, setAccountType] = useState('customer');
-            const [err, setErr] = useState('');
-            const [showCountries, setShowCountries] = useState(false);
-
-            const doJoin = () => {
-                if (!email.trim() || !pass.trim() || !owner.trim()) {
-                    setErr('البريد الإلكتروني، كلمة المرور، واسم المالك مطلوبون');
-                    return;
-                }
-                if (accountType === 'seller' && !store.trim()) {
-                    setErr('اسم المتجر مطلوب للتجار');
-                    return;
-                }
-                onRegister(createSeller({
-                    email: email.trim(),
-                    password: pass.trim(),
-                    storeName: accountType === 'seller' ? store.trim() : '',
-                    ownerName: owner.trim(),
-                    phone: phone.trim() || '01',
-                    country,
-                    accountType,
-                    avatar: accountType === 'customer' ? '👤' : '🛍️'
-                }));
-            };
-
-            return React.createElement('div', { className: 'app-contain
+    init();
+</script>
+</body>
+</html>
