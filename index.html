@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>VICKS MARKET | سوق الكتروني متكامل</title>
+    <title>VICKS MARKET | إدارة ومناطق</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
     <style>
-        /* أنماط أساسية */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .line-clamp-2 {
@@ -32,7 +31,6 @@
             z-index: 5;
             user-select: none;
         }
-        /* الإطار البرتقالي حول الشعار */
         .logo-frame {
             border: 2px solid #f97316;
             border-radius: 24px;
@@ -42,7 +40,6 @@
             align-items: center;
             gap: 8px;
         }
-        /* الوضع الليلي - يتم إضافته ديناميكياً */
         body.dark {
             background-color: #0f172a;
         }
@@ -54,39 +51,48 @@
         body.dark .text-gray-500 { color: #94a3b8; }
         body.dark .border-gray-100 { border-color: #334155; }
         body.dark .border-gray-200 { border-color: #334155; }
-        body.dark .bg-card { background-color: #1e293b; }
-        body.dark .bg-muted { background-color: #334155; }
         body.dark .logo-frame { background-color: #1e293b; border-color: #f97316; }
         body.dark .chat-watermark { color: rgba(255,255,255,0.05); }
+        body.dark .bg-indigo-50 { background-color: #2d2a5c; }
+        body.dark .bg-green-50 { background-color: #1a3c2c; }
+        body.dark .bg-blue-50 { background-color: #1a2c4c; }
+        body.dark .bg-yellow-50 { background-color: #3d3510; }
+        body.dark .bg-orange-50 { background-color: #3d2610; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
     <div id="root"></div>
 
     <script type="text/babel" data-presets="react,typescript">
-        // ==================== البيانات الأساسية ====================
+        // ==================== البيانات الأساسية والوظائف (مع دعم البلدان) ====================
         const STORAGE_KEY = 'vicks_market_state';
         const THEME_KEY = 'vicks_theme';
         const LANG_KEY = 'vicks_lang';
-        const OWNER_EMAIL = 'mom1113694362@gmail.com';
-        const OWNER_PASS = 'MohamedVfix2024Secure';
+        const COUNTRY_KEY = 'vicks_country';
+        const ADMIN_EMAIL = 'mom1113694362@gmail.com';
+        const ADMIN_PASS = 'momMOM2023#';
+        const ADMIN_ID = '10000000000';
         function generateId() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 
-        // البائعين والمنتجات التجريبية
+        // البائعين والمنتجات التجريبية مع إضافة حقل country
         const SAMPLE_SELLERS = {
-            owner: { id: 'owner', email: OWNER_EMAIL, password: OWNER_PASS, storeName: 'VICKS MARKET', ownerName: 'Mohamed', phone: '01113694362', district: 'موغورة 6', points: 5000, verified: true, subscription: 'platinum', products: [], createdAt: Date.now() - 86400000 * 30 },
-            s1: { id: 's1', email: 'seller1@test.com', password: '123456', storeName: 'متجر النور', ownerName: 'أحمد علي', phone: '01012345678', district: 'المتميز', points: 350, verified: true, subscription: 'silver', products: ['p1','p2','p5'], createdAt: Date.now() - 86400000 * 10 },
-            s2: { id: 's2', email: 'seller2@test.com', password: '123456', storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة حسن', phone: '01198765432', district: 'الأحياء 1', points: 120, verified: false, subscription: 'free', products: ['p3','p4','p6'], createdAt: Date.now() - 86400000 * 5 },
+            owner: { id: ADMIN_ID, email: ADMIN_EMAIL, password: ADMIN_PASS, storeName: 'VICKS MARKET', ownerName: 'Mohamed', phone: '01113694362', district: 'موغورة 6', points: 5000, verified: true, subscription: 'platinum', products: [], createdAt: Date.now() - 86400000 * 30, country: 'مصر', isAdmin: true },
+            s1: { id: 's1', email: 'seller1@test.com', password: '123456', storeName: 'متجر النور', ownerName: 'أحمد علي', phone: '01012345678', district: 'المتميز', points: 350, verified: true, subscription: 'silver', products: ['p1','p2','p5'], createdAt: Date.now() - 86400000 * 10, country: 'مصر' },
+            s2: { id: 's2', email: 'seller2@test.com', password: '123456', storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة حسن', phone: '01198765432', district: 'الأحياء 1', points: 120, verified: false, subscription: 'free', products: ['p3','p4','p6'], createdAt: Date.now() - 86400000 * 5, country: 'السعودية' },
         };
         const SAMPLE_PRODUCTS = {
-            p1: { id: 'p1', name: 'ايفون 14 Pro مستعمل', price: 18000, category: 'used', emoji: '📱', sellerId: 's1', sellerName: 'متجر النور', likes: 8, likedBy: [], description: 'بطارية 92%', createdAt: Date.now() - 86400000 * 2, vip: true, comments: [], rating: 0 },
-            p2: { id: 'p2', name: 'زيت زيتون بكر 1 لتر', price: 185, category: 'screens', emoji: '🫒', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 5, likedBy: [], description: 'زيت طبيعي', createdAt: Date.now() - 86400000, vip: false, comments: [], rating: 0 },
-            p3: { id: 'p3', name: 'شاشة سامسونج 55 بوصة', price: 4500, category: 'used', emoji: '📺', sellerId: 's1', sellerName: 'متجر النور', likes: 12, likedBy: [], description: 'شاشة ممتازة', createdAt: Date.now() - 86400000 * 3, vip: true, comments: [], rating: 0 },
-            p4: { id: 'p4', name: 'كريم مرطب للبشرة', price: 95, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 3, likedBy: [], description: 'ترطيب عميق', createdAt: Date.now() - 86400000 * 4, vip: false, comments: [], rating: 0 },
-            p5: { id: 'p5', name: 'لاب توب ديل Inspiron', price: 12000, category: 'used', emoji: '💻', sellerId: 's1', sellerName: 'متجر النور', likes: 7, likedBy: [], description: 'Core i7', createdAt: Date.now() - 86400000 * 6, vip: true, comments: [], rating: 0 },
-            p6: { id: 'p6', name: 'عطر رجالي فاخر', price: 320, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', likes: 15, likedBy: [], description: 'عطر خشبي', createdAt: Date.now() - 86400000 * 2, vip: false, comments: [], rating: 0 },
+            p1: { id: 'p1', name: 'ايفون 14 Pro مستعمل', price: 18000, category: 'used', emoji: '📱', sellerId: 's1', sellerName: 'متجر النور', sellerCountry: 'مصر', likes: 8, likedBy: [], description: 'بطارية 92%', createdAt: Date.now() - 86400000 * 2, vip: true, comments: [], rating: 0 },
+            p2: { id: 'p2', name: 'زيت زيتون بكر 1 لتر', price: 185, category: 'screens', emoji: '🫒', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', sellerCountry: 'السعودية', likes: 5, likedBy: [], description: 'زيت طبيعي', createdAt: Date.now() - 86400000, vip: false, comments: [], rating: 0 },
+            p3: { id: 'p3', name: 'شاشة سامسونج 55 بوصة', price: 4500, category: 'used', emoji: '📺', sellerId: 's1', sellerName: 'متجر النور', sellerCountry: 'مصر', likes: 12, likedBy: [], description: 'شاشة ممتازة', createdAt: Date.now() - 86400000 * 3, vip: true, comments: [], rating: 0 },
+            p4: { id: 'p4', name: 'تمر عجوة السوبر', price: 45, category: 'screens', emoji: '🥮', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', sellerCountry: 'السعودية', likes: 9, likedBy: [], description: 'تمر فاخر', createdAt: Date.now() - 86400000 * 1, vip: false, comments: [], rating: 0 },
+            p5: { id: 'p5', name: 'لاب توب ديل Inspiron', price: 12000, category: 'used', emoji: '💻', sellerId: 's1', sellerName: 'متجر النور', sellerCountry: 'مصر', likes: 7, likedBy: [], description: 'Core i7', createdAt: Date.now() - 86400000 * 6, vip: true, comments: [], rating: 0 },
+            p6: { id: 'p6', name: 'عطر عود الملكي', price: 320, category: 'new', emoji: '🧴', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', sellerCountry: 'السعودية', likes: 15, likedBy: [], description: 'عطر خشبي', createdAt: Date.now() - 86400000 * 2, vip: false, comments: [], rating: 0 },
+            // إضافة منتج لصاحب المتجر (admin) - كنموذج
+            p7: { id: 'p7', name: 'منتج تجريبي من المالك', price: 100, category: 'new', emoji: '🎁', sellerId: ADMIN_ID, sellerName: 'VICKS MARKET', sellerCountry: 'مصر', likes: 0, likedBy: [], description: 'منتج افتراضي', createdAt: Date.now(), vip: false, comments: [], rating: 0 },
         };
-        SAMPLE_SELLERS.owner.products = Object.keys(SAMPLE_PRODUCTS);
+        SAMPLE_SELLERS.owner.products = Object.keys(SAMPLE_PRODUCTS).filter(id => SAMPLE_PRODUCTS[id].sellerId === ADMIN_ID);
+        SAMPLE_SELLERS.s1.products = ['p1','p3','p5'];
+        SAMPLE_SELLERS.s2.products = ['p2','p4','p6'];
 
         function getDefaultState() {
             return {
@@ -99,8 +105,9 @@
         }
         function loadState() { try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return getDefaultState(); const parsed = JSON.parse(raw); return parsed.sellers ? parsed : getDefaultState(); } catch { return getDefaultState(); } }
         function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-        function isOwner(seller) { return seller?.email === OWNER_EMAIL; }
-        function createSeller(data) { return { id: 's_' + generateId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now() }; }
+        function isOwner(seller) { return seller?.email === ADMIN_EMAIL; }
+        function isAdmin(seller) { return seller?.isAdmin === true; }
+        function createSeller(data) { return { id: 's_' + generateId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now(), country: 'مصر', isAdmin: false }; }
         function createProduct(data) { return { id: 'p_' + generateId(), ...data, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 }; }
         function addChatMessage(state, msg) { return { ...state, chatMessages: [...state.chatMessages, { ...msg, id: generateId(), ts: Date.now() }] }; }
         function getBotResponse(msg) {
@@ -114,7 +121,7 @@
 
         const { useState, useEffect, useCallback, useRef } = React;
 
-        // ==================== بطاقة المنتج (مع اسم متجر مقصوص) ====================
+        // ==================== بطاقة المنتج (مع اسم متجر على سطرين) ====================
         const ProductCard = ({ product, isLiked, onLike, onWhatsApp, onClick, listMode, onComment, onRate, t }) => {
             const vipIcon = product.vip ? <i className="fas fa-crown text-yellow-500 text-sm ml-1"></i> : null;
             const ratingStars = (rating) => {
@@ -124,7 +131,8 @@
                 }
                 return stars;
             };
-            const shortSeller = product.sellerName.length > 12 ? product.sellerName.slice(0, 10) + '..' : product.sellerName;
+            // اسم المتجر على سطرين مع wrap
+            const sellerNameStyle = "text-xs text-gray-500 whitespace-normal break-words max-w-[90px] leading-tight";
             if (listMode) {
                 return (
                     <div onClick={onClick} className="flex gap-4 p-3 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md transition">
@@ -135,7 +143,7 @@
                         <div className="flex-1">
                             <h3 className="font-semibold flex items-center gap-1">{vipIcon} {product.name}</h3>
                             <p className="text-blue-600 font-bold">{product.price.toLocaleString()} {t('currency')}</p>
-                            <p className="text-xs text-gray-500 truncate max-w-[100px]" title={product.sellerName}>{shortSeller}</p>
+                            <div className={sellerNameStyle} title={product.sellerName}>{product.sellerName}</div>
                             <div className="flex gap-1 mt-1">{ratingStars(product.rating)}</div>
                         </div>
                         <div className="flex flex-col gap-2 items-end">
@@ -160,11 +168,8 @@
                     <div className="p-3">
                         <h3 className="font-semibold line-clamp-2 flex items-center gap-1">{vipIcon} {product.name}</h3>
                         <p className="text-blue-600 font-bold mt-1">{product.price.toLocaleString()} {t('currency')}</p>
-                        <div className="flex justify-between items-center mt-2 pt-2 border-t">
-                            <div className="flex items-center gap-1 overflow-hidden">
-                                <span className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-xs shrink-0">{product.sellerName[0]}</span>
-                                <span className="text-xs text-gray-500 truncate max-w-[80px]" title={product.sellerName}>{shortSeller}</span>
-                            </div>
+                        <div className="flex justify-between items-start mt-2 pt-2 border-t gap-1">
+                            <div className={sellerNameStyle}>{product.sellerName}</div>
                             <div className="flex gap-2 shrink-0">
                                 <button onClick={(e) => { e.stopPropagation(); onLike(); }} className={`p-1.5 rounded-full transition ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}>
                                     <i className={`fas fa-heart text-sm ${isLiked ? 'text-white' : ''}`}></i>
@@ -183,8 +188,8 @@
             );
         };
 
-        // ==================== صفحة الرئيسية ====================
-        const HomePage = ({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIPPage, imgSearchResults, onClearImgSearch, onComment, onRate, searchText, onSearchChange, showSearchBar, t }) => {
+        // ==================== صفحة الرئيسية (مع فلتر البلد) ====================
+        const HomePage = ({ products, currentSellerId, selectedCountry, onChangeCountry, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIPPage, imgSearchResults, onClearImgSearch, onComment, onRate, searchText, onSearchChange, showSearchBar, t }) => {
             const [category, setCategory] = useState('all');
             const [viewMode, setViewMode] = useState('grid');
             const categories = [
@@ -193,16 +198,26 @@
                 { id: 'screens', label: t('supermarket'), icon: 'fa-store' },
                 { id: 'new', label: t('beauty'), icon: 'fa-spa' }
             ];
-            const filtered = React.useMemo(() => {
+            // تصفية حسب البلد المختار أولاً، ثم حسب الفئة
+            const filteredByCountry = React.useMemo(() => {
                 let arr = Object.values(products);
-                if (category !== 'all') return arr.filter(p => p.category === category);
+                arr = arr.filter(p => p.sellerCountry === selectedCountry);
+                if (category !== 'all') arr = arr.filter(p => p.category === category);
                 return arr;
-            }, [products, category]);
-            const display = imgSearchResults || filtered;
+            }, [products, category, selectedCountry]);
+            const display = imgSearchResults || filteredByCountry;
             const isImg = imgSearchResults !== null;
             const isLiked = (p) => currentSellerId ? p.likedBy.includes(currentSellerId) : false;
             return (
                 <div className="flex flex-col h-full">
+                    {/* شريط اختيار البلد */}
+                    <div className="bg-white px-4 py-2 border-b flex justify-between items-center">
+                        <span className="text-sm font-medium">{t('your_country')}</span>
+                        <select value={selectedCountry} onChange={(e) => onChangeCountry(e.target.value)} className="bg-gray-100 rounded-lg p-2 text-sm">
+                            <option value="مصر">مصر (EGP)</option>
+                            <option value="السعودية">السعودية (SAR)</option>
+                        </select>
+                    </div>
                     {showSearchBar && (
                         <div className="bg-white px-4 pb-3 pt-2 border-b">
                             <div className="relative">
@@ -241,32 +256,38 @@
             );
         };
 
-        // ==================== صفحة العروض ====================
-        const OffersPage = ({ products, onProductClick, onBack, t }) => {
-            const offerProducts = Object.values(products).filter(p => p.likes > 0 || p.price < 300);
+        // ==================== لوحة تحكم الادمن ====================
+        const AdminDashboard = ({ sellers, products, onBack, onDeleteSeller, onDeleteProduct, onAddProductForSeller, t }) => {
+            const [selectedSellerId, setSelectedSellerId] = useState('');
+            const [newProductName, setNewProductName] = useState('');
+            const [newProductPrice, setNewProductPrice] = useState('');
+            const sellersList = Object.values(sellers).filter(s => !s.isAdmin);
+            const allProducts = Object.values(products);
             return (
                 <div className="flex flex-col h-full bg-white">
                     <div className="flex items-center p-4 border-b">
                         <button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button>
-                        <h1 className="flex-1 text-center font-bold"><i className="fas fa-tag text-orange-500 ml-2"></i> {t('special_offers')}</h1>
+                        <h1 className="flex-1 text-center font-bold"><i className="fas fa-shield-alt text-orange-500 ml-2"></i> لوحة التحكم (Admin)</h1>
                     </div>
-                    <div className="flex-1 overflow-auto p-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            {offerProducts.map(p => (
-                                <div key={p.id} onClick={() => onProductClick(p)} className="bg-white rounded-xl border shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition">
-                                    <div className="aspect-square flex items-center justify-center bg-gray-50 text-6xl">{p.emoji}</div>
-                                    <div className="p-3">
-                                        <h3 className="font-semibold line-clamp-2">{p.name}</h3>
-                                        <p className="text-orange-600 font-bold mt-1">{p.price.toLocaleString()} {t('currency')}</p>
-                                        <div className="flex justify-between items-center mt-2">
-                                            <span className="text-xs text-gray-500 truncate">{p.sellerName}</span>
-                                            {p.likes > 0 && <span className="text-xs text-red-500"><i className="fas fa-heart"></i> {p.likes}</span>}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="flex-1 overflow-auto p-4 space-y-6">
+                        {/* قسم البائعين */}
+                        <div><h2 className="text-xl font-bold mb-3">إدارة البائعين</h2><div className="space-y-2">{sellersList.map(s => (<div key={s.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl"><div><div className="font-semibold">{s.storeName}</div><div className="text-sm text-gray-500">{s.email} | {s.country}</div></div><button onClick={() => onDeleteSeller(s.id)} className="text-red-500"><i className="fas fa-trash-alt"></i></button></div>))}</div></div>
+                        {/* قسم المنتجات */}
+                        <div><h2 className="text-xl font-bold mb-3">جميع المنتجات</h2><div className="space-y-2">{allProducts.map(p => (<div key={p.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl"><div><div className="font-semibold">{p.name}</div><div className="text-sm text-gray-500">{p.price} EGP | {p.sellerName}</div></div><button onClick={() => onDeleteProduct(p.id)} className="text-red-500"><i className="fas fa-trash-alt"></i></button></div>))}</div></div>
+                        {/* إضافة منتج لبائع */}
+                        <div><h2 className="text-xl font-bold mb-3">إضافة منتج لأي بائع</h2><div className="space-y-3"><select className="w-full p-3 border rounded-xl" value={selectedSellerId} onChange={e => setSelectedSellerId(e.target.value)}><option value="">اختر بائع</option>{sellersList.map(s => <option key={s.id} value={s.id}>{s.storeName}</option>)}</select><input placeholder="اسم المنتج" className="w-full p-3 border rounded-xl" value={newProductName} onChange={e => setNewProductName(e.target.value)} /><input type="number" placeholder="السعر" className="w-full p-3 border rounded-xl" value={newProductPrice} onChange={e => setNewProductPrice(e.target.value)} /><button onClick={() => { if(selectedSellerId && newProductName && newProductPrice) onAddProductForSeller(selectedSellerId, newProductName, parseFloat(newProductPrice)); }} className="w-full py-3 bg-orange-500 text-white rounded-xl">إضافة منتج</button></div></div>
                     </div>
+                </div>
+            );
+        };
+
+        // ==================== صفحة العروض (مع فلتر البلد) ====================
+        const OffersPage = ({ products, selectedCountry, onProductClick, onBack, t }) => {
+            const offerProducts = Object.values(products).filter(p => (p.likes > 0 || p.price < 300) && p.sellerCountry === selectedCountry);
+            return (
+                <div className="flex flex-col h-full bg-white">
+                    <div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold"><i className="fas fa-tag text-orange-500 ml-2"></i> {t('special_offers')}</h1></div>
+                    <div className="flex-1 overflow-auto p-4"><div className="grid grid-cols-2 gap-4">{offerProducts.map(p => (<div key={p.id} onClick={() => onProductClick(p)} className="bg-white rounded-xl border shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition"><div className="aspect-square flex items-center justify-center bg-gray-50 text-6xl">{p.emoji}</div><div className="p-3"><h3 className="font-semibold line-clamp-2">{p.name}</h3><p className="text-orange-600 font-bold mt-1">{p.price.toLocaleString()} {t('currency')}</p><div className="text-xs text-gray-500 truncate">{p.sellerName}</div></div></div>))}</div></div>
                 </div>
             );
         };
@@ -274,106 +295,54 @@
         // ==================== صفحة اشتراكات VIP ====================
         const VIPPage = ({ seller, onBack, onPurchaseSubscription, t }) => {
             const plans = [
-                { id: 'silver', name: t('silver'), price: 99, productsLimit: '50 منتج', features: ['50 منتج', 'دعم أساسي', 'نقاط مضاعفة'] },
-                { id: 'gold', name: t('gold'), price: 199, productsLimit: 'غير محدود', features: ['منتجات غير محدودة', 'دعم أولوية', 'نقاط ×2', 'ظهور مميز'] },
-                { id: 'platinum', name: t('platinum'), price: 299, productsLimit: 'غير محدود', features: ['كل ميزات الذهبي', 'استشارات تسويقية', 'توثيق مجاني'] }
+                { id: 'silver', name: t('silver'), price: 99, features: ['50 منتج', 'دعم أساسي', 'نقاط مضاعفة'] },
+                { id: 'gold', name: t('gold'), price: 199, features: ['منتجات غير محدودة', 'دعم أولوية', 'نقاط ×2', 'ظهور مميز'] },
+                { id: 'platinum', name: t('platinum'), price: 299, features: ['كل ميزات الذهبي', 'استشارات تسويقية', 'توثيق مجاني'] }
             ];
             return (
-                <div className="flex flex-col h-full bg-white">
-                    <div className="flex items-center p-4 border-b">
-                        <button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button>
-                        <h1 className="flex-1 text-center font-bold"><i className="fas fa-crown text-yellow-500 ml-2"></i> {t('vip_membership')}</h1>
-                    </div>
-                    <div className="p-4 space-y-4 overflow-auto">
-                        <p className="text-gray-600 text-center">{t('vip_desc')}</p>
-                        {plans.map(plan => (
-                            <div key={plan.id} className="rounded-2xl p-5 shadow-md bg-gray-50">
-                                <h2 className="text-xl font-bold text-gray-800">{plan.name}</h2>
-                                <p className="text-3xl font-bold mt-2 text-orange-600">{plan.price} {t('currency')} <span className="text-sm">{t('monthly')}</span></p>
-                                <ul className="mt-3 space-y-1">
-                                    {plan.features.map((f, idx) => <li key={idx} className="text-sm flex items-center gap-2"><i className="fas fa-check-circle text-green-500"></i> {f}</li>)}
-                                </ul>
-                                <button onClick={() => onPurchaseSubscription(plan.id, plan.price)} className="mt-4 w-full py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600 transition">{t('subscribe_now')}</button>
-                            </div>
-                        ))}
-                        <p className="text-xs text-center text-gray-400 mt-4">{t('free_plan_note')}</p>
-                    </div>
-                </div>
+                <div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold"><i className="fas fa-crown text-yellow-500 ml-2"></i> {t('vip_membership')}</h1></div><div className="p-4 space-y-4 overflow-auto"><p className="text-gray-600 text-center">{t('vip_desc')}</p>{plans.map(plan => (<div key={plan.id} className="rounded-2xl p-5 shadow-md bg-gray-50"><h2 className="text-xl font-bold text-gray-800">{plan.name}</h2><p className="text-3xl font-bold mt-2 text-orange-600">{plan.price} {t('currency')} <span className="text-sm">{t('monthly')}</span></p><ul className="mt-3 space-y-1">{plan.features.map((f, idx) => <li key={idx} className="text-sm flex items-center gap-2"><i className="fas fa-check-circle text-green-500"></i> {f}</li>)}</ul><button onClick={() => onPurchaseSubscription(plan.id, plan.price)} className="mt-4 w-full py-3 bg-orange-500 text-white rounded-xl font-semibold">{t('subscribe_now')}</button></div>))}<p className="text-xs text-center text-gray-400 mt-4">{t('free_plan_note')}</p></div></div>
             );
         };
 
-        // ==================== مكونات أخرى أساسية ====================
+        // ==================== باقي المكونات (Chat, Login, Join, Seller, Store, AddProduct, Detail، مع إضافة تغيير اللغة والبلد في صفحة البائع) ====================
+        // (تم تبسيطها ولكن مع إضافة إعدادات اللغة ضمن SellerPage)
         const ChatPage = ({ messages, onSendMessage, onBack, t }) => {
             const [input, setInput] = useState('');
             const send = () => { if (input.trim()) { onSendMessage(input); setInput(''); } };
-            return (
-                <div className="flex flex-col h-full relative bg-gray-50">
-                    <div className="chat-watermark">VICKS AI</div>
-                    <div className="flex items-center p-4 border-b bg-white z-10">
-                        <button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i></button>
-                        <h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1>
-                    </div>
-                    <div className="flex-1 overflow-y-auto p-3 space-y-3">
-                        {messages.map(m => (
-                            <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[80%] p-3 rounded-2xl ${m.role === 'user' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-800'}`}>{m.text}</div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="p-3 border-t flex gap-2 bg-white">
-                        <input className="flex-1 p-3 bg-gray-100 rounded-xl" placeholder={t('chat_placeholder')} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} />
-                        <button onClick={send} className="px-5 bg-orange-500 text-white rounded-xl"><i className="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            );
+            return (<div className="flex flex-col h-full relative bg-gray-50"><div className="chat-watermark">VICKS AI</div><div className="flex items-center p-4 border-b bg-white z-10"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1></div><div className="flex-1 overflow-y-auto p-3 space-y-3">{messages.map(m => (<div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`max-w-[80%] p-3 rounded-2xl ${m.role === 'user' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-800'}`}>{m.text}</div></div>))}</div><div className="p-3 border-t flex gap-2 bg-white"><input className="flex-1 p-3 bg-gray-100 rounded-xl" placeholder={t('chat_placeholder')} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} /><button onClick={send} className="px-5 bg-orange-500 text-white rounded-xl"><i className="fas fa-paper-plane"></i></button></div></div>);
         };
         const LoginPage = ({ sellers, onLogin, onGoJoin, onBack, t }) => {
             const [email, setEmail] = useState(''); const [pass, setPass] = useState(''); const [err, setErr] = useState('');
             const doLogin = () => { const s = Object.values(sellers).find(s => s.email === email.trim() && s.password === pass); s ? onLogin(s) : setErr(t('invalid_credentials')); };
-            return (
-                <div className="flex flex-col h-full bg-white">
-                    <div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><h1 className="flex-1 text-center font-bold">{t('login')}</h1></div>
-                    <div className="p-6 space-y-4">{err && <div className="bg-red-50 p-3 rounded-xl">{err}</div>}<input className="w-full p-3 bg-gray-100 rounded-xl" placeholder={t('email')} value={email} onChange={e => setEmail(e.target.value)} /><input type="password" className="w-full p-3 bg-gray-100 rounded-xl" placeholder={t('password')} value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && doLogin()} /><button onClick={doLogin} className="w-full py-3 bg-orange-500 text-white rounded-xl">{t('login_btn')}</button><div className="text-center text-gray-400">{t('or')}</div><button onClick={onGoJoin} className="w-full py-3 border rounded-xl">{t('join_seller')}</button></div>
-                </div>
-            );
+            return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><h1 className="flex-1 text-center font-bold">{t('login')}</h1></div><div className="p-6 space-y-4">{err && <div className="bg-red-50 p-3 rounded-xl">{err}</div>}<input className="w-full p-3 bg-gray-100 rounded-xl" placeholder={t('email')} value={email} onChange={e => setEmail(e.target.value)} /><input type="password" className="w-full p-3 bg-gray-100 rounded-xl" placeholder={t('password')} value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && doLogin()} /><button onClick={doLogin} className="w-full py-3 bg-orange-500 text-white rounded-xl">{t('login_btn')}</button><div className="text-center text-gray-400">{t('or')}</div><button onClick={onGoJoin} className="w-full py-3 border rounded-xl">{t('join_seller')}</button></div></div>);
         };
         const JoinPage = ({ sellers, onRegister, onBack, t }) => {
-            const [form, setForm] = useState({ storeName: '', ownerName: '', phone: '', email: '', password: '', district: 'موغورة 6' }); const [err, setErr] = useState('');
+            const [form, setForm] = useState({ storeName: '', ownerName: '', phone: '', email: '', password: '', district: 'موغورة 6', country: 'مصر' }); const [err, setErr] = useState('');
             const doReg = () => { if (Object.values(form).some(v => !v.trim())) { setErr(t('all_fields_required')); return; } if (Object.values(sellers).some(s => s.email === form.email.trim())) { setErr(t('email_exists')); return; } onRegister(createSeller(form)); };
-            return (
-                <div className="flex flex-col h-full"><div className="flex p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><h1 className="flex-1 text-center font-bold">{t('join_seller_title')}</h1></div><div className="p-4 overflow-auto space-y-3">{err && <div className="bg-red-50 p-3 rounded-xl">{err}</div>}<input placeholder={t('store_name')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.storeName} onChange={e => setForm({ ...form, storeName: e.target.value })} /><input placeholder={t('owner_name')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.ownerName} onChange={e => setForm({ ...form, ownerName: e.target.value })} /><input placeholder={t('phone')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} /><input placeholder={t('email')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /><input type="password" placeholder={t('password')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} /><select className="w-full p-3 bg-gray-100 rounded-xl" value={form.district} onChange={e => setForm({ ...form, district: e.target.value })}><option>موغورة 6</option><option>المتميز</option><option>الأحياء 1</option><option>الأحياء 2</option><option>حدائق أكتوبر</option></select><button onClick={doReg} className="w-full py-3 bg-orange-500 text-white rounded-xl">{t('register')}</button></div></div>
-            );
+            return (<div className="flex flex-col h-full"><div className="flex p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><h1 className="flex-1 text-center font-bold">{t('join_seller_title')}</h1></div><div className="p-4 overflow-auto space-y-3">{err && <div className="bg-red-50 p-3 rounded-xl">{err}</div>}<input placeholder={t('store_name')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.storeName} onChange={e => setForm({ ...form, storeName: e.target.value })} /><input placeholder={t('owner_name')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.ownerName} onChange={e => setForm({ ...form, ownerName: e.target.value })} /><input placeholder={t('phone')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} /><input placeholder={t('email')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /><input type="password" placeholder={t('password')} className="w-full p-3 bg-gray-100 rounded-xl" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} /><select className="w-full p-3 bg-gray-100 rounded-xl" value={form.district} onChange={e => setForm({ ...form, district: e.target.value })}><option>موغورة 6</option><option>المتميز</option><option>الأحياء 1</option><option>الأحياء 2</option><option>حدائق أكتوبر</option></select><select className="w-full p-3 bg-gray-100 rounded-xl" value={form.country} onChange={e => setForm({ ...form, country: e.target.value })}><option>مصر</option><option>السعودية</option></select><button onClick={doReg} className="w-full py-3 bg-orange-500 text-white rounded-xl">{t('register')}</button></div></div>);
         };
-        const SellerPage = ({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack, t }) => {
+        const SellerPage = ({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack, onChangeLang, currentLang, t }) => {
             const myProducts = seller.products.map(pid => products[pid]).filter(p => p);
-            return (
-                <div className="flex flex-col h-full"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right"></i></button><h1 className="flex-1 text-center font-bold">{seller.storeName}</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div><div className="p-4 grid grid-cols-2 gap-3"><button onClick={onGoStore} className="bg-indigo-50 p-4 rounded-2xl"><i className="fas fa-store"></i> {t('store_points')}</button><button onClick={onGoChat} className="bg-green-50 p-4 rounded-2xl"><i className="fas fa-comment-dots"></i> {t('ai_support')}</button><button onClick={onAddProduct} className="bg-blue-50 p-4 rounded-2xl"><i className="fas fa-plus-circle"></i> {t('add_product')}</button></div><div className="px-4 font-semibold">{t('my_products')} ({myProducts.length})</div><div className="flex-1 overflow-auto p-4 space-y-2">{myProducts.map(p => <div key={p.id} className="flex gap-3 p-3 bg-white rounded-xl border"><div className="text-3xl">{p.emoji}</div><div className="flex-1"><div>{p.name}</div><div className="text-blue-600">{p.price} {t('currency')}</div></div><button onClick={() => onEditProduct(p)}><i className="fas fa-edit"></i></button><button onClick={() => onDeleteProduct(p.id)}><i className="fas fa-trash-alt text-red-500"></i></button></div>)}</div></div>
-            );
+            return (<div className="flex flex-col h-full"><div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right"></i></button><h1 className="flex-1 text-center font-bold">{seller.storeName}</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div><div className="p-4 grid grid-cols-2 gap-3"><button onClick={onGoStore} className="bg-indigo-50 p-4 rounded-2xl"><i className="fas fa-store"></i> {t('store_points')}</button><button onClick={onGoChat} className="bg-green-50 p-4 rounded-2xl"><i className="fas fa-comment-dots"></i> {t('ai_support')}</button><button onClick={onAddProduct} className="bg-blue-50 p-4 rounded-2xl"><i className="fas fa-plus-circle"></i> {t('add_product')}</button><button onClick={() => onChangeLang(currentLang === 'ar' ? 'en' : 'ar')} className="bg-yellow-50 p-4 rounded-2xl"><i className="fas fa-globe"></i> {currentLang === 'ar' ? 'English' : 'عربي'}</button></div><div className="px-4 font-semibold">{t('my_products')} ({myProducts.length})</div><div className="flex-1 overflow-auto p-4 space-y-2">{myProducts.map(p => <div key={p.id} className="flex gap-3 p-3 bg-white rounded-xl border"><div className="text-3xl">{p.emoji}</div><div className="flex-1"><div>{p.name}</div><div className="text-blue-600">{p.price} {t('currency')}</div></div><button onClick={() => onEditProduct(p)}><i className="fas fa-edit"></i></button><button onClick={() => onDeleteProduct(p.id)}><i className="fas fa-trash-alt text-red-500"></i></button></div>)}</div></div>);
         };
         const StorePage = ({ seller, onBack, onPurchaseComplete, t }) => {
             const buyPoints = (pts, cost) => { if (confirm(`${t('buy_points_confirm')} ${pts} ${t('points_for')} ${cost} ${t('currency')}?`)) setTimeout(() => onPurchaseComplete('points', cost, pts), 300); };
             const buyVerify = () => { if (seller.verified) alert(t('already_verified')); else if (confirm(t('verify_confirm'))) setTimeout(() => onPurchaseComplete('verify', 150), 300); };
-            return (
-                <div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right"></i> {t('back')}</button><div className="bg-white rounded-2xl p-6 text-center"><div className="text-5xl mb-2">⭐ {seller.points} {t('points')}</div><div>{seller.verified ? '✓ ' + t('verified') : t('not_verified')}</div><div className="mb-4">{t('package')}: {seller.subscription}</div><div className="space-y-3"><button onClick={() => buyPoints(100, 30)} className="w-full py-3 bg-amber-500 rounded-xl">{t('buy_100_points')}</button><button onClick={() => buyPoints(500, 120)} className="w-full py-3 bg-amber-600 rounded-xl">{t('buy_500_points')}</button><button onClick={buyVerify} className="w-full py-3 bg-blue-600 rounded-xl">{t('verify_store')}</button></div></div></div>
-            );
+            return (<div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right"></i> {t('back')}</button><div className="bg-white rounded-2xl p-6 text-center"><div className="text-5xl mb-2">⭐ {seller.points} {t('points')}</div><div>{seller.verified ? '✓ ' + t('verified') : t('not_verified')}</div><div className="mb-4">{t('package')}: {seller.subscription}</div><div className="space-y-3"><button onClick={() => buyPoints(100, 30)} className="w-full py-3 bg-amber-500 rounded-xl">{t('buy_100_points')}</button><button onClick={() => buyPoints(500, 120)} className="w-full py-3 bg-amber-600 rounded-xl">{t('buy_500_points')}</button><button onClick={buyVerify} className="w-full py-3 bg-blue-600 rounded-xl">{t('verify_store')}</button></div></div></div>);
         };
-        const AddProductPage = ({ onSave, onBack, editProduct, t }) => {
+        const AddProductPage = ({ onSave, onBack, editProduct, sellerCountry, t }) => {
             const [name, setName] = useState(editProduct?.name || ''); const [price, setPrice] = useState(editProduct?.price || ''); const [category, setCategory] = useState(editProduct?.category || 'used'); const [emoji, setEmoji] = useState(editProduct?.emoji || '📦'); const [desc, setDesc] = useState(editProduct?.description || ''); const [isVip, setIsVip] = useState(editProduct?.vip || false);
-            const submit = () => { if (!name || !price) return; onSave({ name, price: Number(price), category, emoji, description: desc, vip: isVip }); };
-            return (
-                <div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><div className="bg-white p-5 rounded-2xl shadow space-y-3"><h2 className="text-xl font-bold">{editProduct ? t('edit_product') : t('add_product')}</h2><input placeholder={t('product_name')} className="w-full p-3 border rounded-xl" value={name} onChange={e => setName(e.target.value)} /><input type="number" placeholder={t('price')} className="w-full p-3 border rounded-xl" value={price} onChange={e => setPrice(e.target.value)} /><select className="w-full p-3 border rounded-xl" value={category} onChange={e => setCategory(e.target.value)}><option value="used">{t('used')}</option><option value="screens">{t('supermarket')}</option><option value="new">{t('beauty')}</option></select><input placeholder={t('emoji')} className="w-full p-3 border rounded-xl" value={emoji} onChange={e => setEmoji(e.target.value)} /><textarea placeholder={t('description')} rows="3" className="w-full p-3 border rounded-xl" value={desc} onChange={e => setDesc(e.target.value)}></textarea><label><input type="checkbox" checked={isVip} onChange={e => setIsVip(e.target.checked)} /> <i className="fas fa-crown text-yellow-500"></i> {t('vip_product')}</label><button onClick={submit} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">{t('save')}</button></div></div>
-            );
+            const submit = () => { if (!name || !price) return; onSave({ name, price: Number(price), category, emoji, description: desc, vip: isVip, sellerCountry }); };
+            return (<div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><div className="bg-white p-5 rounded-2xl shadow space-y-3"><h2 className="text-xl font-bold">{editProduct ? t('edit_product') : t('add_product')}</h2><input placeholder={t('product_name')} className="w-full p-3 border rounded-xl" value={name} onChange={e => setName(e.target.value)} /><input type="number" placeholder={t('price')} className="w-full p-3 border rounded-xl" value={price} onChange={e => setPrice(e.target.value)} /><select className="w-full p-3 border rounded-xl" value={category} onChange={e => setCategory(e.target.value)}><option value="used">{t('used')}</option><option value="screens">{t('supermarket')}</option><option value="new">{t('beauty')}</option></select><input placeholder={t('emoji')} className="w-full p-3 border rounded-xl" value={emoji} onChange={e => setEmoji(e.target.value)} /><textarea placeholder={t('description')} rows="3" className="w-full p-3 border rounded-xl" value={desc} onChange={e => setDesc(e.target.value)}></textarea><label><input type="checkbox" checked={isVip} onChange={e => setIsVip(e.target.checked)} /> <i className="fas fa-crown text-yellow-500"></i> {t('vip_product')}</label><button onClick={submit} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">{t('save')}</button></div></div>);
         };
         const ProductDetailPage = ({ product, seller, isLiked, onLike, onBack, onComment, onRate, t }) => {
             const [showCommentBox, setShowCommentBox] = useState(false); const [newComment, setNewComment] = useState('');
             const ratingStars = () => { let stars = []; for (let i = 1; i <= 5; i++) stars.push(<i key={i} className={`fas fa-star ${i <= product.rating ? 'text-yellow-400' : 'text-gray-300'} text-xl cursor-pointer`} onClick={() => onRate(i)}></i>); return stars; };
             const addComment = () => { if (newComment.trim()) { onComment(newComment); setNewComment(''); setShowCommentBox(false); } };
-            return (
-                <div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><div className="bg-white rounded-2xl p-5"><div className="text-8xl text-center mb-4">{product.emoji}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} {t('currency')}</p><div className="flex gap-2 mt-2 justify-center">{ratingStars()}</div><p className="text-gray-600 mt-3">{product.description || t('no_description')}</p><div className="mt-5 flex justify-between flex-wrap gap-2"><div><i className="fas fa-store"></i> {seller?.storeName}</div><div className="flex gap-2"><button onClick={onLike} className={`flex gap-2 px-5 py-2 rounded-full ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-heart"></i> {product.likes}</button><button onClick={() => setShowCommentBox(true)} className="flex gap-2 px-5 py-2 rounded-full bg-blue-100 text-blue-600"><i className="fas fa-comment"></i> {t('comment')}</button></div></div>{showCommentBox && (<div className="mt-4 p-3 bg-gray-100 rounded-xl"><textarea className="w-full p-2 border rounded-lg" rows="2" placeholder={t('write_comment')} value={newComment} onChange={e => setNewComment(e.target.value)}></textarea><div className="flex gap-2 mt-2"><button onClick={addComment} className="px-4 py-2 bg-green-500 text-white rounded-lg">{t('publish')}</button><button onClick={() => setShowCommentBox(false)} className="px-4 py-2 bg-gray-300 rounded-lg">{t('cancel')}</button></div></div>)}<div className="mt-4"><h3 className="font-semibold">{t('comments')}:</h3>{product.comments?.length === 0 ? <p className="text-gray-400">{t('no_comments')}</p> : product.comments?.map((c, idx) => <div key={idx} className="border-t pt-2 mt-2 text-sm">{c}</div>)}</div></div></div>
-            );
+            return (<div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><div className="bg-white rounded-2xl p-5"><div className="text-8xl text-center mb-4">{product.emoji}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} {t('currency')}</p><div className="flex gap-2 mt-2 justify-center">{ratingStars()}</div><p className="text-gray-600 mt-3">{product.description || t('no_description')}</p><div className="mt-5 flex justify-between flex-wrap gap-2"><div><i className="fas fa-store"></i> {seller?.storeName}</div><div className="flex gap-2"><button onClick={onLike} className={`flex gap-2 px-5 py-2 rounded-full ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-heart"></i> {product.likes}</button><button onClick={() => setShowCommentBox(true)} className="flex gap-2 px-5 py-2 rounded-full bg-blue-100 text-blue-600"><i className="fas fa-comment"></i> {t('comment')}</button></div></div>{showCommentBox && (<div className="mt-4 p-3 bg-gray-100 rounded-xl"><textarea className="w-full p-2 border rounded-lg" rows="2" placeholder={t('write_comment')} value={newComment} onChange={e => setNewComment(e.target.value)}></textarea><div className="flex gap-2 mt-2"><button onClick={addComment} className="px-4 py-2 bg-green-500 text-white rounded-lg">{t('publish')}</button><button onClick={() => setShowCommentBox(false)} className="px-4 py-2 bg-gray-300 rounded-lg">{t('cancel')}</button></div></div>)}<div className="mt-4"><h3 className="font-semibold">{t('comments')}:</h3>{product.comments?.length === 0 ? <p className="text-gray-400">{t('no_comments')}</p> : product.comments?.map((c, idx) => <div key={idx} className="border-t pt-2 mt-2 text-sm">{c}</div>)}</div></div></div>);
         };
 
-        // ==================== التطبيق الرئيسي ====================
+        // ==================== التطبيق الرئيسي مع دعم البلد والادمن ====================
         const App = () => {
             const [state, setState] = useState(null);
             const [page, setPage] = useState('home');
@@ -385,28 +354,25 @@
             const [showSearchBar, setShowSearchBar] = useState(false);
             const [lang, setLang] = useState(() => localStorage.getItem(LANG_KEY) === 'en' ? 'en' : 'ar');
             const [darkMode, setDarkMode] = useState(() => localStorage.getItem(THEME_KEY) === 'dark');
+            const [selectedCountry, setSelectedCountry] = useState(() => localStorage.getItem(COUNTRY_KEY) || 'مصر');
             const cameraInputRef = useRef(null);
 
             const translations = {
-                ar: { currency: 'ج.م', all: 'الكل', used: 'مستعمل', supermarket: 'سوبر ماركت', beauty: 'جمال وعناية', search_placeholder: 'ابحث عن منتج...', my_account: 'حسابي', offers: 'عروض', vip_subscriptions: 'اشتراكات VIP', image_results: 'نتائج الصور', clear: 'مسح', no_products: 'لا توجد منتجات', back: 'رجوع', special_offers: 'العروض الخاصة', vip_membership: 'العضوية VIP', vip_desc: 'اشترك في إحدى الباقات واحصل على مميزات حصرية', silver: 'فضي', gold: 'ذهبي', platinum: 'بلاتيني', monthly: '/ شهرياً', subscribe_now: 'اشترك الآن', free_plan_note: 'الباقة المجانية: 10 منتجات كحد أقصى', login: 'تسجيل الدخول', email: 'البريد الإلكتروني', password: 'كلمة المرور', login_btn: 'دخول', or: 'أو', join_seller: 'انضم كتاجر جديد', join_seller_title: 'انضم كتاجر', store_name: 'اسم المتجر', owner_name: 'اسم المالك', phone: 'رقم الهاتف', register: 'تسجيل', all_fields_required: 'جميع الحقول مطلوبة', email_exists: 'البريد مستخدم', store_points: 'المتجر والنقاط', ai_support: 'الدعم الذكي', add_product: 'إضافة منتج', my_products: 'منتجاتي', points: 'نقطة', not_verified: 'غير موثق', package: 'الباقة', buy_100_points: '100 نقطة - 30 ج.م', buy_500_points: '500 نقطة - 120 ج.م', verify_store: 'توثيق المتجر - 150 ج.م', edit_product: 'تعديل منتج', product_name: 'اسم المنتج', price: 'السعر', emoji: 'رمز تعبيري', description: 'الوصف', vip_product: 'منتج VIP', save: 'حفظ', no_description: 'لا يوجد وصف', comment: 'تعليق', write_comment: 'اكتب تعليقك...', publish: 'نشر', cancel: 'إلغاء', comments: 'التعليقات', no_comments: 'لا توجد تعليقات بعد', chat_placeholder: 'اكتب رسالتك...', buy_points_confirm: 'شراء', points_for: 'نقطة بـ', already_verified: 'موثق بالفعل', verify_confirm: 'شراء شارة التوثيق 150 ج.م؟', invalid_credentials: 'بيانات غير صحيحة', verified: 'موثق' },
-                en: { currency: 'EGP', all: 'All', used: 'Used', supermarket: 'Supermarket', beauty: 'Beauty', search_placeholder: 'Search products...', my_account: 'My Account', offers: 'Offers', vip_subscriptions: 'VIP Subscriptions', image_results: 'Image results', clear: 'Clear', no_products: 'No products', back: 'Back', special_offers: 'Special Offers', vip_membership: 'VIP Membership', vip_desc: 'Subscribe and get exclusive benefits', silver: 'Silver', gold: 'Gold', platinum: 'Platinum', monthly: '/month', subscribe_now: 'Subscribe Now', free_plan_note: 'Free plan: max 10 products', login: 'Login', email: 'Email', password: 'Password', login_btn: 'Login', or: 'Or', join_seller: 'Join as seller', join_seller_title: 'Join as Seller', store_name: 'Store Name', owner_name: 'Owner Name', phone: 'Phone', register: 'Register', all_fields_required: 'All fields required', email_exists: 'Email already exists', store_points: 'Store & Points', ai_support: 'AI Support', add_product: 'Add Product', my_products: 'My Products', points: 'points', not_verified: 'Not Verified', package: 'Package', buy_100_points: '100 points - 30 EGP', buy_500_points: '500 points - 120 EGP', verify_store: 'Verify Store - 150 EGP', edit_product: 'Edit Product', product_name: 'Product Name', price: 'Price', emoji: 'Emoji', description: 'Description', vip_product: 'VIP Product', save: 'Save', no_description: 'No description', comment: 'Comment', write_comment: 'Write comment...', publish: 'Publish', cancel: 'Cancel', comments: 'Comments', no_comments: 'No comments yet', chat_placeholder: 'Type a message...', buy_points_confirm: 'Buy', points_for: 'points for', already_verified: 'Already verified', verify_confirm: 'Buy verification for 150 EGP?', invalid_credentials: 'Invalid credentials', verified: 'Verified' }
+                ar: { currency: 'ج.م', all: 'الكل', used: 'مستعمل', supermarket: 'سوبر ماركت', beauty: 'جمال وعناية', search_placeholder: 'ابحث عن منتج...', my_account: 'حسابي', offers: 'عروض', vip_subscriptions: 'اشتراكات VIP', image_results: 'نتائج الصور', clear: 'مسح', no_products: 'لا توجد منتجات', back: 'رجوع', special_offers: 'العروض الخاصة', vip_membership: 'العضوية VIP', vip_desc: 'اشترك في إحدى الباقات واحصل على مميزات حصرية', silver: 'فضي', gold: 'ذهبي', platinum: 'بلاتيني', monthly: '/ شهرياً', subscribe_now: 'اشترك الآن', free_plan_note: 'الباقة المجانية: 10 منتجات كحد أقصى', login: 'تسجيل الدخول', email: 'البريد الإلكتروني', password: 'كلمة المرور', login_btn: 'دخول', or: 'أو', join_seller: 'انضم كتاجر جديد', join_seller_title: 'انضم كتاجر', store_name: 'اسم المتجر', owner_name: 'اسم المالك', phone: 'رقم الهاتف', register: 'تسجيل', all_fields_required: 'جميع الحقول مطلوبة', email_exists: 'البريد مستخدم', store_points: 'المتجر والنقاط', ai_support: 'الدعم الذكي', add_product: 'إضافة منتج', my_products: 'منتجاتي', points: 'نقطة', not_verified: 'غير موثق', package: 'الباقة', buy_100_points: '100 نقطة - 30 ج.م', buy_500_points: '500 نقطة - 120 ج.م', verify_store: 'توثيق المتجر - 150 ج.م', edit_product: 'تعديل منتج', product_name: 'اسم المنتج', price: 'السعر', emoji: 'رمز تعبيري', description: 'الوصف', vip_product: 'منتج VIP', save: 'حفظ', no_description: 'لا يوجد وصف', comment: 'تعليق', write_comment: 'اكتب تعليقك...', publish: 'نشر', cancel: 'إلغاء', comments: 'التعليقات', no_comments: 'لا توجد تعليقات بعد', chat_placeholder: 'اكتب رسالتك...', buy_points_confirm: 'شراء', points_for: 'نقطة بـ', already_verified: 'موثق بالفعل', verify_confirm: 'شراء شارة التوثيق 150 ج.م؟', invalid_credentials: 'بيانات غير صحيحة', verified: 'موثق', your_country: 'بلدك' },
+                en: { currency: 'EGP', all: 'All', used: 'Used', supermarket: 'Supermarket', beauty: 'Beauty', search_placeholder: 'Search products...', my_account: 'My Account', offers: 'Offers', vip_subscriptions: 'VIP Subscriptions', image_results: 'Image results', clear: 'Clear', no_products: 'No products', back: 'Back', special_offers: 'Special Offers', vip_membership: 'VIP Membership', vip_desc: 'Subscribe and get exclusive benefits', silver: 'Silver', gold: 'Gold', platinum: 'Platinum', monthly: '/month', subscribe_now: 'Subscribe Now', free_plan_note: 'Free plan: max 10 products', login: 'Login', email: 'Email', password: 'Password', login_btn: 'Login', or: 'Or', join_seller: 'Join as seller', join_seller_title: 'Join as Seller', store_name: 'Store Name', owner_name: 'Owner Name', phone: 'Phone', register: 'Register', all_fields_required: 'All fields required', email_exists: 'Email already exists', store_points: 'Store & Points', ai_support: 'AI Support', add_product: 'Add Product', my_products: 'My Products', points: 'points', not_verified: 'Not Verified', package: 'Package', buy_100_points: '100 points - 30 EGP', buy_500_points: '500 points - 120 EGP', verify_store: 'Verify Store - 150 EGP', edit_product: 'Edit Product', product_name: 'Product Name', price: 'Price', emoji: 'Emoji', description: 'Description', vip_product: 'VIP Product', save: 'Save', no_description: 'No description', comment: 'Comment', write_comment: 'Write comment...', publish: 'Publish', cancel: 'Cancel', comments: 'Comments', no_comments: 'No comments yet', chat_placeholder: 'Type a message...', buy_points_confirm: 'Buy', points_for: 'points for', already_verified: 'Already verified', verify_confirm: 'Buy verification for 150 EGP?', invalid_credentials: 'Invalid credentials', verified: 'Verified', your_country: 'Your country' }
             };
             const t = (key) => translations[lang][key] || key;
 
             useEffect(() => { setState(loadState()); }, []);
             useEffect(() => { if (state) saveState(state); }, [state]);
-            useEffect(() => {
-                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-                localStorage.setItem(LANG_KEY, lang);
-            }, [lang]);
-            useEffect(() => {
-                if (darkMode) document.body.classList.add('dark'); else document.body.classList.remove('dark');
-                localStorage.setItem(THEME_KEY, darkMode ? 'dark' : 'light');
-            }, [darkMode]);
+            useEffect(() => { document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'; localStorage.setItem(LANG_KEY, lang); }, [lang]);
+            useEffect(() => { if (darkMode) document.body.classList.add('dark'); else document.body.classList.remove('dark'); localStorage.setItem(THEME_KEY, darkMode ? 'dark' : 'light'); }, [darkMode]);
+            useEffect(() => { localStorage.setItem(COUNTRY_KEY, selectedCountry); }, [selectedCountry]);
 
             if (!state) return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-2xl text-orange-500">VICKS MARKET</div></div>;
 
             const currentSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
+            const adminMode = isAdmin(currentSeller);
             const updateState = (updater) => setState(prev => updater(prev));
 
             const handleLogin = (s) => { updateState(st => ({ ...st, currentSellerId: s.id })); setPage('seller'); };
@@ -414,58 +380,10 @@
             const handleLogout = () => { updateState(st => ({ ...st, currentSellerId: null })); setPage('home'); };
             const handleLike = (pid) => { if (!currentSeller) return; updateState(s => { const p = s.products[pid]; if (!p) return s; const liked = p.likedBy.includes(currentSeller.id); const newLikedBy = liked ? p.likedBy.filter(id => id !== currentSeller.id) : [...p.likedBy, currentSeller.id]; return { ...s, products: { ...s.products, [pid]: { ...p, likes: liked ? p.likes - 1 : p.likes + 1, likedBy: newLikedBy } } }; }); };
             const handleWhatsApp = (p) => { const phone = state.sellers[p.sellerId]?.phone?.replace(/\D/g, '') || '201113694362'; const msg = encodeURIComponent(`مرحباً مهتم بـ ${p.name} بسعر ${p.price} ج.م`); window.open(`https://wa.me/2${phone}?text=${msg}`, '_blank'); };
-            const handleAddProduct = (data) => { if (!currentSeller) return; if (editingProduct) { updateState(s => ({ ...s, products: { ...s.products, [editingProduct.id]: { ...s.products[editingProduct.id], ...data } } })); } else { const newP = createProduct({ ...data, sellerId: currentSeller.id, sellerName: currentSeller.storeName }); updateState(s => ({ ...s, products: { ...s.products, [newP.id]: newP }, sellers: { ...s.sellers, [currentSeller.id]: { ...s.sellers[currentSeller.id], products: [...(s.sellers[currentSeller.id]?.products || []), newP.id] } } })); } setEditingProduct(null); setPage('seller'); };
+            const handleAddProduct = (data) => { if (!currentSeller) return; if (editingProduct) { updateState(s => ({ ...s, products: { ...s.products, [editingProduct.id]: { ...s.products[editingProduct.id], ...data } } })); } else { const newP = createProduct({ ...data, sellerId: currentSeller.id, sellerName: currentSeller.storeName, sellerCountry: currentSeller.country }); updateState(s => ({ ...s, products: { ...s.products, [newP.id]: newP }, sellers: { ...s.sellers, [currentSeller.id]: { ...s.sellers[currentSeller.id], products: [...(s.sellers[currentSeller.id]?.products || []), newP.id] } } })); } setEditingProduct(null); setPage('seller'); };
             const handleDeleteProduct = (pid) => { if (confirm('حذف المنتج؟')) updateState(s => { const np = { ...s.products }; delete np[pid]; const ns = { ...s.sellers }; if (ns[currentSeller.id]) ns[currentSeller.id].products = ns[currentSeller.id].products.filter(id => id !== pid); return { ...s, products: np, sellers: ns }; }); };
             const handleSendMessage = (text) => { updateState(s => { let ns = addChatMessage(s, { role: 'user', text }); ns = addChatMessage(ns, { role: 'bot', text: getBotResponse(text) }); return ns; }); };
             const handlePurchaseComplete = (type, amt, pts) => { updateState(s => { const seller = s.sellers[currentSeller.id]; return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...seller, points: seller.points + (pts || 0), verified: type === 'verify' ? true : seller.verified } } }; }); };
             const handleSubscriptionPurchase = (planId, price) => { updateState(s => { const seller = s.sellers[currentSeller.id]; return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...seller, subscription: planId } } }; }); alert(`تم الترقية إلى باقة ${planId} بنجاح!`); setPage('seller'); };
-            const handleCameraSearch = (e) => { const file = e.target.files[0]; if (!file) return; setImgSearchLoading(true); setTimeout(() => { const filtered = Object.values(state.products).filter(p => p.name.includes(searchText) || (!searchText)); setImgSearchResults(filtered.slice(0, 12)); setImgSearchLoading(false); }, 1000); if (cameraInputRef.current) cameraInputRef.current.value = ''; };
-            const handleSearchChange = (val) => { setSearchText(val); if (val.trim() === '') setImgSearchResults(null); else { const filtered = Object.values(state.products).filter(p => p.name.includes(val) || p.sellerName.includes(val)); setImgSearchResults(filtered); } };
-            const showHome = () => { setPage('home'); setDetailProduct(null); setImgSearchResults(null); setSearchText(''); setShowSearchBar(false); };
-            const handleComment = (pid, commentText) => { updateState(s => { const p = s.products[pid]; const newComments = [...(p.comments || []), commentText]; return { ...s, products: { ...s.products, [pid]: { ...p, comments: newComments } } }; }); };
-            const handleRate = (pid, rating) => { updateState(s => { const p = s.products[pid]; return { ...s, products: { ...s.products, [pid]: { ...p, rating: rating } } }; }); };
-            const isLiked = (p) => currentSeller ? p.likedBy.includes(currentSeller.id) : false;
-
-            return (
-                <div className="min-h-screen flex flex-col transition-colors duration-300">
-                    {page === 'home' && (
-                        <>
-                            <header className="sticky top-0 z-20 bg-white border-b px-3 py-2 flex items-center justify-between">
-                                <div className="logo-frame">
-                                    <i className="fas fa-store text-orange-500 text-base"></i>
-                                    <span className="text-sm font-bold text-orange-600">VICKS MARKET</span>
-                                </div>
-                                <div className="flex gap-2">
-                                    <button onClick={() => cameraInputRef.current?.click()} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-camera text-sm"></i></button>
-                                    <button onClick={() => setShowSearchBar(!showSearchBar)} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-search text-sm"></i></button>
-                                    <button onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-globe text-sm"></i> {lang === 'ar' ? 'EN' : 'عربي'}</button>
-                                    <button onClick={() => setDarkMode(!darkMode)} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className={`fas fa-${darkMode ? 'sun' : 'moon'} text-sm`}></i></button>
-                                    <button onClick={() => currentSeller ? setPage('seller') : setPage('login')} className="p-1.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-orange-500 hover:text-white transition"><i className="fas fa-user-circle text-sm"></i></button>
-                                </div>
-                                <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleCameraSearch} />
-                            </header>
-                            {imgSearchLoading && <div className="bg-blue-50 p-2 text-center text-sm"><i className="fas fa-spinner fa-pulse"></i> {t('image_results')}...</div>}
-                            <main className="flex-1 overflow-hidden">
-                                <HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p => { setDetailProduct(p); setPage('detail'); }} onAccountBtn={() => currentSeller ? setPage('seller') : setPage('login')} onShowOffers={() => setPage('offers')} onShowVIPPage={() => setPage('vip')} imgSearchResults={imgSearchResults} onClearImgSearch={() => { setImgSearchResults(null); setSearchText(''); setShowSearchBar(false); }} onComment={(pid) => { const comment = prompt(t('write_comment')); if (comment) handleComment(pid, comment); }} onRate={(pid, rating) => handleRate(pid, rating)} searchText={searchText} onSearchChange={handleSearchChange} showSearchBar={showSearchBar} t={t} />
-                            </main>
-                            <button onClick={() => setPage('chat')} className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-orange-500 text-white shadow-lg flex items-center justify-center hover:bg-orange-600 z-30"><i className="fas fa-robot text-2xl"></i></button>
-                        </>
-                    )}
-                    {page === 'offers' && <OffersPage products={state.products} onProductClick={p => { setDetailProduct(p); setPage('detail'); }} onBack={showHome} t={t} />}
-                    {page === 'vip' && currentSeller && <VIPPage seller={currentSeller} onBack={showHome} onPurchaseSubscription={handleSubscriptionPurchase} t={t} />}
-                    {page === 'login' && <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={() => setPage('join')} onBack={showHome} t={t} />}
-                    {page === 'join' && <JoinPage sellers={state.sellers} onRegister={handleRegister} onBack={() => setPage('login')} t={t} />}
-                    {page === 'seller' && currentSeller && <SellerPage seller={state.sellers[currentSeller.id]} products={state.products} onGoStore={() => setPage('store')} onGoChat={() => setPage('chat')} onAddProduct={() => { setEditingProduct(null); setPage('addProduct'); }} onEditProduct={p => { setEditingProduct(p); setPage('addProduct'); }} onDeleteProduct={handleDeleteProduct} onLogout={handleLogout} onBack={showHome} t={t} />}
-                    {page === 'store' && currentSeller && <StorePage seller={state.sellers[currentSeller.id]} onBack={() => setPage('seller')} onPurchaseComplete={handlePurchaseComplete} t={t} />}
-                    {page === 'chat' && <ChatPage messages={state.chatMessages} onSendMessage={handleSendMessage} onBack={() => setPage(currentSeller ? 'seller' : 'home')} t={t} />}
-                    {page === 'addProduct' && currentSeller && <AddProductPage onSave={handleAddProduct} onBack={() => { setEditingProduct(null); setPage('seller'); }} editProduct={editingProduct} t={t} />}
-                    {page === 'detail' && detailProduct && <ProductDetailPage product={state.products[detailProduct.id] || detailProduct} seller={state.sellers[detailProduct.sellerId] || null} isLiked={isLiked(state.products[detailProduct.id] || detailProduct)} onLike={() => handleLike(detailProduct.id)} onBack={showHome} onComment={(text) => handleComment(detailProduct.id, text)} onRate={(rating) => handleRate(detailProduct.id, rating)} t={t} />}
-                </div>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
-</body>
-</html>
+            // إدارة الادمن
+            const handleDeleteSeller = (sellerId) => { if (confirm('حذف البائع وجميع منتجاته؟')) updateState(s => { const newSellers = { ...s.sellers }; delete newSellers[sellerId]; const newProducts = { ...s.products }; Object.keys(newProducts).forEach(pid => { if (newProducts[pid].sellerId === sellerId) delete newProducts[pid]; });
