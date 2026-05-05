@@ -10,69 +10,19 @@
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
     <style>
-        /* الأنماط الأساسية والوضع الليلي */
-        body.dark { background-color: #000000; }
-        body.dark .bg-white, body.dark .bg-gray-50, body.dark .bg-gray-100 { background-color: #121212 !important; }
-        body.dark, body.dark .text-gray-800, body.dark .text-gray-600, body.dark .text-gray-500, body.dark .text-blue-600 { color: #ff6600 !important; }
-        body.dark .border, body.dark .border-gray-100 { border-color: #ff6600 !important; border-width: 0.5px; }
-        body.dark .shadow-sm, body.dark .shadow-md { box-shadow: none !important; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        /* أنماط شريط البحث */
-        .search-input {
-            transition: all 0.2s ease;
-            direction: rtl;
+        body.dark {
+            background-color: #000000;
         }
-        .search-input:focus {
-            outline: none;
-            ring: 2px solid #ff6600;
+        body.dark .bg-white, body.dark .bg-gray-50, body.dark .bg-gray-100 {
+            background-color: #121212 !important;
         }
-        /* أنماط بطاقة منتج محسنة - أزرار أفقية صغيرة */
-        .product-actions {
-            display: flex;
-            flex-direction: row;
-            gap: 6px;
-            align-items: center;
+        body.dark .text-gray-800, body.dark .text-gray-600, body.dark .text-gray-500 {
+            color: #ff6600 !important;
         }
-        .product-actions button {
-            width: 28px;
-            height: 28px;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f3f4f6;
-            transition: all 0.2s;
+        body.dark .border, body.dark .border-gray-100 {
+            border-color: #ff6600 !important;
+            border-width: 0.5px;
         }
-        .product-actions button i {
-            font-size: 12px;
-        }
-        .product-actions button:hover {
-            background-color: #e5e7eb;
-        }
-        /* أنماط التاجر والتوثيق */
-        .seller-info {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-        .seller-avatar-mini {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: #e5e7eb;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-        }
-        .verified-badge {
-            color: #3b82f6;
-            font-size: 10px;
-            margin-right: 2px;
-        }
-        /* العلامة المائية للدردشة */
         .watermark {
             position: absolute;
             top: 50%;
@@ -83,11 +33,8 @@
             white-space: nowrap;
             pointer-events: none;
             z-index: 5;
-            display: flex;
-            gap: 8px;
         }
         body.dark .watermark { opacity: 0.15; }
-        /* شريط الدردشة الثابت */
         .chat-bottom {
             position: fixed;
             bottom: 0;
@@ -96,20 +43,48 @@
             background: inherit;
             z-index: 20;
         }
+        .seller-avatar-mini {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e5e7eb;
+            font-size: 8px;
+        }
+        .verified-badge {
+            color: #3b82f6;
+            font-size: 10px;
+            margin-right: 2px;
+        }
+        .product-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .product-actions button {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
     <div id="root"></div>
 
     <script type="text/babel" data-presets="react,typescript">
-        // ==================== البيانات الثابتة ووظائف التخزين ====================
-        const STORAGE_KEY = 'vicks_market_final';
+        // ------------------------------------------------------------------
+        // 1. الثوابت والبيانات الأساسية (تعمل بشكل آمن)
+        // ------------------------------------------------------------------
+        const STORAGE_KEY = 'vicks_works';
         const THEME_KEY = 'vicks_theme';
-        const COUNTRY_KEY = 'vicks_country';
         const ADMIN_EMAIL = 'mom1113694362@gmail.com';
         const ADMIN_PASS = 'momMOM2023#';
         const ADMIN_ID = '10000000000';
-
         function genId() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 
         // بيانات أولية (بائعين ومنتجات)
@@ -118,48 +93,47 @@
                 id: ADMIN_ID, email: ADMIN_EMAIL, password: ADMIN_PASS,
                 storeName: 'VICKS MARKET', ownerName: 'محمد المالك', phone: '01113694362',
                 points: 50000, verified: true, subscription: 'platinum', products: [],
-                createdAt: Date.now(), country: 'مصر', isAdmin: true,
-                avatar: '👑', verificationBadge: true
+                createdAt: Date.now(), country: 'مصر', isAdmin: true, avatar: '👑', verificationBadge: true
             },
-            s1: {
+            seller1: {
                 id: 's1', email: 'seller1@test.com', password: '123456',
                 storeName: 'متجر النور', ownerName: 'أحمد', phone: '01012345678',
-                points: 350, verified: true, subscription: 'silver',
-                products: [], country: 'مصر', isAdmin: false,
-                avatar: '🌟', verificationBadge: true
+                points: 350, verified: true, subscription: 'silver', products: [],
+                country: 'مصر', isAdmin: false, avatar: '🌟', verificationBadge: true
             },
-            s2: {
+            seller2: {
                 id: 's2', email: 'seller2@test.com', password: '123456',
                 storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة', phone: '01198765432',
-                points: 120, verified: false, subscription: 'free',
-                products: [], country: 'السعودية', isAdmin: false,
-                avatar: '🛒', verificationBadge: false
+                points: 120, verified: false, subscription: 'free', products: [],
+                country: 'السعودية', isAdmin: false, avatar: '🛒', verificationBadge: false
             }
         };
 
         const initialProducts = {};
-        for (let i = 1; i <= 15; i++) {
-            let sellerId = i % 2 === 0 ? 's2' : 's1';
+        const productNames = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر', 'ساعة ذكية', 'سماعة لاسلكية'];
+        const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧'];
+        for (let i = 1; i <= 14; i++) {
+            const sellerId = i % 2 === 0 ? 's2' : 's1';
             initialProducts[`p${i}`] = {
                 id: `p${i}`,
-                name: i === 1 ? 'ايفون 14 Pro' : i === 2 ? 'زيت زيتون' : i === 3 ? 'شاشة سامسونج' : i === 4 ? 'بلاي ستيشن 5' : i === 5 ? 'لاب توب ديل' : i === 6 ? 'عطر فاخر' : `منتج مميز ${i}`,
+                name: productNames[i % productNames.length] + (i > 8 ? ` ${i}` : ''),
                 price: 100 + i * 45,
-                category: i % 2 === 0 ? 'fashion' : 'electronics',
-                emoji: ['📱', '🫒', '📺', '🎮', '💻', '🧴', '👗', '📚'][(i - 1) % 8],
+                category: i % 3 === 0 ? 'electronics' : (i % 2 === 0 ? 'fashion' : 'home'),
+                emoji: emojis[i % emojis.length],
                 sellerId: sellerId,
                 sellerName: sellerId === 's1' ? 'متجر النور' : 'سوبر ماركت الفرح',
                 sellerCountry: sellerId === 's1' ? 'مصر' : 'السعودية',
-                likes: (i * 3) % 17,
+                likes: (i * 7) % 19,
                 likedBy: [],
-                description: `وصف تفصيلي للمنتج ${i}`,
+                description: `وصف المنتج ${i}`,
                 createdAt: Date.now() - i * 86400000,
                 vip: false,
                 comments: [],
                 rating: i % 5
             };
         }
-        initialSellers.s1.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId === 's1');
-        initialSellers.s2.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId === 's2');
+        initialSellers.seller1.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId === 's1');
+        initialSellers.seller2.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId === 's2');
 
         function getInitialState() {
             return {
@@ -180,21 +154,27 @@
             } catch { return getInitialState(); }
         }
         function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
-        function isAdmin(s) { return s?.isAdmin === true; }
-        function createSeller(data) { return { id: 's_' + genId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now(), isAdmin: false, verificationBadge: false, avatar: '🛍️' }; }
-        function createProduct(data) { return { id: 'p_' + genId(), ...data, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 }; }
+        function isAdmin(seller) { return seller?.isAdmin === true; }
+        function createSeller(data) {
+            return { id: 's_' + genId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now(), isAdmin: false, verificationBadge: false, avatar: '🛍️' };
+        }
+        function createProduct(data) {
+            return { id: 'p_' + genId(), ...data, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 };
+        }
         function addMessage(state, msg) { return { ...state, chatMessages: [...state.chatMessages, { ...msg, id: genId(), ts: Date.now() }] }; }
         function botReply(txt) {
             const m = txt.toLowerCase();
             if (m.includes('سعر')) return 'يمكنك الاطلاع على الأسعار في الصفحة الرئيسية. هل تبحث عن منتج معين؟';
-            if (m.includes('بائع')) return 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد". التسجيل مجاني!';
+            if (m.includes('بائع')) return 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد". مجاني!';
             if (m.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة المتجر (حسابي ← المتجر والنقاط).';
             return 'شكراً لتواصلك! كيف يمكنني مساعدتك اليوم؟';
         }
 
         const { useState, useEffect, useCallback, useRef } = React;
 
-        // ==================== صفحة الملف الشخصي العام للتاجر ====================
+        // ------------------------------------------------------------------
+        // 2. صفحة البروفايل العام للتاجر (تعمل بشكل آمن)
+        // ------------------------------------------------------------------
         function SellerPublicProfile({ sellerId, sellers, products, onBack }) {
             const seller = sellers[sellerId];
             if (!seller) return <div className="p-4 text-center">التاجر غير موجود</div>;
@@ -208,15 +188,14 @@
                     <div className="p-6 text-center border-b">
                         <div className="w-24 h-24 rounded-full bg-orange-100 flex items-center justify-center text-4xl mx-auto">{seller.avatar || '🏪'}</div>
                         <h2 className="text-xl font-bold mt-3 flex items-center justify-center gap-1">{seller.storeName} {seller.verificationBadge && <i className="fas fa-check-circle text-blue-500 text-lg"></i>}</h2>
-                        <p className="text-gray-500 text-sm">المالك: {seller.ownerName}</p>
-                        <p className="text-gray-500 text-sm mt-1">البلد: {seller.country}</p>
-                        {seller.verified && <p className="text-green-600 text-sm mt-1"><i className="fas fa-check-circle"></i> موثق</p>}
+                        <p className="text-gray-500 text-sm mt-1">المالك: {seller.ownerName}</p>
+                        <p className="text-gray-500 text-sm">البلد: {seller.country}</p>
                     </div>
                     <div className="flex-1 overflow-auto p-4">
                         <h3 className="font-semibold mb-3">منتجات التاجر ({sellerProducts.length})</h3>
                         <div className="grid grid-cols-2 gap-3">
                             {sellerProducts.map(p => (
-                                <div key={p.id} className="bg-white rounded-xl border p-2 shadow-sm">
+                                <div key={p.id} className="bg-white rounded-xl border p-2">
                                     <div className="text-4xl text-center">{p.emoji}</div>
                                     <h4 className="font-semibold text-sm line-clamp-2 mt-1">{p.name}</h4>
                                     <p className="text-blue-600 font-bold text-sm">{p.price} ج.م</p>
@@ -228,25 +207,25 @@
             );
         }
 
-        // ==================== بطاقة المنتج المُحسَّنة (بدون تمدد أزرار) ====================
+        // ------------------------------------------------------------------
+        // 3. بطاقة المنتج (مع أزرار أفقية غير متمددة)
+        // ------------------------------------------------------------------
         function ProductCard({ prod, liked, onLike, onWhats, onClick, onComment, onRate, sellerAvatar, sellerVerification, onSellerClick, isList }) {
             const stars = Array(5).fill(0).map((_, i) => (
-                <i key={i} className={`fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'} ${isList ? 'text-xs' : 'text-[10px]'} cursor-pointer`}
+                <i key={i} className={`fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'} ${isList ? 'text-xs' : 'text-[8px]'} cursor-pointer`}
                    onClick={(e) => { e.stopPropagation(); onRate(i + 1); }} />
             ));
             const shortName = prod.sellerName.length > 12 ? prod.sellerName.slice(0, 10) + '..' : prod.sellerName;
-            const sellerAvatarChar = sellerAvatar ? (sellerAvatar.length > 1 ? sellerAvatar[0] : sellerAvatar) : '🏪';
-
             if (isList) {
                 return (
-                    <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer hover:shadow-sm transition">
-                        <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center text-3xl">{prod.emoji}</div>
+                    <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer">
+                        <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-3xl">{prod.emoji}</div>
                         <div className="flex-1">
                             <div className="font-semibold text-sm">{prod.name}</div>
-                            <p className="text-blue-600 font-bold text-sm mt-0.5">{prod.price.toLocaleString()} ج.م</p>
-                            <div className="flex flex-wrap items-center gap-1 mt-1">
-                                <button onClick={(e) => { e.stopPropagation(); onSellerClick(); }} className="seller-info">
-                                    <span className="seller-avatar-mini">{sellerAvatarChar}</span>
+                            <p className="text-blue-600 font-bold text-sm">{prod.price.toLocaleString()} ج.م</p>
+                            <div className="flex items-center gap-1 mt-1">
+                                <button onClick={(e) => { e.stopPropagation(); onSellerClick(); }} className="flex items-center gap-1">
+                                    <span className="seller-avatar-mini">{sellerAvatar || '🏪'}</span>
                                     <span className="text-[10px] text-gray-600">{shortName}</span>
                                     {sellerVerification && <i className="fas fa-check-circle verified-badge"></i>}
                                 </button>
@@ -261,36 +240,34 @@
                     </div>
                 );
             }
-
-            // عرض الشبكة مع أزرار أفقية صغيرة
             return (
-                <div onClick={onClick} className="p-2 bg-white rounded-xl border shadow-sm cursor-pointer flex-shrink-0 w-[145px] transition hover:shadow-md">
+                <div onClick={onClick} className="p-2 bg-white rounded-xl border shadow-sm cursor-pointer flex-shrink-0 w-[140px]">
                     <div className="h-20 flex items-center justify-center bg-gray-50 rounded-xl text-4xl">{prod.emoji}</div>
-                    <h3 className="font-semibold text-xs line-clamp-2 mt-1.5">{prod.name}</h3>
+                    <h3 className="font-semibold text-xs line-clamp-2 mt-1">{prod.name}</h3>
                     <p className="text-blue-600 font-bold text-xs mt-0.5">{prod.price.toLocaleString()} ج.م</p>
-                    <div className="flex justify-between items-center mt-2">
-                        <button onClick={(e) => { e.stopPropagation(); onSellerClick(); }} className="seller-info">
-                            <span className="seller-avatar-mini">{sellerAvatarChar}</span>
-                            <span className="text-[9px] text-gray-500 max-w-[55px] truncate">{shortName}</span>
+                    <div className="flex justify-between items-center mt-1">
+                        <button onClick={(e) => { e.stopPropagation(); onSellerClick(); }} className="flex items-center gap-1">
+                            <span className="seller-avatar-mini">{sellerAvatar || '🏪'}</span>
+                            <span className="text-[8px] text-gray-500 max-w-[55px] truncate">{shortName}</span>
                             {sellerVerification && <i className="fas fa-check-circle verified-badge"></i>}
                         </button>
                         <div className="product-actions">
-                            <button onClick={(e)=>{e.stopPropagation(); onLike();}} className={liked ? 'bg-orange-500 text-white' : 'bg-gray-100'} style={{ width: '24px', height: '24px' }}><i className="fas fa-heart text-[9px]"></i></button>
-                            <button onClick={(e)=>{e.stopPropagation(); onWhats();}} className="bg-green-100" style={{ width: '24px', height: '24px' }}><i className="fab fa-whatsapp text-[9px]"></i></button>
-                            <button onClick={(e)=>{e.stopPropagation(); onComment();}} className="bg-blue-100" style={{ width: '24px', height: '24px' }}><i className="fas fa-comment text-[9px]"></i></button>
+                            <button onClick={(e)=>{e.stopPropagation(); onLike();}} className={liked ? 'bg-orange-500 text-white' : 'bg-gray-100'}><i className="fas fa-heart text-[8px]"></i></button>
+                            <button onClick={(e)=>{e.stopPropagation(); onWhats();}} className="bg-green-100"><i className="fab fa-whatsapp text-[8px]"></i></button>
+                            <button onClick={(e)=>{e.stopPropagation(); onComment();}} className="bg-blue-100"><i className="fas fa-comment text-[8px]"></i></button>
                         </div>
                     </div>
-                    <div className="flex justify-center gap-0.5 mt-1.5">{stars}</div>
+                    <div className="flex justify-center gap-0.5 mt-1">{stars}</div>
                 </div>
             );
         }
 
-        // ==================== الصفحة الرئيسية (بشريط بحث جديد فوق أزرار العرض) ====================
+        // ------------------------------------------------------------------
+        // 4. الصفحة الرئيسية (مع شريط بحث وأزرار عرض)
+        // ------------------------------------------------------------------
         function HomePage({ products, sellers, currSellerId, onLike, onWhats, onProductClick, onShowOffers, onShowVIP, onComment, onRate, onSellerProfile, searchQuery, onSearchChange }) {
             const [view, setView] = useState('grid');
             const [cat, setCat] = useState('all');
-
-            // فلترة حسب الفئة والنص البحثي
             const filtered = React.useMemo(() => {
                 let arr = Object.values(products);
                 if (cat !== 'all') arr = arr.filter(p => p.category === cat);
@@ -298,64 +275,36 @@
                     const q = searchQuery.toLowerCase().trim();
                     arr = arr.filter(p => p.name.toLowerCase().includes(q) || p.sellerName.toLowerCase().includes(q));
                 }
-                arr.sort((a, b) => {
-                    const sa = sellers[a.sellerId], sb = sellers[b.sellerId];
-                    const va = sa?.subscription !== 'free' && (sa?.vipExpiry || 0) > Date.now();
-                    const vb = sb?.subscription !== 'free' && (sb?.vipExpiry || 0) > Date.now();
-                    if (va && !vb) return -1;
-                    if (!va && vb) return 1;
-                    return 0;
-                });
                 return arr;
-            }, [products, cat, sellers, searchQuery]);
-            
+            }, [products, cat, searchQuery]);
             const isLiked = (p) => currSellerId ? p.likedBy.includes(currSellerId) : false;
             const half = Math.ceil(filtered.length / 2);
             const row1 = filtered.slice(0, half);
             const row2 = filtered.slice(half);
-
             return (
                 <div className="flex flex-col h-full">
-                    {/* شريط التصنيفات */}
                     <div className="sticky top-0 z-10 bg-white border-b px-2 py-1 overflow-x-auto scrollbar-hide">
                         <div className="flex gap-2">
                             {[{ id: 'all', label: 'الجميع' }, { id: 'electronics', label: 'إلكترونيات' }, { id: 'fashion', label: 'موضة' }, { id: 'home', label: 'منزل' }].map(c => (
-                                <button key={c.id} onClick={() => setCat(c.id)} className={`px-3 py-1.5 rounded-full text-xs transition ${cat === c.id ? 'bg-orange-500 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>{c.label}</button>
+                                <button key={c.id} onClick={() => setCat(c.id)} className={`px-3 py-1.5 rounded-full text-xs transition ${cat === c.id ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}>{c.label}</button>
                             ))}
                         </div>
                     </div>
-                    
-                    {/* شريط البحث الذي يظهر أسفل التصنيفات وفوق أزرار VIP والعرض */}
                     <div className="bg-white px-3 py-2 border-b">
                         <div className="relative">
                             <i className="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => onSearchChange(e.target.value)}
-                                placeholder="ابحث عن منتج..."
-                                className="search-input w-full py-2.5 pr-9 pl-3 bg-gray-100 rounded-xl text-sm border-0 focus:ring-1 focus:ring-orange-500"
-                            />
+                            <input type="text" value={searchQuery} onChange={(e) => onSearchChange(e.target.value)} placeholder="ابحث عن منتج..." className="w-full py-2 pr-9 pl-3 bg-gray-100 rounded-xl text-sm border-0 focus:ring-1 focus:ring-orange-500" />
                         </div>
                     </div>
-                    
-                    {/* أزرار VIP والعرض */}
                     <div className="flex items-center gap-3 px-3 py-2 bg-white border-b">
-                        <button onClick={onShowOffers} className="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-xl font-medium">🎁 عروض</button>
-                        <button onClick={onShowVIP} className="text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-xl font-medium">👑 VIP</button>
+                        <button onClick={onShowOffers} className="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-xl">🎁 عروض</button>
+                        <button onClick={onShowVIP} className="text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-xl">👑 VIP</button>
                         <div className="flex-1"></div>
-                        <button onClick={() => setView('grid')} className={`p-1.5 rounded-lg transition ${view === 'grid' ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-th"></i></button>
-                        <button onClick={() => setView('list')} className={`p-1.5 rounded-lg transition ${view === 'list' ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-list-ul"></i></button>
+                        <button onClick={() => setView('grid')} className={`p-1.5 rounded-lg ${view === 'grid' ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-th"></i></button>
+                        <button onClick={() => setView('list')} className={`p-1.5 rounded-lg ${view === 'list' ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-list-ul"></i></button>
                     </div>
-                    
-                    {/* عرض المنتجات */}
                     <div className="flex-1 overflow-auto p-2">
-                        {filtered.length === 0 && (
-                            <div className="text-center py-12 text-gray-400">
-                                <i className="fas fa-search text-4xl mb-2"></i>
-                                <p className="text-sm">لا توجد منتجات تطابق بحثك</p>
-                            </div>
-                        )}
+                        {filtered.length === 0 && <div className="text-center py-12 text-gray-400"><i className="fas fa-search text-4xl mb-2"></i><p className="text-sm">لا توجد منتجات</p></div>}
                         {view === 'grid' && (
                             <div className="space-y-2">
                                 {row1.length > 0 && <div className="flex gap-2 overflow-x-auto pb-1">{row1.map(p => {
@@ -381,33 +330,16 @@
             );
         }
 
-        // ==================== صفحة الإعدادات (حيث يختار المستخدم بلده) ====================
-        function SettingsPage({ selectedCountry, setSelectedCountry, onBack }) {
-            return (
-                <div className="flex flex-col h-full bg-white">
-                    <div className="flex items-center p-4 border-b">
-                        <button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                        <h1 className="flex-1 text-center font-bold"><i className="fas fa-cog"></i> الإعدادات</h1>
-                    </div>
-                    <div className="p-6">
-                        <label className="block text-sm font-medium mb-2">بلدك (العملة والمنتجات)</label>
-                        <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full p-2 bg-gray-100 rounded-xl border-0">
-                            <option>مصر</option><option>السعودية</option>
-                        </select>
-                        <p className="text-xs text-gray-500 mt-2">سيؤثر اختيار البلد على العملة والمنتجات المعروضة.</p>
-                    </div>
-                </div>
-            );
-        }
-
-        // ==================== باقي الصفحات (ملف المالك، العروض، VIP، الدردشة، تسجيل الدخول، إلخ) ====================
+        // ------------------------------------------------------------------
+        // 5. الصفحات الأخرى (بروفايل المالك، عروض، VIP، شات، تسجيل دخول، إلخ)
+        // ------------------------------------------------------------------
         function OwnerProfile({ seller, onLogout, onBack }) {
             return (
                 <div className="flex flex-col h-full bg-white">
                     <div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">الملف الشخصي - Admin</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div>
                     <div className="flex-1 overflow-auto p-6">
                         <div className="w-28 h-28 rounded-full bg-orange-500 flex items-center justify-center text-5xl mx-auto"><i className="fas fa-crown"></i></div>
-                        <h2 className="text-center text-xl font-bold mt-3 flex items-center justify-center gap-1">{seller.ownerName} {seller.verificationBadge && <i className="fas fa-check-circle text-blue-500 text-lg"></i>}</h2>
+                        <h2 className="text-center text-xl font-bold mt-3">{seller.ownerName}</h2>
                         <p className="text-center text-gray-500 text-sm">ID: {seller.id}</p>
                         <div className="mt-6 space-y-3 bg-gray-50 rounded-2xl p-4">
                             <div className="flex justify-between border-b pb-2"><span className="font-medium">البريد:</span><span dir="ltr">{seller.email}</span></div>
@@ -421,57 +353,92 @@
         }
 
         function OffersPage({ products, onProductClick, onBack }) {
-            const country = localStorage.getItem(COUNTRY_KEY) || 'مصر';
-            const offers = Object.values(products).filter(p => (p.likes > 5 || p.price < 200) && p.sellerCountry === country);
-            return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-3 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">العروض الخاصة</h1></div><div className="flex-1 overflow-auto p-3 grid grid-cols-2 gap-2">{offers.map(p => <div key={p.id} onClick={() => onProductClick(p)} className="bg-white rounded-xl border p-2 cursor-pointer hover:shadow-sm"><div className="text-4xl text-center">{p.emoji}</div><h3 className="text-xs font-semibold mt-1 line-clamp-2">{p.name}</h3><p className="text-orange-600 font-bold text-sm">{p.price} ج.م</p></div>)}</div></div>);
+            const offers = Object.values(products).filter(p => (p.likes > 5 || p.price < 200));
+            return (
+                <div className="flex flex-col h-full bg-white">
+                    <div className="flex items-center p-3 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">العروض</h1></div>
+                    <div className="flex-1 overflow-auto p-3 grid grid-cols-2 gap-2">
+                        {offers.map(p => <div key={p.id} onClick={() => onProductClick(p)} className="bg-white rounded-xl border p-2 cursor-pointer"><div className="text-4xl text-center">{p.emoji}</div><h3 className="text-xs font-semibold line-clamp-2">{p.name}</h3><p className="text-orange-600 font-bold text-sm">{p.price} ج.م</p></div>)}
+                    </div>
+                </div>
+            );
         }
 
         function VIPPage({ onBack }) {
             const buy = (plan, price) => {
                 const msg = encodeURIComponent(`طلب اشتراك VIP - الباقة: ${plan} - المبلغ: ${price} ج.م`);
                 window.open(`https://wa.me/201113694362?text=${msg}`, '_blank');
-                alert('تم إرسال طلب الاشتراك للإدارة عبر واتساب. سيتم التواصل معك قريباً.');
+                alert('تم إرسال طلب الاشتراك للإدارة');
             };
-            return (<div className="flex flex-col h-full bg-black"><div className="flex items-center p-4 border-b border-gray-800"><button onClick={onBack} className="text-white"><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold text-white"><i className="fas fa-crown text-yellow-500 ml-2"></i> اشتراكات VIP</h1></div><div className="flex-1 overflow-auto p-4"><div className="grid grid-cols-1 gap-4"><div className="bg-gray-900 border border-yellow-700 rounded-2xl p-4 text-center"><h2 className="text-white text-lg">فضي</h2><p className="text-yellow-500 text-2xl">99 ج.م</p><p className="text-gray-400 text-xs mt-1">50 منتج - دعم أساسي</p><button onClick={() => buy('فضي', 99)} className="mt-3 w-full py-2 bg-yellow-600 rounded-xl text-sm font-semibold">اشترك الآن</button></div><div className="bg-gray-900 border border-yellow-700 rounded-2xl p-4 text-center"><h2 className="text-white text-lg">ذهبي</h2><p className="text-yellow-500 text-2xl">199 ج.م</p><p className="text-gray-400 text-xs mt-1">منتجات غير محدودة - دعم أولوية</p><button onClick={() => buy('ذهبي', 199)} className="mt-3 w-full py-2 bg-yellow-600 rounded-xl text-sm font-semibold">اشترك الآن</button></div><div className="bg-gray-900 border border-yellow-700 rounded-2xl p-4 text-center"><h2 className="text-white text-lg">بلاتيني</h2><p className="text-yellow-500 text-2xl">299 ج.م</p><p className="text-gray-400 text-xs mt-1">مميزات خاصة + استشارات تسويقية</p><button onClick={() => buy('بلاتيني', 299)} className="mt-3 w-full py-2 bg-yellow-600 rounded-xl text-sm font-semibold">اشترك الآن</button></div></div></div></div>);
+            return (
+                <div className="flex flex-col h-full bg-black">
+                    <div className="flex items-center p-4 border-b border-gray-800"><button onClick={onBack} className="text-white"><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold text-white"><i className="fas fa-crown text-yellow-500 ml-2"></i> اشتراكات VIP</h1></div>
+                    <div className="flex-1 overflow-auto p-4">
+                        <div className="grid grid-cols-1 gap-4">
+                            <div className="bg-gray-900 border border-yellow-700 rounded-2xl p-4 text-center"><h2 className="text-white text-lg">فضي</h2><p className="text-yellow-500 text-2xl">99 ج.م</p><button onClick={() => buy('فضي', 99)} className="mt-3 w-full py-2 bg-yellow-600 rounded-xl">اشترك</button></div>
+                            <div className="bg-gray-900 border border-yellow-700 rounded-2xl p-4 text-center"><h2 className="text-white text-lg">ذهبي</h2><p className="text-yellow-500 text-2xl">199 ج.م</p><button onClick={() => buy('ذهبي', 199)} className="mt-3 w-full py-2 bg-yellow-600 rounded-xl">اشترك</button></div>
+                            <div className="bg-gray-900 border border-yellow-700 rounded-2xl p-4 text-center"><h2 className="text-white text-lg">بلاتيني</h2><p className="text-yellow-500 text-2xl">299 ج.م</p><button onClick={() => buy('بلاتيني', 299)} className="mt-3 w-full py-2 bg-yellow-600 rounded-xl">اشترك</button></div>
+                        </div>
+                    </div>
+                </div>
+            );
         }
 
         function ChatPage({ messages, onSend, onBack }) {
             const [input, setInput] = useState('');
-            const fileInputRef = useRef(null);
-            const cameraInputRef = useRef(null);
+            const fileRef = useRef(null);
+            const cameraRef = useRef(null);
             const send = () => { if (input.trim()) { onSend(input); setInput(''); } };
-            const handleFile = (e) => { if (e.target.files[0]) alert(`تم رفع الملف: ${e.target.files[0].name} (محاكاة)`); };
-            const handleCamera = (e) => { if (e.target.files[0]) alert(`تم التقاط صورة: ${e.target.files[0].name} (محاكاة)`); };
-            return (<div className="flex flex-col h-full relative bg-gray-50">
-                <div className="watermark"><i className="fas fa-robot text-3xl"></i><span className="text-xl font-bold"> VICKS AI</span></div>
-                <div className="flex items-center p-3 border-b bg-white z-10"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1></div>
-                <div className="flex-1 overflow-y-auto p-3 space-y-2 pb-24">
-                    {messages.map(m => <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`max-w-[80%] p-2 rounded-2xl text-sm ${m.role === 'user' ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}>{m.text}</div></div>)}
-                </div>
-                <div className="chat-bottom p-2 border-t flex gap-2 bg-white">
-                    <div className="flex gap-2">
-                        <button onClick={() => fileInputRef.current.click()} className="p-2 rounded-xl bg-gray-100 hover:bg-orange-500"><i className="fas fa-plus text-sm"></i></button>
-                        <button onClick={() => cameraInputRef.current.click()} className="p-2 rounded-xl bg-gray-100 hover:bg-orange-500"><i className="fas fa-camera text-sm"></i></button>
+            const handleFile = (e) => { if (e.target.files[0]) alert(`تم رفع الملف: ${e.target.files[0].name}`); };
+            const handleCamera = (e) => { if (e.target.files[0]) alert(`تم التقاط صورة: ${e.target.files[0].name}`); };
+            return (
+                <div className="flex flex-col h-full relative bg-gray-50">
+                    <div className="watermark"><i className="fas fa-robot text-3xl"></i><span className="text-xl font-bold"> VICKS AI</span></div>
+                    <div className="flex items-center p-3 border-b bg-white z-10"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1></div>
+                    <div className="flex-1 overflow-y-auto p-3 space-y-2 pb-24">
+                        {messages.map(m => <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`max-w-[80%] p-2 rounded-2xl text-sm ${m.role === 'user' ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}>{m.text}</div></div>)}
                     </div>
-                    <input className="flex-1 p-2 bg-gray-100 rounded-xl text-sm" placeholder="هيا نتحدث.. ما مشكلتك؟" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} />
-                    <button onClick={send} className="px-3 bg-orange-500 text-white rounded-xl"><i className="fas fa-paper-plane text-sm"></i></button>
-                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-                    <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleCamera} />
+                    <div className="chat-bottom p-2 border-t flex gap-2 bg-white">
+                        <div className="flex gap-2">
+                            <button onClick={() => fileRef.current.click()} className="p-2 rounded-xl bg-gray-100"><i className="fas fa-plus text-sm"></i></button>
+                            <button onClick={() => cameraRef.current.click()} className="p-2 rounded-xl bg-gray-100"><i className="fas fa-camera text-sm"></i></button>
+                        </div>
+                        <input className="flex-1 p-2 bg-gray-100 rounded-xl text-sm" placeholder="هيا نتحدث.. ما مشكلتك؟" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} />
+                        <button onClick={send} className="px-3 bg-orange-500 text-white rounded-xl"><i className="fas fa-paper-plane text-sm"></i></button>
+                        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+                        <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleCamera} />
+                    </div>
                 </div>
-            </div>);
+            );
         }
 
-        // باقي صفحات الدخول والانضمام ولوحة البائع والمتجر وإضافة منتج وتفاصيل المنتج (مختصرة وبسيطة)
         function LoginPage({ sellers, onLogin, onGoJoin, onBack }) {
             const [email, setEmail] = useState(''); const [pass, setPass] = useState(''); const [err, setErr] = useState('');
             const doLogin = () => {
                 const em = email.trim(), pw = pass.trim();
-                if (em === ADMIN_EMAIL && pw === ADMIN_PASS) { const a = Object.values(sellers).find(s => s.email === ADMIN_EMAIL); if (a) { onLogin(a); return; } else setErr('خطأ في حساب المالك'); return; }
+                if (em === ADMIN_EMAIL && pw === ADMIN_PASS) {
+                    const a = Object.values(sellers).find(s => s.email === ADMIN_EMAIL);
+                    if (a) { onLogin(a); return; } else setErr('خطأ في حساب المالك');
+                    return;
+                }
                 const s = Object.values(sellers).find(s => s.email === em && s.password === pw);
                 if (s) onLogin(s); else setErr('بيانات غير صحيحة');
             };
-            return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1></div><div className="p-6 space-y-4">{err && <div className="bg-red-50 p-2 rounded-xl text-red-600 text-sm">{err}</div>}<input className="w-full p-3 bg-gray-100 rounded-xl" placeholder="البريد الإلكتروني" value={email} onChange={e => setEmail(e.target.value)} /><input type="password" className="w-full p-3 bg-gray-100 rounded-xl" placeholder="كلمة المرور" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && doLogin()} /><button onClick={doLogin} className="w-full py-3 bg-orange-500 text-white rounded-xl">دخول</button><div className="text-center text-gray-400">أو</div><button onClick={onGoJoin} className="w-full py-3 border rounded-xl">انضم كتاجر جديد</button></div></div>);
+            return (
+                <div className="flex flex-col h-full bg-white">
+                    <div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1></div>
+                    <div className="p-6 space-y-4">
+                        {err && <div className="bg-red-50 p-2 rounded-xl text-red-600 text-sm">{err}</div>}
+                        <input className="w-full p-3 bg-gray-100 rounded-xl" placeholder="البريد الإلكتروني" value={email} onChange={e => setEmail(e.target.value)} />
+                        <input type="password" className="w-full p-3 bg-gray-100 rounded-xl" placeholder="كلمة المرور" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && doLogin()} />
+                        <button onClick={doLogin} className="w-full py-3 bg-orange-500 text-white rounded-xl">دخول</button>
+                        <div className="text-center text-gray-400">أو</div>
+                        <button onClick={onGoJoin} className="w-full py-3 border rounded-xl">انضم كتاجر جديد</button>
+                    </div>
+                </div>
+            );
         }
+
         function JoinPage({ sellers, onRegister, onBack }) {
             const [form, setForm] = useState({ ownerName: '', phone: '', email: '', password: '', country: 'مصر' });
             const [err, setErr] = useState('');
@@ -484,30 +451,70 @@
                 if (Object.values(sellers).some(s => s.email === form.email.trim())) { setErr('البريد مستخدم'); return; }
                 onRegister(createSeller({ ...form, storeName: form.ownerName + ' Store' }));
             };
-            return (<div className="flex flex-col h-full bg-white"><div className="flex p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">انضم كتاجر</h1></div><div className="p-4 overflow-auto space-y-3">{err && <div className="bg-red-50 p-2 rounded-xl text-red-600 text-xs">{err}</div>}<input placeholder="الاسم" className="w-full p-2 bg-gray-100 rounded-xl" value={form.ownerName} onChange={e => setForm({ ...form, ownerName: e.target.value })} /><input placeholder="الهاتف" className="w-full p-2 bg-gray-100 rounded-xl" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} /><div className="flex gap-2"><input placeholder="البريد" className="flex-1 p-2 bg-gray-100 rounded-xl" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /><button onClick={sendOtp} className="px-3 bg-orange-500 text-white rounded-xl text-xs">إرسال كود</button></div>{otpSent && <input placeholder="الكود" className="w-full p-2 bg-gray-100 rounded-xl" value={userOtp} onChange={e => setUserOtp(e.target.value)} />}<input type="password" placeholder="كلمة المرور" className="w-full p-2 bg-gray-100 rounded-xl" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} /><select className="w-full p-2 bg-gray-100 rounded-xl" value={form.country} onChange={e => setForm({ ...form, country: e.target.value })}><option>مصر</option><option>السعودية</option></select><button onClick={register} className="w-full py-2 bg-orange-500 text-white rounded-xl font-bold">تسجيل</button></div></div>);
+            return (
+                <div className="flex flex-col h-full bg-white">
+                    <div className="flex p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">انضم كتاجر</h1></div>
+                    <div className="p-4 overflow-auto space-y-3">
+                        {err && <div className="bg-red-50 p-2 rounded-xl text-red-600 text-xs">{err}</div>}
+                        <input placeholder="الاسم" className="w-full p-2 bg-gray-100 rounded-xl" value={form.ownerName} onChange={e => setForm({ ...form, ownerName: e.target.value })} />
+                        <input placeholder="الهاتف" className="w-full p-2 bg-gray-100 rounded-xl" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
+                        <div className="flex gap-2"><input placeholder="البريد" className="flex-1 p-2 bg-gray-100 rounded-xl" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /><button onClick={sendOtp} className="px-3 bg-orange-500 text-white rounded-xl text-xs">إرسال كود</button></div>
+                        {otpSent && <input placeholder="الكود" className="w-full p-2 bg-gray-100 rounded-xl" value={userOtp} onChange={e => setUserOtp(e.target.value)} />}
+                        <input type="password" placeholder="كلمة المرور" className="w-full p-2 bg-gray-100 rounded-xl" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} />
+                        <select className="w-full p-2 bg-gray-100 rounded-xl" value={form.country} onChange={e => setForm({ ...form, country: e.target.value })}><option>مصر</option><option>السعودية</option></select>
+                        <button onClick={register} className="w-full py-2 bg-orange-500 text-white rounded-xl font-bold">تسجيل</button>
+                    </div>
+                </div>
+            );
         }
+
+        // لوحة البائع وإدارة المنتجات والمتجر (مبسطة)
         function SellerDashboard({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack }) {
             const myProds = seller.products.map(pid => products[pid]).filter(p => p);
-            return (<div className="flex flex-col h-full"><div className="flex items-center p-3 border-b"><button onClick={onBack}><i className="fas fa-arrow-right"></i></button><h1 className="flex-1 text-center font-bold text-sm">{seller.storeName}</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div><div className="p-3 grid grid-cols-2 gap-2"><button onClick={onGoStore} className="bg-indigo-50 p-2 rounded-xl text-xs">🏪 المتجر والنقاط</button><button onClick={onGoChat} className="bg-green-50 p-2 rounded-xl text-xs">💬 الدعم الذكي</button><button onClick={onAddProduct} className="bg-blue-50 p-2 rounded-xl text-xs">➕ إضافة منتج</button></div><div className="px-3 text-xs font-semibold">منتجاتي ({myProds.length})</div><div className="flex-1 overflow-auto p-3 space-y-2">{myProds.map(p => <div key={p.id} className="flex gap-2 p-2 bg-white rounded-xl border text-xs"><div className="text-2xl">{p.emoji}</div><div className="flex-1"><div>{p.name}</div><div className="text-blue-600">{p.price} ج.م</div></div><button onClick={() => onEditProduct(p)}><i className="fas fa-edit"></i></button><button onClick={() => onDeleteProduct(p.id)}><i className="fas fa-trash-alt text-red-500"></i></button></div>)}</div></div>);
+            return (
+                <div className="flex flex-col h-full">
+                    <div className="flex items-center p-3 border-b"><button onClick={onBack}><i className="fas fa-arrow-right"></i></button><h1 className="flex-1 text-center font-bold text-sm">{seller.storeName}</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div>
+                    <div className="p-3 grid grid-cols-2 gap-2">
+                        <button onClick={onGoStore} className="bg-indigo-50 p-2 rounded-xl text-xs">🏪 المتجر والنقاط</button>
+                        <button onClick={onGoChat} className="bg-green-50 p-2 rounded-xl text-xs">💬 الدعم الذكي</button>
+                        <button onClick={onAddProduct} className="bg-blue-50 p-2 rounded-xl text-xs">➕ إضافة منتج</button>
+                    </div>
+                    <div className="px-3 text-xs font-semibold">منتجاتي ({myProds.length})</div>
+                    <div className="flex-1 overflow-auto p-3 space-y-2">
+                        {myProds.map(p => <div key={p.id} className="flex gap-2 p-2 bg-white rounded-xl border text-xs"><div className="text-2xl">{p.emoji}</div><div className="flex-1"><div>{p.name}</div><div className="text-blue-600">{p.price} ج.م</div></div><button onClick={() => onEditProduct(p)}><i className="fas fa-edit"></i></button><button onClick={() => onDeleteProduct(p.id)}><i className="fas fa-trash-alt text-red-500"></i></button></div>)}
+                    </div>
+                </div>
+            );
         }
+
         function StorePoints({ seller, onBack, onPurchase }) {
             const buy = (pts, cost) => { if (confirm(`شراء ${pts} نقطة بـ ${cost} ج.م`)) setTimeout(() => onPurchase('points', cost, pts), 300); };
             const verify = () => { if (seller.verified) alert('موثق'); else if (confirm('شراء توثيق 150 ج.م')) setTimeout(() => onPurchase('verify', 150), 300); };
-            return (<div className="p-4"><button onClick={onBack}><i className="fas fa-arrow-right"></i> رجوع</button><div className="bg-white rounded-2xl p-4 text-center mt-3"><div className="text-3xl">⭐ {seller.points} نقطة</div><div className="text-xs">{seller.verified ? '✓ موثق' : 'غير موثق'}</div><div className="mb-2 text-xs">الباقة: {seller.subscription}</div><div className="space-y-2"><button onClick={() => buy(100, 30)} className="w-full py-2 bg-amber-500 rounded-xl text-sm">100 نقطة - 30 ج.م</button><button onClick={() => buy(500, 120)} className="w-full py-2 bg-amber-600 rounded-xl text-sm">500 نقطة - 120 ج.م</button><button onClick={verify} className="w-full py-2 bg-blue-600 rounded-xl text-sm">توثيق المتجر - 150 ج.م</button></div></div></div>);
+            return (
+                <div className="p-4"><button onClick={onBack}><i className="fas fa-arrow-right"></i> رجوع</button><div className="bg-white rounded-2xl p-4 text-center mt-3"><div className="text-3xl">⭐ {seller.points} نقطة</div><div className="text-xs">{seller.verified ? '✓ موثق' : 'غير موثق'}</div><div className="mb-2 text-xs">الباقة: {seller.subscription}</div><div className="space-y-2"><button onClick={() => buy(100, 30)} className="w-full py-2 bg-amber-500 rounded-xl text-sm">100 نقطة - 30 ج.م</button><button onClick={() => buy(500, 120)} className="w-full py-2 bg-amber-600 rounded-xl text-sm">500 نقطة - 120 ج.م</button><button onClick={verify} className="w-full py-2 bg-blue-600 rounded-xl text-sm">توثيق المتجر - 150 ج.م</button></div></div></div>
+            );
         }
+
         function AddEditProduct({ onSave, onBack, edit, sellerCountry }) {
             const [name, setName] = useState(edit?.name || ''); const [price, setPrice] = useState(edit?.price || ''); const [cat, setCat] = useState(edit?.category || 'electronics'); const [emoji, setEmoji] = useState(edit?.emoji || '📦'); const [desc, setDesc] = useState(edit?.description || ''); const [vip, setVip] = useState(edit?.vip || false);
             const submit = () => { if (!name || !price) return; onSave({ name, price: Number(price), category: cat, emoji, description: desc, vip, sellerCountry }); };
-            return (<div className="p-4"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white p-4 rounded-2xl shadow mt-2 space-y-3"><h2 className="text-base font-bold">{edit ? 'تعديل' : 'إضافة'} منتج</h2><input placeholder="الاسم" className="w-full p-2 border rounded-xl" value={name} onChange={e => setName(e.target.value)} /><input type="number" placeholder="السعر" className="w-full p-2 border rounded-xl" value={price} onChange={e => setPrice(e.target.value)} /><select className="w-full p-2 border rounded-xl" value={cat} onChange={e => setCat(e.target.value)}><option value="electronics">إلكترونيات</option><option value="fashion">موضة</option><option value="home">منزل</option></select><input placeholder="رمز" className="w-full p-2 border rounded-xl" value={emoji} onChange={e => setEmoji(e.target.value)} /><textarea placeholder="الوصف" rows="2" className="w-full p-2 border rounded-xl" value={desc} onChange={e => setDesc(e.target.value)} /><label className="text-xs"><input type="checkbox" checked={vip} onChange={e => setVip(e.target.checked)} /> منتج VIP</label><button onClick={submit} className="w-full py-2 bg-orange-500 text-white rounded-xl">حفظ</button></div></div>);
+            return (
+                <div className="p-4"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white p-4 rounded-2xl shadow mt-2 space-y-3"><h2 className="text-base font-bold">{edit ? 'تعديل' : 'إضافة'} منتج</h2><input placeholder="الاسم" className="w-full p-2 border rounded-xl" value={name} onChange={e => setName(e.target.value)} /><input type="number" placeholder="السعر" className="w-full p-2 border rounded-xl" value={price} onChange={e => setPrice(e.target.value)} /><select className="w-full p-2 border rounded-xl" value={cat} onChange={e => setCat(e.target.value)}><option value="electronics">إلكترونيات</option><option value="fashion">موضة</option><option value="home">منزل</option></select><input placeholder="رمز" className="w-full p-2 border rounded-xl" value={emoji} onChange={e => setEmoji(e.target.value)} /><textarea placeholder="الوصف" rows="2" className="w-full p-2 border rounded-xl" value={desc} onChange={e => setDesc(e.target.value)} /><label className="text-xs"><input type="checkbox" checked={vip} onChange={e => setVip(e.target.checked)} /> منتج VIP</label><button onClick={submit} className="w-full py-2 bg-orange-500 text-white rounded-xl">حفظ</button></div></div>
+            );
         }
+
         function ProductDetailPage({ product, seller, isLiked, onLike, onBack, onComment, onRate }) {
             const [showC, setShowC] = useState(false); const [newC, setNewC] = useState('');
             const stars = Array(5).fill(0).map((_, i) => <i key={i} className={`fas fa-star ${i < product.rating ? 'text-yellow-400' : 'text-gray-300'} text-xl cursor-pointer`} onClick={() => onRate(i + 1)} />);
             const add = () => { if (newC.trim()) { onComment(newC); setNewC(''); setShowC(false); } };
-            return (<div className="p-4"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white rounded-2xl p-4 mt-2"><div className="text-7xl text-center">{product.emoji}</div><h2 className="text-lg font-bold">{product.name}</h2><p className="text-2xl text-blue-600 font-bold">{product.price.toLocaleString()} ج.م</p><div className="flex justify-center gap-1 mt-1">{stars}</div><p className="text-gray-600 text-sm mt-2">{product.description || 'لا يوجد وصف'}</p><div className="flex justify-between mt-3"><div><i className="fas fa-store"></i> {seller?.storeName}</div><div className="flex gap-2"><button onClick={onLike} className={`px-3 py-1 rounded-full text-sm ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-heart"></i> {product.likes}</button><button onClick={() => setShowC(true)} className="px-3 py-1 rounded-full bg-blue-100 text-blue-600 text-sm"><i className="fas fa-comment"></i> تعليق</button></div></div>{showC && (<div className="mt-3 p-2 bg-gray-100 rounded-xl"><textarea rows="2" className="w-full p-2 border rounded-lg" placeholder="اكتب تعليقك..." value={newC} onChange={e => setNewC(e.target.value)}></textarea><div className="flex gap-2 mt-2"><button onClick={add} className="px-3 py-1 bg-green-500 text-white rounded-lg">نشر</button><button onClick={() => setShowC(false)} className="px-3 py-1 bg-gray-300 rounded-lg">إلغاء</button></div></div>)}<div className="mt-3"><h3 className="font-semibold">التعليقات:</h3>{product.comments?.length === 0 ? <p className="text-gray-400">لا توجد تعليقات</p> : product.comments?.map((c, i) => <div key={i} className="border-t pt-1 mt-1 text-sm">{c}</div>)}</div></div></div>);
+            return (
+                <div className="p-4"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white rounded-2xl p-4 mt-2"><div className="text-7xl text-center">{product.emoji}</div><h2 className="text-lg font-bold">{product.name}</h2><p className="text-2xl text-blue-600 font-bold">{product.price.toLocaleString()} ج.م</p><div className="flex justify-center gap-1 mt-1">{stars}</div><p className="text-gray-600 text-sm mt-2">{product.description || 'لا يوجد وصف'}</p><div className="flex justify-between mt-3"><div><i className="fas fa-store"></i> {seller?.storeName}</div><div className="flex gap-2"><button onClick={onLike} className={`px-3 py-1 rounded-full text-sm ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-heart"></i> {product.likes}</button><button onClick={() => setShowC(true)} className="px-3 py-1 rounded-full bg-blue-100 text-blue-600 text-sm"><i className="fas fa-comment"></i> تعليق</button></div></div>{showC && (<div className="mt-3 p-2 bg-gray-100 rounded-xl"><textarea rows="2" className="w-full p-2 border rounded-lg" placeholder="اكتب تعليقك..." value={newC} onChange={e => setNewC(e.target.value)}></textarea><div className="flex gap-2 mt-2"><button onClick={add} className="px-3 py-1 bg-green-500 text-white rounded-lg">نشر</button><button onClick={() => setShowC(false)} className="px-3 py-1 bg-gray-300 rounded-lg">إلغاء</button></div></div>)}<div className="mt-3"><h3 className="font-semibold">التعليقات:</h3>{product.comments?.length === 0 ? <p className="text-gray-400">لا توجد تعليقات</p> : product.comments?.map((c, i) => <div key={i} className="border-t pt-1 mt-1 text-sm">{c}</div>)}</div></div></div>
+            );
         }
 
-        // ==================== التطبيق الرئيسي ====================
+        // ------------------------------------------------------------------
+        // 6. التطبيق الرئيسي (App)
+        // ------------------------------------------------------------------
         function App() {
             const [state, setState] = useState(null);
             const [page, setPage] = useState('home');
@@ -515,34 +522,30 @@
             const [detailProd, setDetailProd] = useState(null);
             const [publicSellerId, setPublicSellerId] = useState(null);
             const [dark, setDark] = useState(() => localStorage.getItem(THEME_KEY) === 'dark');
-            const [selectedCountry, setSelectedCountry] = useState(() => localStorage.getItem(COUNTRY_KEY) || 'مصر');
             const [searchQuery, setSearchQuery] = useState('');
 
-            useEffect(() => { localStorage.setItem(COUNTRY_KEY, selectedCountry); }, [selectedCountry]);
             useEffect(() => { setState(loadState()); }, []);
             useEffect(() => { if (state) saveState(state); }, [state]);
             useEffect(() => { if (dark) document.body.classList.add('dark'); else document.body.classList.remove('dark'); localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); }, [dark]);
 
             if (!state) return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-orange-500">VICKS MARKET</div></div>;
 
-            const currSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
+            const currentSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
             const update = (up) => setState(prev => up(prev));
 
-            // دوال المعالجة
             const handleLogin = (s) => { update(st => ({ ...st, currentSellerId: s.id })); if (s.isAdmin) setPage('profile'); else setPage('seller'); };
             const handleRegister = (s) => { update(st => ({ ...st, sellers: { ...st.sellers, [s.id]: s }, currentSellerId: s.id })); setPage('seller'); };
             const handleLogout = () => { update(st => ({ ...st, currentSellerId: null })); setPage('home'); };
-            const handleLike = (pid) => { if (!currSeller) return; update(s => { const p = s.products[pid]; const liked = p.likedBy.includes(currSeller.id); const nl = liked ? p.likedBy.filter(id => id !== currSeller.id) : [...p.likedBy, currSeller.id]; return { ...s, products: { ...s.products, [pid]: { ...p, likes: liked ? p.likes - 1 : p.likes + 1, likedBy: nl } } }; }); };
+            const handleLike = (pid) => { if (!currentSeller) return; update(s => { const p = s.products[pid]; const liked = p.likedBy.includes(currentSeller.id); const nl = liked ? p.likedBy.filter(id => id !== currentSeller.id) : [...p.likedBy, currentSeller.id]; return { ...s, products: { ...s.products, [pid]: { ...p, likes: liked ? p.likes - 1 : p.likes + 1, likedBy: nl } } }; }); };
             const handleWhats = (p) => { const phone = state.sellers[p.sellerId]?.phone?.replace(/\D/g, '') || '201113694362'; const msg = encodeURIComponent(`مهتم بـ ${p.name} بسعر ${p.price} ج.م`); window.open(`https://wa.me/2${phone}?text=${msg}`, '_blank'); };
-            const handleAdd = (data) => { if (!currSeller) return; if (editProd) { update(s => ({ ...s, products: { ...s.products, [editProd.id]: { ...s.products[editProd.id], ...data } } })); } else { const np = createProduct({ ...data, sellerId: currSeller.id, sellerName: currSeller.storeName, sellerCountry: currSeller.country }); update(s => ({ ...s, products: { ...s.products, [np.id]: np }, sellers: { ...s.sellers, [currSeller.id]: { ...s.sellers[currSeller.id], products: [...(s.sellers[currSeller.id]?.products || []), np.id] } } })); } setEditProd(null); setPage('seller'); };
-            const handleDelete = (pid) => { if (confirm('حذف المنتج؟')) update(s => { const np = { ...s.products }; delete np[pid]; const ns = { ...s.sellers }; if (ns[currSeller.id]) ns[currSeller.id].products = ns[currSeller.id].products.filter(id => id !== pid); return { ...s, products: np, sellers: ns }; }); };
-            const handleSendMsg = (txt) => { update(s => { let ns = addMessage(s, { role: 'user', text: txt }); ns = addMessage(ns, { role: 'bot', text: botReply(txt) }); return ns; }); };
-            const handlePurchase = (type, amt, pts) => { update(s => { const sel = s.sellers[currSeller.id]; return { ...s, sellers: { ...s.sellers, [currSeller.id]: { ...sel, points: sel.points + (pts || 0), verified: type === 'verify' ? true : sel.verified } } }; }); };
+            const handleAdd = (data) => { if (!currentSeller) return; if (editProd) { update(s => ({ ...s, products: { ...s.products, [editProd.id]: { ...s.products[editProd.id], ...data } } })); } else { const np = createProduct({ ...data, sellerId: currentSeller.id, sellerName: currentSeller.storeName, sellerCountry: currentSeller.country }); update(s => ({ ...s, products: { ...s.products, [np.id]: np }, sellers: { ...s.sellers, [currentSeller.id]: { ...s.sellers[currentSeller.id], products: [...(s.sellers[currentSeller.id]?.products || []), np.id] } } })); } setEditProd(null); setPage('seller'); };
+            const handleDelete = (pid) => { if (confirm('حذف المنتج؟')) update(s => { const np = { ...s.products }; delete np[pid]; const ns = { ...s.sellers }; if (ns[currentSeller.id]) ns[currentSeller.id].products = ns[currentSeller.id].products.filter(id => id !== pid); return { ...s, products: np, sellers: ns }; }); };
+            const handleSend = (txt) => { update(s => { let ns = addMessage(s, { role: 'user', text: txt }); ns = addMessage(ns, { role: 'bot', text: botReply(txt) }); return ns; }); };
+            const handlePurchase = (type, amt, pts) => { update(s => { const sel = s.sellers[currentSeller.id]; return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...sel, points: sel.points + (pts || 0), verified: type === 'verify' ? true : sel.verified } } }; }); };
             const handleComment = (pid, text) => { update(s => { const p = s.products[pid]; return { ...s, products: { ...s.products, [pid]: { ...p, comments: [...(p.comments || []), text] } } }; }); };
             const handleRate = (pid, rating) => { update(s => { const p = s.products[pid]; return { ...s, products: { ...s.products, [pid]: { ...p, rating } } }; }); };
-            const isLiked = (p) => currSeller ? p.likedBy.includes(currSeller.id) : false;
+            const isLiked = (p) => currentSeller ? p.likedBy.includes(currentSeller.id) : false;
 
-            // عرض صفحة التاجر العام
             if (publicSellerId) {
                 return <SellerPublicProfile sellerId={publicSellerId} sellers={state.sellers} products={state.products} onBack={() => setPublicSellerId(null)} />;
             }
@@ -554,10 +557,8 @@
                             <header className="sticky top-0 z-20 bg-white border-b px-3 py-2 flex items-center justify-between">
                                 <div className="flex items-center gap-2"><i className="fas fa-store text-orange-500 text-base"></i><span className="text-sm font-bold text-orange-600">VICKS MARKET</span></div>
                                 <div className="flex gap-2">
-                                    {/* أيقونة البحث العلوية (مكررة للوصول السريع) */}
-                                    <button onClick={() => document.getElementById('searchInputHome')?.focus()} className="p-1.5 rounded-lg bg-gray-100 hover:bg-orange-100"><i className="fas fa-search text-sm"></i></button>
                                     <button onClick={() => setDark(!dark)} className="p-1.5 rounded-lg bg-gray-100"><i className={`fas fa-${dark ? 'sun' : 'moon'} text-sm`}></i></button>
-                                    <button onClick={() => currSeller ? (currSeller.isAdmin ? setPage('profile') : setPage('seller')) : setPage('login')} className="p-1.5 rounded-lg bg-gray-100"><i className="fas fa-user-circle text-sm"></i></button>
+                                    <button onClick={() => currentSeller ? (currentSeller.isAdmin ? setPage('profile') : setPage('seller')) : setPage('login')} className="p-1.5 rounded-lg bg-gray-100"><i className="fas fa-user-circle text-sm"></i></button>
                                 </div>
                             </header>
                             <main className="flex-1 overflow-hidden">
@@ -571,4 +572,31 @@
                                     onShowOffers={() => setPage('offers')}
                                     onShowVIP={() => setPage('vip')}
                                     onComment={(pid) => { const c = prompt('تعليقك:'); if (c) handleComment(pid, c); }}
-                                    onRat
+                                    onRate={handleRate}
+                                    onSellerProfile={(sid) => setPublicSellerId(sid)}
+                                    searchQuery={searchQuery}
+                                    onSearchChange={setSearchQuery}
+                                />
+                            </main>
+                            <button onClick={() => setPage('chat')} className="fixed bottom-4 right-4 w-10 h-10 rounded-full bg-orange-500 text-white shadow-lg flex items-center justify-center z-30"><i className="fas fa-robot text-base"></i></button>
+                        </>
+                    )}
+                    {page === 'offers' && <OffersPage products={state.products} onProductClick={p => { setDetailProd(p); setPage('detail'); }} onBack={() => setPage('home')} />}
+                    {page === 'vip' && <VIPPage onBack={() => setPage('home')} />}
+                    {page === 'profile' && currentSeller?.isAdmin && <OwnerProfile seller={currentSeller} onLogout={handleLogout} onBack={() => setPage('home')} />}
+                    {page === 'login' && <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={() => setPage('join')} onBack={() => setPage('home')} />}
+                    {page === 'join' && <JoinPage sellers={state.sellers} onRegister={handleRegister} onBack={() => setPage('login')} />}
+                    {page === 'seller' && currentSeller && !currentSeller.isAdmin && <SellerDashboard seller={currentSeller} products={state.products} onGoStore={() => setPage('store')} onGoChat={() => setPage('chat')} onAddProduct={() => { setEditProd(null); setPage('addProduct'); }} onEditProduct={p => { setEditProd(p); setPage('addProduct'); }} onDeleteProduct={handleDelete} onLogout={handleLogout} onBack={() => setPage('home')} />}
+                    {page === 'store' && currentSeller && <StorePoints seller={currentSeller} onBack={() => setPage('seller')} onPurchase={handlePurchase} />}
+                    {page === 'chat' && <ChatPage messages={state.chatMessages} onSend={handleSend} onBack={() => setPage(currentSeller ? (currentSeller.isAdmin ? 'profile' : 'seller') : 'home')} />}
+                    {page === 'addProduct' && currentSeller && <AddEditProduct onSave={handleAdd} onBack={() => { setEditProd(null); setPage('seller'); }} edit={editProd} sellerCountry={currentSeller.country} />}
+                    {page === 'detail' && detailProd && <ProductDetailPage product={state.products[detailProd.id] || detailProd} seller={state.sellers[detailProd.sellerId] || null} isLiked={isLiked(state.products[detailProd.id] || detailProd)} onLike={() => handleLike(detailProd.id)} onBack={() => setPage('home')} onComment={(txt) => handleComment(detailProd.id, txt)} onRate={(r) => handleRate(detailProd.id, r)} />}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+    </html>
