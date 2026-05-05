@@ -10,19 +10,60 @@
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
     <style>
-        /* أنماط عامة وDark Mode Gemini style */
+        /* أنماط عامة */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        body.dark { background-color: #000000; }
-        body.dark .bg-white, body.dark .bg-gray-50, body.dark .bg-gray-100, body.dark .bg-card { background-color: #121212 !important; }
-        body.dark .text-gray-800, body.dark .text-gray-600, body.dark .text-gray-500, body.dark .text-blue-600 { color: #f97316 !important; }
-        body.dark .border, body.dark .border-gray-100, body.dark .border-gray-200 { border-color: #f97316 !important; }
-        body.dark .bg-orange-50, body.dark .bg-yellow-50, body.dark .bg-indigo-50, body.dark .bg-green-50 { background-color: #1a1a1a !important; }
-        body.dark button.bg-gray-100 { background-color: #1a1a1a !important; color: #f97316 !important; }
-        body.dark button.bg-gray-100:hover { background-color: #f97316 !important; color: #000000 !important; }
-        .chat-fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: inherit; z-index: 20; }
-        /* تنسيق الصفحة الشخصية */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        /* الوضع الليلي الاحترافي (Gemini) */
+        body.dark {
+            background-color: #000000;
+        }
+        body.dark .bg-white,
+        body.dark .bg-gray-50,
+        body.dark .bg-gray-100,
+        body.dark .bg-card {
+            background-color: #121212 !important;
+        }
+        body.dark .text-gray-800,
+        body.dark .text-gray-600,
+        body.dark .text-gray-500,
+        body.dark .text-blue-600 {
+            color: #f97316 !important;
+        }
+        body.dark .border,
+        body.dark .border-gray-100,
+        body.dark .border-gray-200 {
+            border-color: #f97316 !important;
+        }
+        body.dark .bg-orange-50,
+        body.dark .bg-yellow-50,
+        body.dark .bg-indigo-50,
+        body.dark .bg-green-50 {
+            background-color: #1a1a1a !important;
+        }
+        body.dark button.bg-gray-100 {
+            background-color: #1a1a1a !important;
+            color: #f97316 !important;
+        }
+        body.dark button.bg-gray-100:hover {
+            background-color: #f97316 !important;
+            color: #000000 !important;
+        }
+        /* شريط الدردشة الثابت */
+        .chat-fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: inherit;
+            z-index: 20;
+        }
+        /* تنسيق الصورة الدائرية للمالك */
         .profile-avatar {
             width: 120px;
             height: 120px;
@@ -35,7 +76,10 @@
             color: white;
             margin: 0 auto;
         }
-        body.dark .profile-avatar { background-color: #f97316; color: #000; }
+        body.dark .profile-avatar {
+            background-color: #f97316;
+            color: #000;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -43,14 +87,14 @@
 
     <script type="text/babel" data-presets="react,typescript">
         // --------------------------------------------------------------
-        // 1. الثوابت والبيانات الأساسية (مع تصحيح حساب المالك)
+        // 1. الثوابت والبيانات الأساسية (مع حساب المالك)
         // --------------------------------------------------------------
-        const STORAGE_KEY = 'vicks_market_pro';
-        const THEME_KEY = 'vicks_theme_pro';
-        const LANG_KEY = 'vicks_lang_pro';
-        const COUNTRY_KEY = 'vicks_country_pro';
+        const STORAGE_KEY = 'vicks_market_final';
+        const THEME_KEY = 'vicks_theme_final';
+        const LANG_KEY = 'vicks_lang_final';
+        const COUNTRY_KEY = 'vicks_country_final';
         
-        // بيانات المالك الثابتة (يتم استخدام trim عند المقارنة)
+        // بيانات المالك الثابتة (مهم جداً استخدام trim في المقارنة)
         const OWNER_EMAIL = 'mom1113694362@gmail.com';
         const OWNER_PASS = 'momMOM2023#';
         const OWNER_ID = '10000000000';
@@ -69,7 +113,7 @@
             { code: 'TR', name: 'Turkey', currency: 'TRY' }
         ];
         
-        // التصنيفات (مع ترجمة 'all' إلى 'الجميع')
+        // التصنيفات (مع ترجمة 'all')
         const categoriesData = [
             { id: 'all', label: 'الجميع', icon: 'fa-grid' },
             { id: 'electronics', label: 'الإلكترونيات', icon: 'fa-microchip' },
@@ -168,7 +212,7 @@
         const { useState, useEffect, useCallback, useRef } = React;
         
         // --------------------------------------------------------------
-        // 2. مكونات الصفحات (ProductCard, HomePage, AdminProfilePage, وغيرها)
+        // 2. مكونات الصفحات الأساسية
         // --------------------------------------------------------------
         
         // بطاقة المنتج
@@ -202,7 +246,7 @@
             );
         }
         
-        // الصفحة الرئيسية (تم إزالة اختيار البلد وزر حسابي المكرر)
+        // الصفحة الرئيسية (بدون اختيار البلد وبدون زر حسابي مكرر)
         function HomePage({ products, sellers, currentSellerId, selectedCountry, onLike, onWhatsApp, onProductClick, onShowOffers, onShowVIPPage, onComment, onRate, t }) {
             const [category, setCategory] = useState('all');
             const [viewMode, setViewMode] = useState('grid');
@@ -254,7 +298,7 @@
             );
         }
         
-        // صفحة الملف الشخصي للمالك (بتصميم جديد)
+        // صفحة الملف الشخصي للمالك (بتصميم دائري وقائمة بيانات)
         function AdminProfilePage({ seller, onLogout, onBack, t }) {
             return (
                 <div className="flex flex-col h-full bg-white">
@@ -280,7 +324,7 @@
             );
         }
         
-        // صفحة VIP
+        // صفحة الاشتراكات VIP
         function VIPPage({ seller, onBack, onPurchaseSubscription, t }) {
             const [planType, setPlanType] = useState('monthly');
             const monthly = [
@@ -331,7 +375,7 @@
             );
         }
         
-        // صفحات تسجيل الدخول والانضمام والإعدادات والدردشة وغيرها (مختصرة ولكن كاملة)
+        // صفحة تسجيل الدخول (مع دعم المالك القوي)
         function LoginPage({ sellers, onLogin, onGoJoin, onBack, t }) {
             const [email, setEmail] = useState('');
             const [pass, setPass] = useState('');
@@ -339,11 +383,16 @@
             const handleLogin = () => {
                 const trimmedEmail = email.trim();
                 const trimmedPass = pass.trim();
+                // التحقق القوي من حساب المالك
                 if (trimmedEmail === OWNER_EMAIL && trimmedPass === OWNER_PASS) {
                     const admin = Object.values(sellers).find(s => s.email === OWNER_EMAIL);
-                    if (admin) onLogin(admin);
-                    else setError('حساب المالك غير موجود');
-                    return;
+                    if (admin) {
+                        onLogin(admin);
+                        return;
+                    } else {
+                        setError('حساب المالك غير موجود في قاعدة البيانات');
+                        return;
+                    }
                 }
                 const seller = Object.values(sellers).find(s => s.email === trimmedEmail && s.password === trimmedPass);
                 if (seller) onLogin(seller);
@@ -365,6 +414,7 @@
             );
         }
         
+        // صفحة انضمام تاجر جديد (مبسطة)
         function JoinPage({ sellers, onRegister, onBack, t }) {
             const [form, setForm] = useState({ ownerName: '', phone: '', email: '', password: '', country: 'مصر' });
             const [error, setError] = useState('');
@@ -417,6 +467,7 @@
             );
         }
         
+        // صفحة الإعدادات (لتغيير البلد فقط)
         function SettingsPage({ selectedCountry, setSelectedCountry, t }) {
             return (
                 <div className="flex flex-col h-full bg-white">
@@ -426,6 +477,7 @@
             );
         }
         
+        // صفحة الدردشة VICKS AI (مع شريط ثابت وأيقونة +)
         function ChatPage({ messages, onSendMessage, onBack, t, onImageUpload }) {
             const [input, setInput] = useState('');
             const fileRef = useRef(null);
@@ -446,8 +498,9 @@
             );
         }
         
-        // باقي المكونات (SellerPage, StorePage, AddProductPage, ProductDetailPage, OffersPage, AdminDashboard)
-        // اختصار لضمان اكتمال الكود
+        // --------------------------------------------------------------
+        // 3. باقي المكونات (Seller, Store, AddProduct, Detail, Offers, AdminDashboard)
+        // --------------------------------------------------------------
         function SellerPage({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack, onChangeLang, currentLang, t, onOpenSettings }) {
             const myProducts = seller.products.map(pid => products[pid]).filter(p => p);
             return (<div className="flex flex-col h-full"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right"></i></button><h1 className="flex-1 text-center font-bold">{seller.storeName}</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div><div className="p-4 grid grid-cols-2 gap-3"><button onClick={onGoStore} className="bg-indigo-50 p-4 rounded-2xl"><i className="fas fa-store"></i> {t('store_points')}</button><button onClick={onGoChat} className="bg-green-50 p-4 rounded-2xl"><i className="fas fa-comment-dots"></i> {t('ai_support')}</button><button onClick={onAddProduct} className="bg-blue-50 p-4 rounded-2xl"><i className="fas fa-plus-circle"></i> {t('add_product')}</button><button onClick={() => onChangeLang(currentLang === 'ar' ? 'en' : 'ar')} className="bg-yellow-50 p-4 rounded-2xl"><i className="fas fa-globe"></i> {currentLang === 'ar' ? 'English' : 'عربي'}</button><button onClick={onOpenSettings} className="bg-purple-50 p-4 rounded-2xl"><i className="fas fa-cog"></i> {t('settings')}</button></div><div className="px-4 font-semibold">{t('my_products')} ({myProducts.length})</div><div className="flex-1 overflow-auto p-4 space-y-2">{myProducts.map(p => <div key={p.id} className="flex gap-3 p-3 bg-white rounded-xl border"><div className="text-3xl">{p.emoji}</div><div className="flex-1"><div>{p.name}</div><div className="text-blue-600">{p.price} {t('currency')}</div></div><button onClick={() => onEditProduct(p)}><i className="fas fa-edit"></i></button><button onClick={() => onDeleteProduct(p.id)}><i className="fas fa-trash-alt text-red-500"></i></button></div>)}</div></div>);
@@ -478,7 +531,6 @@
             const offers = Object.values(products).filter(p => (p.likes > 0 || p.price < 300) && p.sellerCountry === selectedCountry);
             return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold">{t('special_offers')}</h1></div><div className="flex-1 overflow-auto p-4 grid grid-cols-2 gap-4">{offers.map(p => <div key={p.id} onClick={() => onProductClick(p)} className="bg-white rounded-xl border p-3 cursor-pointer"><div className="text-6xl text-center">{p.emoji}</div><h3 className="font-semibold line-clamp-2">{p.name}</h3><p className="text-orange-600 font-bold">{p.price} {t('currency')}</p></div>)}</div></div>);
         }
-        // لوحة تحكم عامة (AdminDashboard) للإدارة القديمة (اختياري)
         function AdminDashboard({ sellers, products, onBack, onDeleteSeller, onDeleteProduct, onAddProductForSeller, onActivateVIP, t }) {
             const [selSeller, setSelSeller] = useState('');
             const [pName, setPName] = useState('');
@@ -488,7 +540,7 @@
         }
         
         // --------------------------------------------------------------
-        // 5. التطبيق الرئيسي (App) - تعديل المسارات: إضافة صفحة البروفايل للمالك
+        // 4. التطبيق الرئيسي (App) - مع دعم حساب المالك
         // --------------------------------------------------------------
         function App() {
             const [state, setState] = useState(null);
@@ -522,11 +574,8 @@
             const isAdminUser = currentSeller?.isAdmin === true;
             const updateState = (updater) => setState(prev => updater(prev));
             
-            const handleLogin = (s) => { 
-                updateState(st => ({ ...st, currentSellerId: s.id })); 
-                if (isAdmin(s)) setPage('adminProfile');  // المالك يذهب للصفحة الشخصية الجديدة
-                else setPage('seller');
-            };
+            // دوال المعالجة
+            const handleLogin = (s) => { updateState(st => ({ ...st, currentSellerId: s.id })); if (isAdmin(s)) setPage('adminProfile'); else setPage('seller'); };
             const handleRegister = (s) => { updateState(st => ({ ...st, sellers: { ...st.sellers, [s.id]: s }, currentSellerId: s.id })); setPage('seller'); };
             const handleLogout = () => { updateState(st => ({ ...st, currentSellerId: null })); setPage('home'); };
             const handleLike = (pid) => { if (!currentSeller) return; updateState(s => { const p = s.products[pid]; if (!p) return s; const liked = p.likedBy.includes(currentSeller.id); const newLiked = liked ? p.likedBy.filter(id => id !== currentSeller.id) : [...p.likedBy, currentSeller.id]; return { ...s, products: { ...s.products, [pid]: { ...p, likes: liked ? p.likes - 1 : p.likes + 1, likedBy: newLiked } } }; }); };
@@ -558,7 +607,6 @@
                                     <button onClick={() => cameraRef.current?.click()} className="p-1.5 rounded-xl bg-gray-100 hover:bg-orange-500"><i className="fas fa-camera text-sm"></i></button>
                                     <button onClick={() => setShowSearchBar(!showSearchBar)} className="p-1.5 rounded-xl bg-gray-100 hover:bg-orange-500"><i className="fas fa-search text-sm"></i></button>
                                     <button onClick={() => setDarkMode(!darkMode)} className="p-1.5 rounded-xl bg-gray-100"><i className={`fas fa-${darkMode ? 'sun' : 'moon'} text-sm`}></i></button>
-                                    {isAdminUser && <button onClick={() => setPage('adminProfile')} className="p-1.5 rounded-xl bg-gray-100"><i className="fas fa-user-circle"></i></button>}
                                     <button onClick={() => currentSeller ? (isAdminUser ? setPage('adminProfile') : setPage('seller')) : setPage('login')} className="p-1.5 rounded-xl bg-gray-100"><i className="fas fa-user-circle text-sm"></i></button>
                                 </div>
                                 <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleCameraSearch} />
