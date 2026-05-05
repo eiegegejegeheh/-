@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>VICKS MARKET | منصة تجارة عالمية</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js">
+    </script>
     <style>
         :root {
             --orange: #ff6600;
@@ -302,8 +310,14 @@
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .search-wrapper {
@@ -355,8 +369,12 @@
             flex-shrink: 0;
         }
 
-        .icon-btn:hover { background: #e5e7eb; }
-        body.dark .icon-btn:hover { background: #333; }
+        .icon-btn:hover {
+            background: #e5e7eb;
+        }
+        body.dark .icon-btn:hover {
+            background: #333;
+        }
 
         .btn-primary {
             background: var(--orange);
@@ -371,7 +389,9 @@
             transition: background 0.2s;
         }
 
-        .btn-primary:hover { background: #e55d00; }
+        .btn-primary:hover {
+            background: #e55d00;
+        }
 
         .social-btn {
             display: flex;
@@ -391,10 +411,21 @@
             margin-bottom: 8px;
         }
 
-        .social-btn.google { border-color: #ea4335; color: #ea4335; }
-        .social-btn.facebook { border-color: #1877f2; color: #1877f2; }
-        .social-btn.email-signup { border-color: var(--orange); color: var(--orange); }
-        .social-btn:hover { background: var(--input-bg); }
+        .social-btn.google {
+            border-color: #ea4335;
+            color: #ea4335;
+        }
+        .social-btn.facebook {
+            border-color: #1877f2;
+            color: #1877f2;
+        }
+        .social-btn.email-signup {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+        .social-btn:hover {
+            background: var(--input-bg);
+        }
 
         .category-btn {
             padding: 7px 15px;
@@ -428,7 +459,14 @@
             animation: fadeIn 0.2s ease;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
         .comments-panel {
             background: var(--card-bg);
@@ -441,7 +479,14 @@
             overflow: hidden;
         }
 
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
 
         .comments-header {
             display: flex;
@@ -526,10 +571,33 @@
             white-space: nowrap;
         }
 
-        @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-        @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
 
-        .hidden-file-input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+        .hidden-file-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
 
         .chat-fullscreen {
             position: fixed;
@@ -628,12 +696,21 @@
             animation: pulse-orange 2s infinite;
         }
 
-        .floating-ai-btn:active { transform: scale(0.9); box-shadow: 0 3px 10px rgba(255, 102, 0, 0.4); }
+        .floating-ai-btn:active {
+            transform: scale(0.9);
+            box-shadow: 0 3px 10px rgba(255, 102, 0, 0.4);
+        }
 
         @keyframes pulse-orange {
-            0% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
-            70% { box-shadow: 0 0 0 14px rgba(255, 102, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 14px rgba(255, 102, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 102, 0, 0);
+            }
         }
 
         .separator-text {
@@ -645,18 +722,104 @@
             opacity: 0.8;
         }
 
-        .vip-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 12px; }
-        .vip-card.platinum { border-color: #ffd700; background: linear-gradient(135deg, #1a1a1a, #2d2410); }
-        body:not(.dark) .vip-card.platinum { background: linear-gradient(135deg, #fffef0, #fff7e0); }
-        .vip-card.gold { border-color: #ffaa00; }
-        .vip-card.silver { border-color: #a0a0a0; }
-        .offer-badge { position: absolute; top: 12px; left: 12px; background: #ef4444; color: white; padding: 4px 10px; border-radius: 14px; font-size: 0.7rem; font-weight: 800; }
-        .offer-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; display: flex; gap: 12px; padding: 12px; margin-bottom: 10px; align-items: center; position: relative; }
-        .old-price { text-decoration: line-through; color: #9ca3af; font-size: 0.75rem; margin-right: 6px; }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: var(--text-sub); }
-        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); font-size: 0.9rem; color: var(--text-main); outline: none; }
-        .form-group input:focus { border-color: var(--orange); }
+        .vip-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .vip-card.platinum {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #1a1a1a, #2d2410);
+        }
+        body:not(.dark) .vip-card.platinum {
+            background: linear-gradient(135deg, #fffef0, #fff7e0);
+        }
+        .vip-card.gold {
+            border-color: #ffaa00;
+        }
+        .vip-card.silver {
+            border-color: #a0a0a0;
+        }
+        .offer-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #ef4444;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+        .offer-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            align-items: center;
+            position: relative;
+        }
+        .old-price {
+            text-decoration: line-through;
+            color: #9ca3af;
+            font-size: 0.75rem;
+            margin-right: 6px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-sub);
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            outline: none;
+        }
+        .form-group input:focus {
+            border-color: var(--orange);
+        }
+        .image-preview-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -669,26 +832,281 @@
 
     <script>
         (function() {
+            // ==================== تهيئة Firebase ====================
+            const firebaseConfig = {
+                apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                authDomain: "vicks-market.firebaseapp.com",
+                projectId: "vicks-market",
+                storageBucket: "vicks-market.appspot.com",
+                messagingSenderId: "000000000000",
+                appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxx"
+            };
+
+            let firebaseInitialized = false;
+            let auth = null;
+            let db = null;
+
+            try {
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+                firebaseInitialized = true;
+                console.log('✅ Firebase initialized successfully');
+            } catch (e) {
+                console.warn('⚠️ Firebase config placeholder detected. Social login will show a demo message.', e.message);
+            }
+
+            // ==================== مفاتيح التخزين ====================
             const STORAGE_KEY = 'vicks_final_v4';
             const THEME_KEY = 'vicks_theme_v4';
             const GUEST_LIKES_KEY = 'vicks_guest_likes_v4';
             const CONTACT_KEY = 'vicks_contact_method_v4';
 
-            function getGuestLikes() { try { return JSON.parse(localStorage.getItem(GUEST_LIKES_KEY) || '[]'); } catch { return []; } }
+            function getGuestLikes() { try { return JSON.parse(localStorage.getItem(GUEST_LIKES_KEY) ||
+            '[]'); } catch { return []; } }
+
             function isGuestLiked(pid) { return getGuestLikes().includes(pid); }
-            function toggleGuestLike(pid) { const likes = getGuestLikes(); const idx = likes.indexOf(pid); if (idx >= 0) likes.splice(idx, 1); else likes.push(pid); localStorage.setItem(GUEST_LIKES_KEY, JSON.stringify(likes)); return idx < 0; }
+
+            function toggleGuestLike(pid) { const likes = getGuestLikes(); const idx = likes.indexOf(pid); if (idx >=
+                    0) likes.splice(idx, 1); else likes.push(pid); localStorage.setItem(GUEST_LIKES_KEY, JSON.stringify(
+                    likes)); return idx < 0; }
+
             function getContactMethod() { return localStorage.getItem(CONTACT_KEY) || 'whatsapp'; }
+
             function setContactMethod(m) { localStorage.setItem(CONTACT_KEY, m); }
 
+            // ==================== دالة حفظ المستخدم في Firestore ====================
+            function saveUserToFirestore(userData) {
+                if (!firebaseInitialized || !db) {
+                    console.log('📦 Firestore غير مهيأ – تم الحفظ محلياً فقط.');
+                    return Promise.resolve();
+                }
+                return db.collection('users').doc(userData.id).set({
+                    id: userData.id,
+                    email: userData.email || '',
+                    storeName: userData.storeName || '',
+                    ownerName: userData.ownerName || '',
+                    phone: userData.phone || '',
+                    country: userData.country || 'مصر',
+                    avatar: userData.avatar || '👤',
+                    photoURL: userData.photoURL || '',
+                    provider: userData.provider || 'email',
+                    accountType: userData.accountType || 'seller',
+                    subscription: userData.subscription || 'free',
+                    verified: userData.verified || false,
+                    verificationBadge: userData.verificationBadge || false,
+                    points: userData.points || 0,
+                    maxProducts: userData.maxProducts || 10,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true }).then(() => {
+                    console.log('✅ تم حفظ بيانات المستخدم في Firestore:', userData.id);
+                }).catch(err => {
+                    console.warn('⚠️ تعذر الحفظ في Firestore:', err.message);
+                });
+            }
+
+            // ==================== دوال المصادقة عبر Firebase ====================
+            function signInWithGoogle(isSignUp = false) {
+                if (!firebaseInitialized || !auth) {
+                    showToast('⚠️ Firebase غير مهيأ. الرجاء إعداد المشروع أولاً.');
+                    return;
+                }
+                const provider = new firebase.auth.GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+                auth.signInWithPopup(provider).then(result => {
+                    const user = result.user;
+                    const displayName = user.displayName || 'مستخدم';
+                    const email = user.email || '';
+                    const photoURL = user.photoURL || '';
+                    if (isSignUp) {
+                        handleSocialSignUp(user.uid, email, displayName, photoURL, 'google');
+                    } else {
+                        handleSocialSignIn(user.uid, email, displayName, photoURL, 'google');
+                    }
+                }).catch(err => {
+                    console.error('Google sign-in error:', err);
+                    if (err.code === 'auth/popup-closed-by-user') {
+                        showToast('تم إغلاق نافذة تسجيل الدخول.');
+                    } else if (err.code === 'auth/configuration-not-found') {
+                        showToast('⚠️ Google Sign-In غير مفعل في Firebase. راجع الإعدادات.');
+                    } else {
+                        showToast('❌ فشل تسجيل الدخول: ' + err.message);
+                    }
+                });
+            }
+
+            function signInWithFacebook(isSignUp = false) {
+                if (!firebaseInitialized || !auth) {
+                    showToast('⚠️ Firebase غير مهيأ. الرجاء إعداد المشروع أولاً.');
+                    return;
+                }
+                const provider = new firebase.auth.FacebookAuthProvider();
+                provider.setCustomParameters({ display: 'popup' });
+                auth.signInWithPopup(provider).then(result => {
+                    const user = result.user;
+                    const displayName = user.displayName || 'مستخدم';
+                    const email = user.email || '';
+                    const photoURL = user.photoURL || '';
+                    if (isSignUp) {
+                        handleSocialSignUp(user.uid, email, displayName, photoURL, 'facebook');
+                    } else {
+                        handleSocialSignIn(user.uid, email, displayName, photoURL, 'facebook');
+                    }
+                }).catch(err => {
+                    console.error('Facebook sign-in error:', err);
+                    if (err.code === 'auth/popup-closed-by-user') {
+                        showToast('تم إغلاق نافذة تسجيل الدخول.');
+                    } else if (err.code === 'auth/configuration-not-found') {
+                        showToast('⚠️ Facebook Sign-In غير مفعل في Firebase. راجع الإعدادات.');
+                    } else if (err.code === 'auth/account-exists-with-different-credential') {
+                        showToast('⚠️ يوجد حساب مسجل مسبقاً بنفس البريد الإلكتروني.');
+                    } else {
+                        showToast('❌ فشل تسجيل الدخول: ' + err.message);
+                    }
+                });
+            }
+
+            function handleSocialSignUp(uid, email, displayName, photoURL, provider) {
+                const existingId = Object.keys(state.sellers).find(
+                    sid => state.sellers[sid].email === email && state.sellers[sid].id !== 'admin1'
+                );
+                if (existingId) {
+                    state.currentSellerId = existingId;
+                    saveState(state);
+                    showToast('مرحباً بعودتك ' + displayName + '!');
+                    navigate('home');
+                    return;
+                }
+                const sellerId = 's' + uid.replace(/[^a-zA-Z0-9]/g, '').slice(0, 10);
+                state.sellers[sellerId] = {
+                    id: sellerId,
+                    email: email,
+                    password: '',
+                    storeName: displayName,
+                    ownerName: displayName,
+                    phone: '',
+                    country: 'مصر',
+                    avatar: photoURL || '👤',
+                    photoURL: photoURL || '',
+                    provider: provider,
+                    points: 0,
+                    verified: true,
+                    subscription: 'free',
+                    verificationBadge: true,
+                    accountType: 'seller',
+                    maxProducts: 10
+                };
+                state.currentSellerId = sellerId;
+                saveState(state);
+                saveUserToFirestore(state.sellers[sellerId]);
+                showToast('🎉 تم إنشاء الحساب بنجاح! مرحباً ' + displayName);
+                navigate('home');
+            }
+
+            function handleSocialSignIn(uid, email, displayName, photoURL, provider) {
+                let existingSellerId = null;
+                for (const sid in state.sellers) {
+                    if (state.sellers[sid].email === email && sid !== 'admin1') {
+                        existingSellerId = sid;
+                        break;
+                    }
+                }
+                if (existingSellerId) {
+                    state.currentSellerId = existingSellerId;
+                    if (photoURL && !state.sellers[existingSellerId].photoURL) {
+                        state.sellers[existingSellerId].photoURL = photoURL;
+                        state.sellers[existingSellerId].avatar = photoURL;
+                    }
+                    saveState(state);
+                    showToast('مرحباً بعودتك ' + displayName + '!');
+                    navigate('home');
+                } else {
+                    handleSocialSignUp(uid, email, displayName, photoURL, provider);
+                }
+            }
+
+            function scrollToJoinForm() {
+                const formEl = document.getElementById('joinFormFields');
+                if (formEl) {
+                    formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => {
+                        const firstInput = formEl.querySelector('input');
+                        if (firstInput) firstInput.focus();
+                    }, 400);
+                }
+            }
+
+            // ==================== تحميل وحفظ الحالة ====================
             function createInitialData() {
                 const sellers = {
-                    admin: { id: 'admin1', email: 'admin@vicks.com', password: 'admin123', storeName: 'VICKS MARKET', ownerName: 'محمد المالك', phone: '01113694362', points: 50000, verified: true, subscription: 'platinum', country: 'مصر', avatar: '👑', verificationBadge: true, accountType: 'seller', maxProducts: Infinity },
-                    s1: { id: 's1', email: 'seller1@test.com', password: '123456', storeName: 'متجر النور', ownerName: 'أحمد', phone: '01012345678', points: 350, verified: true, subscription: 'silver', country: 'مصر', avatar: '🌟', verificationBadge: true, accountType: 'seller', maxProducts: Infinity },
-                    s2: { id: 's2', email: 'seller2@test.com', password: '123456', storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة', phone: '01198765432', points: 120, verified: false, subscription: 'free', country: 'السعودية', avatar: '🛒', verificationBadge: false, accountType: 'seller', maxProducts: 10 },
-                    cust1: { id: 'cust1', email: 'customer@test.com', password: '123456', storeName: '', ownerName: 'عميل عادي', phone: '01000000000', points: 50, verified: false, subscription: 'free', country: 'مصر', avatar: '👤', verificationBadge: false, accountType: 'customer' }
+                    admin: {
+                        id: 'admin1',
+                        email: 'admin@vicks.com',
+                        password: 'admin123',
+                        storeName: 'VICKS MARKET',
+                        ownerName: 'محمد المالك',
+                        phone: '01113694362',
+                        points: 50000,
+                        verified: true,
+                        subscription: 'platinum',
+                        country: 'مصر',
+                        avatar: '👑',
+                        verificationBadge: true,
+                        accountType: 'seller',
+                        maxProducts: Infinity
+                    },
+                    s1: {
+                        id: 's1',
+                        email: 'seller1@test.com',
+                        password: '123456',
+                        storeName: 'متجر النور',
+                        ownerName: 'أحمد',
+                        phone: '01012345678',
+                        points: 350,
+                        verified: true,
+                        subscription: 'silver',
+                        country: 'مصر',
+                        avatar: '🌟',
+                        verificationBadge: true,
+                        accountType: 'seller',
+                        maxProducts: Infinity
+                    },
+                    s2: {
+                        id: 's2',
+                        email: 'seller2@test.com',
+                        password: '123456',
+                        storeName: 'سوبر ماركت الفرح',
+                        ownerName: 'فاطمة',
+                        phone: '01198765432',
+                        points: 120,
+                        verified: false,
+                        subscription: 'free',
+                        country: 'السعودية',
+                        avatar: '🛒',
+                        verificationBadge: false,
+                        accountType: 'seller',
+                        maxProducts: 10
+                    },
+                    cust1: {
+                        id: 'cust1',
+                        email: 'customer@test.com',
+                        password: '123456',
+                        storeName: '',
+                        ownerName: 'عميل عادي',
+                        phone: '01000000000',
+                        points: 50,
+                        verified: false,
+                        subscription: 'free',
+                        country: 'مصر',
+                        avatar: '👤',
+                        verificationBadge: false,
+                        accountType: 'customer'
+                    }
                 };
                 const products = {};
-                const names = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر', 'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'];
+                const names = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر',
+                    'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'
+                ];
                 const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧', '🍳', '⚽', '💎', '📷'];
                 const cats = ['electronics', 'fashion', 'home', 'smart', 'games', 'accessories'];
                 for (let i = 1; i <= 14; i++) {
@@ -703,17 +1121,25 @@
                         sellerName: sid === 's1' ? 'متجر النور' : 'سوبر ماركت الفرح',
                         likes: (i * 7) % 19,
                         likedBy: [],
-                        comments: ['جيد جداً 👍', 'ممتاز وسرعة في التوصيل', 'سعر مناسب وجودة عالية'].slice(0, (i % 3) + 1),
+                        comments: ['جيد جداً 👍', 'ممتاز وسرعة في التوصيل', 'سعر مناسب وجودة عالية'].slice(0, (i % 3) +
+                            1),
                         rating: i % 5
                     };
                 }
-                return { sellers, products, currentSellerId: null, chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أقدر أساعدك؟', ts: Date.now() }] };
+                return {
+                    sellers,
+                    products,
+                    currentSellerId: null,
+                    chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أقدر أساعدك؟',
+                        ts: Date.now() }]
+                };
             }
 
             function loadState() {
                 try {
                     const raw = localStorage.getItem(STORAGE_KEY);
-                    if (raw) { const st = JSON.parse(raw); if (!st.chatMessages) st.chatMessages = [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET!', ts: Date.now() }]; return st; }
+                    if (raw) { const st = JSON.parse(raw); if (!st.chatMessages) st.chatMessages = [{ id: '1',
+                            role: 'bot', text: 'أهلاً بك في VICKS MARKET!', ts: Date.now() }]; return st; }
                     return createInitialData();
                 } catch { return createInitialData(); }
             }
@@ -768,11 +1194,17 @@
                             <div class="form-group"><label>كلمة المرور</label><input type="password" id="loginPassword" placeholder="********"></div>
                             <button class="btn-primary" onclick="login()">دخول</button>
                             <div class="separator-text" style="margin:16px 0;">أو</div>
-                            <button class="social-btn google" onclick="showToast('تسجيل الدخول عبر Google قيد التطوير')"><i class="fab fa-google"></i> متابعة عبر Google</button>
-                            <button class="social-btn facebook" onclick="showToast('تسجيل الدخول عبر Facebook قيد التطوير')"><i class="fab fa-facebook-f"></i> متابعة عبر Facebook</button>
+                            <button class="social-btn google" id="googleLoginBtn"><i class="fab fa-google"></i> متابعة عبر Google</button>
+                            <button class="social-btn facebook" id="facebookLoginBtn"><i class="fab fa-facebook-f"></i> متابعة عبر Facebook</button>
                             <p style="text-align:center;margin-top:16px;font-size:0.8rem;">ليس لديك حساب؟ <a href="#" onclick="navigate('join');return false;" style="color:var(--orange);font-weight:700;">انضم الآن</a></p>
                         </div>
                     </div>`;
+                setTimeout(() => {
+                    const gBtn = document.getElementById('googleLoginBtn');
+                    const fbBtn = document.getElementById('facebookLoginBtn');
+                    if (gBtn) gBtn.onclick = () => signInWithGoogle(false);
+                    if (fbBtn) fbBtn.onclick = () => signInWithFacebook(false);
+                }, 50);
                 return container;
             }
 
@@ -781,8 +1213,10 @@
                 const password = document.getElementById('loginPassword')?.value.trim();
                 if (!email || !password) return showToast('يرجى ملء البريد الإلكتروني وكلمة المرور');
                 const seller = Object.values(state.sellers).find(s => s.email === email && s.password === password);
-                if (seller) { state.currentSellerId = seller.id; saveState(state); showToast('مرحباً ' + seller.ownerName); navigate('home'); }
-                else showToast('بيانات الدخول غير صحيحة');
+                if (seller) { state.currentSellerId = seller.id;
+                    saveState(state);
+                    showToast('مرحباً ' + seller.ownerName);
+                    navigate('home'); } else showToast('بيانات الدخول غير صحيحة');
             }
 
             function buildJoinPage() {
@@ -796,20 +1230,31 @@
                     </div>
                     <div class="content-scroll" style="padding:16px;">
                         <div style="max-width:400px;margin:0 auto;">
-                            <div class="form-group"><label>اسم المتجر</label><input type="text" id="joinStoreName" placeholder="مثال: متجر النور"></div>
-                            <div class="form-group"><label>اسم المالك</label><input type="text" id="joinOwnerName" placeholder="الاسم الكامل"></div>
-                            <div class="form-group"><label>رقم الهاتف</label><input type="tel" id="joinPhone" placeholder="01xxxxxxxxx"></div>
-                            <div class="form-group"><label>الدولة</label><select id="joinCountry"><option value="مصر">مصر</option><option value="السعودية">السعودية</option><option value="الإمارات">الإمارات</option><option value="الكويت">الكويت</option><option value="قطر">قطر</option><option value="البحرين">البحرين</option><option value="عمان">عمان</option><option value="الأردن">الأردن</option><option value="لبنان">لبنان</option><option value="المغرب">المغرب</option><option value="الجزائر">الجزائر</option><option value="تونس">تونس</option></select></div>
-                            <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="joinEmail" placeholder="example@mail.com"></div>
-                            <div class="form-group"><label>كلمة المرور</label><input type="password" id="joinPassword" placeholder="********"></div>
-                            <button class="btn-primary" onclick="registerSeller()">إنشاء حساب</button>
-                            <div class="separator-text">أو قم بالتسجيل عبر</div>
-                            <button class="social-btn google" onclick="showToast('التسجيل عبر Google قيد التطوير')"><i class="fab fa-google"></i> التسجيل عبر Google</button>
-                            <button class="social-btn facebook" onclick="showToast('التسجيل عبر Facebook قيد التطوير')"><i class="fab fa-facebook-f"></i> التسجيل عبر Facebook</button>
-                            <button class="social-btn email-signup" onclick="showToast('التسجيل عبر البريد الإلكتروني قيد التطوير')"><i class="fas fa-envelope"></i> التسجيل عبر البريد الإلكتروني</button>
+                            <div class="separator-text" style="margin:8px 0 16px;">سجل بسرعة عبر</div>
+                            <button class="social-btn google" id="joinGoogleBtn"><i class="fab fa-google"></i> التسجيل عبر Google</button>
+                            <button class="social-btn facebook" id="joinFacebookBtn"><i class="fab fa-facebook-f"></i> التسجيل عبر Facebook</button>
+                            <button class="social-btn email-signup" id="joinEmailScrollBtn"><i class="fas fa-envelope"></i> التسجيل عبر البريد الإلكتروني</button>
+                            <div class="separator-text" style="margin:16px 0;">أو املأ البيانات يدوياً</div>
+                            <div id="joinFormFields">
+                                <div class="form-group"><label>اسم المتجر</label><input type="text" id="joinStoreName" placeholder="مثال: متجر النور"></div>
+                                <div class="form-group"><label>اسم المالك</label><input type="text" id="joinOwnerName" placeholder="الاسم الكامل"></div>
+                                <div class="form-group"><label>رقم الهاتف</label><input type="tel" id="joinPhone" placeholder="01xxxxxxxxx"></div>
+                                <div class="form-group"><label>الدولة</label><select id="joinCountry"><option value="مصر">مصر</option><option value="السعودية">السعودية</option><option value="الإمارات">الإمارات</option><option value="الكويت">الكويت</option><option value="قطر">قطر</option><option value="البحرين">البحرين</option><option value="عمان">عمان</option><option value="الأردن">الأردن</option><option value="لبنان">لبنان</option><option value="المغرب">المغرب</option><option value="الجزائر">الجزائر</option><option value="تونس">تونس</option></select></div>
+                                <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="joinEmail" placeholder="example@mail.com"></div>
+                                <div class="form-group"><label>كلمة المرور</label><input type="password" id="joinPassword" placeholder="********"></div>
+                                <button class="btn-primary" onclick="registerSeller()">إنشاء حساب</button>
+                            </div>
                             <p style="text-align:center;margin-top:16px;font-size:0.8rem;">لديك حساب بالفعل؟ <a href="#" onclick="navigate('login');return false;" style="color:var(--orange);font-weight:700;">تسجيل الدخول</a></p>
                         </div>
                     </div>`;
+                setTimeout(() => {
+                    const gBtn = document.getElementById('joinGoogleBtn');
+                    const fbBtn = document.getElementById('joinFacebookBtn');
+                    const emailScrollBtn = document.getElementById('joinEmailScrollBtn');
+                    if (gBtn) gBtn.onclick = () => signInWithGoogle(true);
+                    if (fbBtn) fbBtn.onclick = () => signInWithFacebook(true);
+                    if (emailScrollBtn) emailScrollBtn.onclick = () => scrollToJoinForm();
+                }, 50);
                 return container;
             }
 
@@ -820,18 +1265,40 @@
                 const country = document.getElementById('joinCountry')?.value;
                 const email = document.getElementById('joinEmail')?.value.trim();
                 const password = document.getElementById('joinPassword')?.value.trim();
-                if (!storeName || !ownerName || !phone || !email || !password) return showToast('يرجى ملء جميع الحقول المطلوبة');
+                if (!storeName || !ownerName || !phone || !email || !password) return showToast(
+                    'يرجى ملء جميع الحقول المطلوبة');
                 const id = 's' + Date.now();
-                state.sellers[id] = { id, email, password, storeName, ownerName, phone, country, points: 0, verified: false, subscription: 'free', avatar: '👤', verificationBadge: false, accountType: 'seller', maxProducts: 10 };
+                const userData = {
+                    id,
+                    email,
+                    password,
+                    storeName,
+                    ownerName,
+                    phone,
+                    country,
+                    avatar: '👤',
+                    photoURL: '',
+                    provider: 'email',
+                    points: 0,
+                    verified: false,
+                    subscription: 'free',
+                    verificationBadge: false,
+                    accountType: 'seller',
+                    maxProducts: 10
+                };
+                state.sellers[id] = userData;
                 state.currentSellerId = id;
                 saveState(state);
+                saveUserToFirestore(userData);
                 showToast('تم إنشاء حساب التاجر بنجاح!');
                 navigate('home');
             }
 
             function navigate(page) {
                 currentPage = page;
-                if (page === 'home') { showSearch = false; commentsProduct = null; previewProduct = null; }
+                if (page === 'home') { showSearch = false;
+                    commentsProduct = null;
+                    previewProduct = null; }
                 render();
             }
 
@@ -839,7 +1306,8 @@
                 const seller = state.sellers[prod.sellerId] || {};
                 const isLoggedIn = !!state.currentSellerId;
                 const liked = isLoggedIn ? prod.likedBy.includes(state.currentSellerId) : isGuestLiked(prod.id);
-                const shortName = (seller.storeName || 'متجر').length > 10 ? (seller.storeName || 'متجر').slice(0, 8) + '..' : (seller.storeName || 'متجر');
+                const shortName = (seller.storeName || 'متجر').length > 10 ? (seller.storeName || 'متجر').slice(0,
+                    8) + '..' : (seller.storeName || 'متجر');
                 const contactMethod = getContactMethod();
                 const contactIconClass = contactMethod === 'telegram' ? 'fa-telegram-plane' : 'fa-whatsapp';
                 const contactBtnBg = contactMethod === 'telegram' ? '#e0f4ff' : '#dcfce7';
@@ -849,7 +1317,9 @@
                 const imgDiv = document.createElement('div');
                 imgDiv.className = 'product-image';
                 imgDiv.textContent = prod.emoji;
-                imgDiv.onclick = (e) => { e.stopPropagation(); previewProduct = prod; render(); };
+                imgDiv.onclick = (e) => { e.stopPropagation();
+                    previewProduct = prod;
+                    render(); };
                 card.appendChild(imgDiv);
                 const cardBody = document.createElement('div');
                 cardBody.className = 'card-body';
@@ -862,14 +1332,19 @@
                 for (let i = 0; i < 5; i++) {
                     const star = document.createElement('i');
                     star.className = `fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'}`;
-                    star.onclick = (e) => { e.stopPropagation(); prod.rating = i + 1; saveState(state); render(); };
+                    star.onclick = (e) => { e.stopPropagation();
+                        prod.rating = i + 1;
+                        saveState(state);
+                        render(); };
                     starsDiv.appendChild(star);
                 }
                 cardBody.appendChild(starsDiv);
                 const sellerDiv = document.createElement('div');
                 sellerDiv.className = 'seller-info';
-                sellerDiv.innerHTML = `<span class="seller-avatar">${seller.avatar||'🏪'}</span><span class="seller-name-text">${shortName}</span>${seller.verificationBadge ? '<i class="fas fa-check-circle" style="color:#3b82f6;font-size:9px;"></i>' : ''}`;
-                sellerDiv.onclick = (e) => { e.stopPropagation(); showToast(`ملف التاجر: ${seller.storeName||'مستخدم'}`); };
+                sellerDiv.innerHTML =
+                    `<span class="seller-avatar">${seller.avatar||'🏪'}</span><span class="seller-name-text">${shortName}</span>${seller.verificationBadge ? '<i class="fas fa-check-circle" style="color:#3b82f6;font-size:9px;"></i>' : ''}`;
+                sellerDiv.onclick = (e) => { e.stopPropagation();
+                    showToast(`ملف التاجر: ${seller.storeName||'مستخدم'}`); };
                 cardBody.appendChild(sellerDiv);
                 const bottomRow = document.createElement('div');
                 bottomRow.className = 'bottom-row';
@@ -879,19 +1354,32 @@
                 contactBtn.className = 'action-btn';
                 contactBtn.style.cssText = `background:${contactBtnBg};color:${contactBtnColor};`;
                 contactBtn.innerHTML = `<i class="fab ${contactIconClass}"></i>`;
-                contactBtn.onclick = (e) => { e.stopPropagation(); const phone = seller.phone || '01113694362'; const msg = encodeURIComponent(`مرحباً، أنا مهتم بمنتج: ${prod.name}`); window.open(getContactMethod() === 'telegram' ? `https://t.me/+2${phone}?text=${msg}` : `https://wa.me/+2${phone}?text=${msg}`, '_blank'); };
+                contactBtn.onclick = (e) => { e.stopPropagation(); const phone = seller.phone || '01113694362';
+                    const msg = encodeURIComponent(`مرحباً، أنا مهتم بمنتج: ${prod.name}`);
+                    window.open(getContactMethod() === 'telegram' ?
+                        `https://t.me/+2${phone}?text=${msg}` :
+                        `https://wa.me/+2${phone}?text=${msg}`, '_blank'); };
                 actions.appendChild(contactBtn);
                 const commBtn = document.createElement('button');
                 commBtn.className = 'action-btn';
                 commBtn.style.cssText = 'background:#dbeafe;color:#2563eb;';
                 commBtn.innerHTML = '<i class="fas fa-comment"></i>';
-                commBtn.onclick = (e) => { e.stopPropagation(); commentsProduct = prod; render(); };
+                commBtn.onclick = (e) => { e.stopPropagation();
+                    commentsProduct = prod;
+                    render(); };
                 actions.appendChild(commBtn);
                 const likeBtn = document.createElement('button');
                 likeBtn.className = 'action-btn';
                 likeBtn.style.cssText = `background:${liked ? '#ff6600' : '#f3f4f6'};color:${liked ? 'white' : '#6b7280'};`;
                 likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
-                likeBtn.onclick = (e) => { e.stopPropagation(); if (isLoggedIn) { const idx = prod.likedBy.indexOf(state.currentSellerId); if (idx >= 0) { prod.likedBy.splice(idx, 1); prod.likes = Math.max(0, prod.likes - 1); } else { prod.likedBy.push(state.currentSellerId); prod.likes++; } } else { const nowLiked = toggleGuestLike(prod.id); if (nowLiked) prod.likes++; else prod.likes = Math.max(0, prod.likes - 1); } saveState(state); render(); };
+                likeBtn.onclick = (e) => { e.stopPropagation(); if (isLoggedIn) { const idx = prod.likedBy.indexOf(
+                        state.currentSellerId); if (idx >= 0) { prod.likedBy.splice(idx, 1);
+                        prod.likes = Math.max(0, prod.likes - 1); } else { prod.likedBy.push(state
+                            .currentSellerId);
+                        prod.likes++; } } else { const nowLiked = toggleGuestLike(prod.id); if (
+                        nowLiked) prod.likes++; else prod.likes = Math.max(0, prod.likes - 1); } saveState(
+                        state);
+                    render(); };
                 actions.appendChild(likeBtn);
                 bottomRow.appendChild(actions);
                 const priceEl = document.createElement('span');
@@ -935,18 +1423,24 @@
                     container.appendChild(searchOverlay);
                 }
                 const categoriesRow = document.createElement('div');
-                categoriesRow.style.cssText = 'display:flex;gap:6px;overflow-x:auto;padding:8px 10px;flex-shrink:0;';
-                const categories = [{ id: 'all', label: 'الكل' }, { id: 'electronics', label: '📱 إلكترونيات' }, { id: 'fashion', label: '👗 موضة' }, { id: 'home', label: '🏠 منزل' }, { id: 'smart', label: '⌚ ذكي' }, { id: 'games', label: '🎮 ألعاب' }, { id: 'accessories', label: '💎 إكسسوارات' }];
+                categoriesRow.style.cssText =
+                    'display:flex;gap:6px;overflow-x:auto;padding:8px 10px;flex-shrink:0;';
+                const categories = [{ id: 'all', label: 'الكل' }, { id: 'electronics', label: '📱 إلكترونيات' }, { id: 'fashion',
+                    label: '👗 موضة' }, { id: 'home', label: '🏠 منزل' }, { id: 'smart', label: '⌚ ذكي' }, { id: 'games',
+                    label: '🎮 ألعاب' }, { id: 'accessories', label: '💎 إكسسوارات' }
+                ];
                 categories.forEach(cat => {
                     const btn = document.createElement('button');
                     btn.className = 'category-btn' + (activeCategory === cat.id ? ' active' : '');
                     btn.textContent = cat.label;
-                    btn.onclick = () => { activeCategory = cat.id; render(); };
+                    btn.onclick = () => { activeCategory = cat.id;
+                        render(); };
                     categoriesRow.appendChild(btn);
                 });
                 container.appendChild(categoriesRow);
                 const viewToggleRow = document.createElement('div');
-                viewToggleRow.style.cssText = 'display:flex;gap:8px;padding:4px 10px;flex-shrink:0;align-items:center;';
+                viewToggleRow.style.cssText =
+                    'display:flex;gap:8px;padding:4px 10px;flex-shrink:0;align-items:center;';
                 viewToggleRow.innerHTML = `
                     <button class="icon-btn" onclick="setView('grid')" style="${viewMode==='grid'?'background:var(--orange);color:white;':''}"><i class="fas fa-th"></i></button>
                     <button class="icon-btn" onclick="setView('list')" style="${viewMode==='list'?'background:var(--orange);color:white;':''}"><i class="fas fa-list"></i></button>
@@ -980,7 +1474,8 @@
                 if (!commentsProduct) return document.createElement('div');
                 const overlay = document.createElement('div');
                 overlay.className = 'comments-overlay';
-                overlay.onclick = (e) => { if (e.target === overlay) { commentsProduct = null; render(); } };
+                overlay.onclick = (e) => { if (e.target === overlay) { commentsProduct = null;
+                        render(); } };
                 const panel = document.createElement('div');
                 panel.className = 'comments-panel';
                 panel.innerHTML = `
@@ -995,9 +1490,10 @@
                 if (!previewProduct) return document.createElement('div');
                 const overlay = document.createElement('div');
                 overlay.className = 'image-preview-overlay';
-                overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;';
-                overlay.onclick = () => { previewProduct = null; render(); };
-                overlay.innerHTML = `<div style="font-size:8rem;">${previewProduct.emoji}</div><div style="color:white;margin-top:16px;font-weight:bold;">${previewProduct.name}</div>`;
+                overlay.onclick = () => { previewProduct = null;
+                    render(); };
+                overlay.innerHTML =
+                    `<div style="font-size:8rem;">${previewProduct.emoji}</div><div style="color:white;margin-top:16px;font-weight:bold;">${previewProduct.name}</div>`;
                 return overlay;
             }
 
@@ -1047,53 +1543,125 @@
                 const container = document.createElement('div');
                 container.className = 'app-container';
                 container.innerHTML = `
-                    <div class="header"><button class="icon-btn" onclick="navigate('home')"><i class="fas fa-arrow-right"></i></button><h1 style="font-weight:800;">الملف الشخصي</h1><button class="icon-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button></div>
-                    <div class="content-scroll" style="padding:16px;">
-                        <div class="profile-avatar-large" style="width:90px;height:90px;border-radius:50%;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:3.5rem;margin:0 auto 12px;border:3px solid var(--orange);">${seller.avatar}</div>
-                        <div class="profile-info-row"><div class="info-icon"><i class="fas fa-store"></i></div><div class="info-content"><div class="info-label">المتجر</div><div class="info-value">${seller.storeName||'غير محدد'}</div></div></div>
-                        <div class="profile-info-row"><div class="info-icon"><i class="fas fa-user"></i></div><div class="info-content"><div class="info-label">المالك</div><div class="info-value">${seller.ownerName}</div></div></div>
-                        <div class="profile-info-row"><div class="info-icon"><i class="fas fa-phone"></i></div><div class="info-content"><div class="info-label">الهاتف</div><div class="info-value">${seller.phone}</div></div></div>
-                        <div class="profile-info-row"><div class="info-icon"><i class="fas fa-envelope"></i></div><div class="info-content"><div class="info-label">البريد</div><div class="info-value">${seller.email}</div></div></div>
-                        <div class="profile-info-row"><div class="info-icon"><i class="fas fa-globe"></i></div><div class="info-content"><div class="info-label">الدولة</div><div class="info-value">${seller.country}</div></div></div>
-                        <div class="profile-info-row"><div class="info-icon"><i class="fas fa-star"></i></div><div class="info-content"><div class="info-label">النقاط</div><div class="info-value">${seller.points}</div></div></div>
+                    <div class="header"><button class="icon-btn" onclick="navigate('home')"><i class="fas fa-arrow-right"></i></button><h1 style="font-weight:800;">الملف الشخصي</h1><div style="width:36px;"></div></div>
+                    <div class="content-scroll" style="padding:16px;text-align:center;">
+                        <div style="font-size:4rem;">${seller.avatar||'👤'}</div>
+                        <h2 style="font-weight:700;margin-top:8px;">${seller.storeName||seller.ownerName}</h2>
+                        <p style="color:var(--text-sub);">${seller.email}</p>
+                        <p style="color:var(--text-sub);">${seller.phone||'لا يوجد'}</p>
+                        <p style="color:var(--text-sub);">الدولة: ${seller.country||'غير محدد'}</p>
+                        <p style="color:var(--text-sub);">الباقة: ${seller.subscription==='platinum'?'بلاتينيوم':seller.subscription==='gold'?'ذهبي':seller.subscription==='silver'?'فضي':'مجاني'}</p>
+                        <p style="color:var(--text-sub);">النقاط: ${seller.points||0}</p>
+                        <button class="btn-primary" style="margin-top:20px;" onclick="logout()">تسجيل الخروج</button>
                     </div>`;
                 return container;
             }
 
-            // Expose globally
-            window.showToast = showToast;
-            window.navigate = navigate;
-            window.login = login;
-            window.registerSeller = registerSeller;
-            window.toggleSearch = () => { showSearch = !showSearch; render(); };
-            window.closeSearch = () => { showSearch = false; render(); };
-            window.updateSearch = (val) => { searchQuery = val; render(); };
-            window.setView = (mode) => { viewMode = mode; render(); };
-            window.openChatFullscreen = () => { showChatFullscreen = true; render(); };
-            window.closeChatFullscreen = () => { showChatFullscreen = false; render(); };
-            window.closeComments = () => { commentsProduct = null; render(); };
-            window.submitComment = () => {
-                if (!commentsProduct) return;
-                const input = document.getElementById('commentInputField');
-                if (input && input.value.trim()) { commentsProduct.comments.push(input.value.trim()); saveState(state); input.value = ''; render(); }
-            };
-            window.sendFullChat = () => {
+            function logout() {
+                state.currentSellerId = null;
+                saveState(state);
+                if (auth && auth.currentUser) {
+                    auth.signOut().catch(() => {});
+                }
+                showToast('تم تسجيل الخروج');
+                navigate('home');
+            }
+
+            // ==================== الدوال العامة ====================
+            function toggleSearch() { showSearch = !showSearch;
+                render(); }
+
+            function closeSearch() { showSearch = false;
+                searchQuery = '';
+                render(); }
+
+            function updateSearch(val) { searchQuery = val;
+                render(); }
+
+            function setView(mode) { viewMode = mode;
+                render(); }
+
+            function toggleTheme() {
+                document.body.classList.toggle('dark');
+                localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light');
+                render();
+            }
+
+            function switchContact() {
+                const current = getContactMethod();
+                const next = current === 'whatsapp' ? 'telegram' : 'whatsapp';
+                setContactMethod(next);
+                showToast('تم التبديل إلى ' + (next === 'telegram' ? 'تليجرام' : 'واتساب'));
+                render();
+            }
+
+            function openChatFullscreen() { showChatFullscreen = true;
+                render(); }
+
+            function closeChatFullscreen() { showChatFullscreen = false;
+                render(); }
+
+            function sendFullChat() {
                 const input = document.getElementById('fullChatInput');
                 if (!input || !input.value.trim()) return;
-                state.chatMessages.push({ id: 'm'+Date.now(), role: 'user', text: input.value.trim(), ts: Date.now() });
+                const text = input.value.trim();
+                state.chatMessages.push({ id: 'u' + Date.now(), role: 'user', text, ts: Date.now() });
                 input.value = '';
-                setTimeout(() => { state.chatMessages.push({ id: 'm'+Date.now(), role: 'bot', text: 'شكراً لتواصلك، سأقوم بمساعدتك قريباً.', ts: Date.now() }); saveState(state); render(); }, 800);
-                saveState(state); render();
-            };
-            window.toggleTheme = () => { document.body.classList.toggle('dark'); localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light'); };
-            window.openCamera = () => document.getElementById('cameraInput').click();
-            window.openGallery = () => document.getElementById('galleryInput').click();
-            window.switchContact = () => { const newMethod = getContactMethod() === 'whatsapp' ? 'telegram' : 'whatsapp'; setContactMethod(newMethod); showToast('تم التبديل إلى ' + (newMethod === 'telegram' ? 'تليجرام' : 'واتساب')); render(); };
-            window.logout = () => { state.currentSellerId = null; saveState(state); showToast('تم تسجيل الخروج'); navigate('home'); };
+                saveState(state);
+                render();
+                setTimeout(() => {
+                    state.chatMessages.push({
+                        id: 'b' + Date.now(),
+                        role: 'bot',
+                        text: 'شكراً لتواصلك! فريق VICKS MARKET جاهز لخدمتك. 🙌',
+                        ts: Date.now()
+                    });
+                    saveState(state);
+                    render();
+                }, 800);
+            }
 
-            if (localStorage.getItem(THEME_KEY) === 'dark') document.body.classList.add('dark');
+            function closeComments() { commentsProduct = null;
+                render(); }
+
+            function submitComment() {
+                const input = document.getElementById('commentInputField');
+                if (!input || !input.value.trim() || !commentsProduct) return;
+                commentsProduct.comments.push(input.value.trim());
+                input.value = '';
+                saveState(state);
+                render();
+            }
+
+            // ==================== تعريض الدوال عالمياً ====================
+            window.navigate = navigate;
+            window.toggleSearch = toggleSearch;
+            window.closeSearch = closeSearch;
+            window.updateSearch = updateSearch;
+            window.setView = setView;
+            window.toggleTheme = toggleTheme;
+            window.switchContact = switchContact;
+            window.openChatFullscreen = openChatFullscreen;
+            window.closeChatFullscreen = closeChatFullscreen;
+            window.sendFullChat = sendFullChat;
+            window.closeComments = closeComments;
+            window.submitComment = submitComment;
+            window.login = login;
+            window.registerSeller = registerSeller;
+            window.showToast = showToast;
+            window.signInWithGoogle = signInWithGoogle;
+            window.signInWithFacebook = signInWithFacebook;
+            window.scrollToJoinForm = scrollToJoinForm;
+            window.logout = logout;
+
+            // ==================== تحميل الثيم عند البداية ====================
+            if (localStorage.getItem(THEME_KEY) === 'dark') {
+                document.body.classList.add('dark');
+            }
+
+            // ==================== العرض الأولي ====================
             render();
         })();
     </script>
 </body>
-</html>
+    </html>
