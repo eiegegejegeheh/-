@@ -20,8 +20,8 @@
         body.dark .text-blue-600, body.dark span, body.dark p, body.dark h1, body.dark h2, body.dark h3,
         body.dark .product-name, body.dark .seller-name, body.dark .price { color: #ff6600 !important; }
         body.dark .border, body.dark .border-gray-100, body.dark .border-t { border-color: #ff6600 !important; border-width: 0.5px; }
-        
-        /* العلامة المائية في منتصف شاشة الدردشة */
+
+        /* العلامة المائية في المنتصف */
         .chat-watermark {
             position: absolute;
             top: 50%;
@@ -38,8 +38,8 @@
             z-index: 5;
         }
         body.dark .chat-watermark { opacity: 0.1; color: #ff6600; }
-        
-        /* شريط الإدخال الثابت للدردشة */
+
+        /* شريط الإدخال */
         .chat-input-bar {
             position: fixed;
             bottom: 0;
@@ -64,8 +64,8 @@
             outline: none;
         }
         body.dark .chat-input { background-color: #2a2a2a; color: #ff6600; }
-        
-        /* أزرار الدردشة - مربعة ومتناسقة */
+
+        /* أزرار الدردشة مربعة الشكل */
         .chat-icon-btn {
             width: 40px;
             height: 40px;
@@ -80,25 +80,10 @@
             flex-shrink: 0;
         }
         body.dark .chat-icon-btn { background-color: #2a2a2a; color: #ff6600; }
-        .chat-icon-btn:hover { background-color: #e5e7eb; }
-        body.dark .chat-icon-btn:hover { background-color: #3a3a3a; }
         .send-btn { background-color: #ff6600; color: white; border-radius: 12px; }
         body.dark .send-btn { background-color: #ff6600; color: #000000; }
-        .send-btn:hover { background-color: #e55a00; }
-        
-        /* فقاعات المحادثة */
-        .message-bubble-user { background-color: #ff6600; color: white; border-radius: 20px 20px 4px 20px; }
-        .message-bubble-bot { background-color: #e5e7eb; color: #1f2937; border-radius: 20px 20px 20px 4px; }
-        body.dark .message-bubble-bot { background-color: #2a2a2a; color: #ff6600; }
-        .messages-container { overflow-y: auto; padding: 16px 12px; padding-bottom: 85px; }
-        
-        /* أزرار المنتج المصغرة */
-        .action-btn-row {
-            display: flex;
-            gap: 4px;
-            justify-content: center;
-            align-items: center;
-        }
+
+        /* أزرار التفاعل المصغرة */
         .action-btn-sm {
             width: 26px;
             height: 26px;
@@ -110,7 +95,13 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        
+        .action-btn-row {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+        }
+
         /* شريط البحث المنبثق */
         .search-overlay {
             position: absolute;
@@ -128,7 +119,7 @@
             from { opacity: 0; transform: translateY(-8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         /* شريط الفئات القابل للسحب */
         .categories-scroll {
             display: flex;
@@ -139,6 +130,12 @@
             scrollbar-width: none;
         }
         .categories-scroll::-webkit-scrollbar { display: none; }
+
+        /* فقاعات المحادثة */
+        .message-bubble-user { background-color: #ff6600; color: white; border-radius: 20px 20px 4px 20px; }
+        .message-bubble-bot { background-color: #e5e7eb; color: #1f2937; border-radius: 20px 20px 20px 4px; }
+        body.dark .message-bubble-bot { background-color: #2a2a2a; color: #ff6600; }
+        .messages-container { overflow-y: auto; padding: 16px 12px; padding-bottom: 85px; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -151,15 +148,14 @@
     <script type="text/babel" data-presets="react,typescript">
         const { useState, useEffect, useRef } = React;
 
-        // ---------- بيانات ثابتة ----------
-        const STORAGE_KEY = 'vicks_market_final_v3';
-        const THEME_KEY = 'vicks_theme_v3';
+        // ---------- ثوابت ----------
+        const STORAGE_KEY = 'vicks_market_final_v4';
+        const THEME_KEY = 'vicks_theme_v4';
         const ADMIN_EMAIL = 'mom1113694362@gmail.com';
         const ADMIN_PASS = 'momMOM2023#';
         const ADMIN_ID = '10000000000';
         function genId() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 
-        // قائمة الفئات الجديدة
         const categories = [
             { id: 'all', label: 'الجميع', icon: '🌐' },
             { id: 'electronics', label: 'إلكترونيات', icon: '📱' },
@@ -194,7 +190,7 @@
         const productNames = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر', 'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'];
         const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧', '🍳', '⚽', '💎', '📷'];
         const possibleCategories = ['electronics', 'fashion', 'home', 'smart', 'games', 'accessories'];
-        
+
         const initialProducts = {};
         for (let i = 1; i <= 14; i++) {
             const sellerId = i % 2 === 0 ? 's2' : 's1';
@@ -227,539 +223,221 @@
                 chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟', ts: Date.now() }]
             };
         }
-
-        function loadState() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (!raw) return getInitialState();
-                const p = JSON.parse(raw);
-                return (p && p.sellers && p.products) ? p : getInitialState();
-            } catch { return getInitialState(); }
-        }
+        function loadState() { try { const r = localStorage.getItem(STORAGE_KEY); return r ? (JSON.parse(r) || getInitialState()) : getInitialState(); } catch { return getInitialState(); } }
         function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
-        function createSeller(data) {
-            return { id: 's_' + genId(), ...data, points: 0, verified: false, subscription: 'free', products: [], createdAt: Date.now(), isAdmin: false, verificationBadge: false, avatar: '🛍️' };
-        }
-        function createProduct(data) {
-            return { id: 'p_' + genId(), ...data, likes: 0, likedBy: [], createdAt: Date.now(), vip: false, comments: [], rating: 0 };
-        }
-        function addMessage(state, msg) { return { ...state, chatMessages: [...state.chatMessages, { ...msg, id: genId(), ts: Date.now() }] }; }
-        function botReply(txt) {
-            const m = txt.toLowerCase();
-            if (m.includes('سعر')) return 'يمكنك الاطلاع على الأسعار في الصفحة الرئيسية. هل تبحث عن منتج معين؟';
-            if (m.includes('بائع')) return 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد".';
-            if (m.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة المتجر (حسابي ← المتجر والنقاط).';
-            return 'شكراً لتواصلك! كيف يمكنني مساعدتك اليوم؟';
+        function createSeller(d) { return { id:'s_'+genId(), ...d, points:0, verified:false, subscription:'free', products:[], createdAt:Date.now(), isAdmin:false, verificationBadge:false, avatar:'🛍️' }; }
+        function createProduct(d) { return { id:'p_'+genId(), ...d, likes:0, likedBy:[], createdAt:Date.now(), vip:false, comments:[], rating:0 }; }
+        function addMessage(s, m) { return {...s, chatMessages:[...s.chatMessages, {...m, id:genId(), ts:Date.now()}]}; }
+        function botReply(t) {
+            const tx = t.toLowerCase();
+            if(tx.includes('سعر')) return 'يمكنك الاطلاع على الأسعار في الصفحة الرئيسية.';
+            if(tx.includes('بائع')) return 'للانضمام كبائع: اضغط أيقونة المستخدم ثم "انضم كتاجر جديد".';
+            if(tx.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة المتجر.';
+            return 'شكراً لتواصلك! كيف يمكنني مساعدتك؟';
         }
 
-        // ---------- مكونات الواجهة ----------
-        
-        // مكون الدردشة المحسن
+        // ---------- مكونات محسنة ----------
         function ChatPage({ messages, onSend, onBack }) {
             const [input, setInput] = useState('');
-            const fileRef = useRef(null);
-            const camRef = useRef(null);
-            const endRef = useRef(null);
-            const send = () => { if (input.trim()) { onSend(input.trim()); setInput(''); } };
-            useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+            const fileRef = useRef(null), camRef = useRef(null), endRef = useRef(null);
+            const send = () => { if(input.trim()) { onSend(input.trim()); setInput(''); } };
+            useEffect(() => { endRef.current?.scrollIntoView({behavior:'smooth'}); }, [messages]);
 
             return (
-                <div className="flex flex-col relative bg-gray-50" style={{ height: '100vh', overflow: 'hidden' }}>
+                <div className="flex flex-col relative bg-gray-50" style={{height:'100vh', overflow:'hidden'}}>
                     <div className="flex items-center p-4 border-b bg-white z-10">
-                        <button onClick={onBack} className="hover:text-orange-500 ml-2"><i className="fas fa-arrow-right text-lg"></i></button>
+                        <button onClick={onBack} className="ml-2"><i className="fas fa-arrow-right text-lg"></i></button>
                         <h1 className="flex-1 text-center font-bold text-lg"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1>
                     </div>
-                    
-                    {/* العلامة المائية في المنتصف تماماً */}
-                    <div className="chat-watermark">
-                        <i className="fas fa-robot text-4xl"></i>
-                        <span className="text-3xl font-bold">VICKS AI</span>
-                    </div>
-                    
-                    {/* منطقة الرسائل */}
-                    <div className="messages-container flex-1" style={{ position: 'relative', zIndex: 5 }}>
-                        {messages.map(msg => (
-                            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} mb-3`}>
-                                <div className={`max-w-[75%] p-3 text-sm ${msg.role === 'user' ? 'message-bubble-user' : 'message-bubble-bot'}`}>
-                                    {msg.text}
-                                </div>
+                    <div className="chat-watermark"><i className="fas fa-robot text-4xl"></i><span className="text-3xl font-bold">VICKS AI</span></div>
+                    <div className="messages-container flex-1" style={{position:'relative', zIndex:5}}>
+                        {messages.map(m => (
+                            <div key={m.id} className={`flex ${m.role==='user'?'justify-end':'justify-start'} mb-3`}>
+                                <div className={`max-w-[75%] p-3 text-sm ${m.role==='user'?'message-bubble-user':'message-bubble-bot'}`}>{m.text}</div>
                             </div>
                         ))}
                         <div ref={endRef} />
                     </div>
 
-                    {/* شريط الإدخال المحسن - إرسال يمين، + وكاميرا يسار */}
+                    {/* شريط الإدخال: إرسال يمين، + وكاميرا يسار */}
                     <div className="chat-input-bar">
-                        {/* الجانب الأيسر: زر + والكاميرا */}
                         <div className="flex gap-2">
-                            <button onClick={() => fileRef.current.click()} className="chat-icon-btn" title="رفع ملف">
-                                <i className="fas fa-plus"></i>
-                            </button>
-                            <button onClick={() => camRef.current.click()} className="chat-icon-btn" title="كاميرا">
-                                <i className="fas fa-camera"></i>
-                            </button>
+                            <button onClick={()=>fileRef.current.click()} className="chat-icon-btn"><i className="fas fa-plus"></i></button>
+                            <button onClick={()=>camRef.current.click()} className="chat-icon-btn"><i className="fas fa-camera"></i></button>
                         </div>
-
-                        {/* حقل الإدخال في المنتصف */}
-                        <input
-                            type="text"
-                            className="chat-input"
-                            placeholder="هيا نتحدث.. ما مشكلتك؟"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && send()}
-                        />
-
-                        {/* الجانب الأيمن: زر الإرسال (مربع وغير مضغوط) */}
-                        <button onClick={send} className="chat-icon-btn send-btn" title="إرسال">
-                            <i className="fas fa-paper-plane"></i>
-                        </button>
-
-                        {/* مدخلات مخفية */}
-                        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { if(e.target.files[0]) alert(`تم رفع: ${e.target.files[0].name}`); }} />
-                        <input ref={camRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => { if(e.target.files[0]) alert(`تم التقاط: ${e.target.files[0].name}`); }} />
+                        <input type="text" className="chat-input" placeholder="هيا نتحدث.." value={input}
+                            onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()} />
+                        <button onClick={send} className="chat-icon-btn send-btn"><i className="fas fa-paper-plane"></i></button>
+                        <input ref={fileRef} type="file" className="hidden" />
+                        <input ref={camRef} type="file" capture="environment" className="hidden" />
                     </div>
                 </div>
             );
         }
 
-        // بطاقة المنتج بأزرار مصغرة
         function ProductCard({ prod, liked, onLike, onWhats, onClick, onRate, sellerAvatar, sellerVerification, onSellerClick, isList }) {
-            const stars = Array(5).fill(0).map((_, i) =>
-                <i key={i} className={`fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                   style={{ fontSize: '8px', cursor: 'pointer' }}
-                   onClick={(e) => { e.stopPropagation(); onRate(i+1); }}></i>
-            );
-            const shortName = prod.sellerName.length > 10 ? prod.sellerName.slice(0,8)+'..' : prod.sellerName;
+            const stars = Array(5).fill(0).map((_,i) =>
+                <i key={i} className={`fas fa-star ${i<prod.rating?'text-yellow-400':'text-gray-300'}`} style={{fontSize:'8px',cursor:'pointer'}}
+                   onClick={e=>{e.stopPropagation(); onRate(i+1);}}></i>);
+            const short = prod.sellerName.length>10?prod.sellerName.slice(0,8)+'..':prod.sellerName;
 
-            if (isList) {
+            if(isList) {
                 return (
-                    <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer hover:shadow-md transition-shadow">
+                    <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer hover:shadow-md">
                         <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center text-3xl flex-shrink-0">{prod.emoji}</div>
                         <div className="flex-1 min-w-0">
                             <div className="font-semibold text-sm truncate">{prod.name}</div>
                             <p className="text-orange-600 font-bold text-sm mt-0.5">{prod.price.toLocaleString()} ج.م</p>
                             <div className="flex items-center gap-2 mt-1">
-                                <button onClick={(e)=>{e.stopPropagation(); onSellerClick();}} className="flex items-center gap-1">
-                                    <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[9px]">{sellerAvatar || '🏪'}</span>
-                                    <span className="text-[9px] text-gray-500">{shortName}</span>
+                                <button onClick={e=>{e.stopPropagation(); onSellerClick();}} className="flex items-center gap-1">
+                                    <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[9px]">{sellerAvatar||'🏪'}</span>
+                                    <span className="text-[9px] text-gray-500">{short}</span>
                                     {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[8px]"></i>}
                                 </button>
                                 <div className="flex gap-0.5">{stars}</div>
                             </div>
                         </div>
                         <div className="action-btn-row flex-shrink-0">
-                            <button onClick={(e)=>{e.stopPropagation(); onLike();}} className={`action-btn-sm ${liked?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-heart"></i></button>
-                            <button onClick={(e)=>{e.stopPropagation(); onWhats();}} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
+                            <button onClick={e=>{e.stopPropagation(); onLike();}} className={`action-btn-sm ${liked?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-heart"></i></button>
+                            <button onClick={e=>{e.stopPropagation(); onWhats();}} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
                         </div>
                     </div>
                 );
             }
             return (
-                <div onClick={onClick} className="p-2.5 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md transition-shadow w-[148px] flex-shrink-0">
+                <div onClick={onClick} className="p-2.5 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md w-[148px] flex-shrink-0">
                     <div className="h-20 flex items-center justify-center bg-gray-50 rounded-xl text-4xl mb-1.5">{prod.emoji}</div>
                     <h3 className="font-semibold text-xs truncate">{prod.name}</h3>
                     <p className="text-orange-600 font-bold text-xs mt-0.5">{prod.price.toLocaleString()} ج.م</p>
                     <div className="flex justify-between items-center mt-1.5">
-                        <button onClick={(e)=>{e.stopPropagation(); onSellerClick();}} className="flex items-center gap-1">
-                            <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[8px]">{sellerAvatar || '🏪'}</span>
-                            <span className="text-[8px] text-gray-500 max-w-[50px] truncate">{shortName}</span>
+                        <button onClick={e=>{e.stopPropagation(); onSellerClick();}} className="flex items-center gap-1">
+                            <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[8px]">{sellerAvatar||'🏪'}</span>
+                            <span className="text-[8px] text-gray-500 max-w-[50px] truncate">{short}</span>
                             {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[7px]"></i>}
                         </button>
                     </div>
                     <div className="flex justify-center gap-0.5 mt-1">{stars}</div>
-                    {/* أزرار مصغرة مرتبة أفقياً */}
                     <div className="action-btn-row mt-1.5">
-                        <button onClick={(e)=>{e.stopPropagation(); onLike();}} className={`action-btn-sm ${liked?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-heart"></i></button>
-                        <button onClick={(e)=>{e.stopPropagation(); onWhats();}} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
+                        <button onClick={e=>{e.stopPropagation(); onLike();}} className={`action-btn-sm ${liked?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-heart"></i></button>
+                        <button onClick={e=>{e.stopPropagation(); onWhats();}} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
                     </div>
                 </div>
             );
         }
 
-        // الصفحة الرئيسية مع شريط البحث المنبثق والفئات القابلة للسحب
         function HomePage({ products, sellers, currSellerId, onLike, onWhats, onProductClick, onShowOffers, onShowVIP, onRate, onSellerProfile }) {
             const [view, setView] = useState('grid');
             const [cat, setCat] = useState('all');
             const [showSearch, setShowSearch] = useState(false);
-            const [searchQuery, setSearchQuery] = useState('');
-            
+            const [q, setQ] = useState('');
             const filtered = Object.values(products).filter(p => {
-                if (cat !== 'all' && p.category !== cat) return false;
-                if (searchQuery.trim()) {
-                    const q = searchQuery.toLowerCase();
-                    return p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
-                }
+                if(cat!=='all' && p.category!==cat) return false;
+                if(q.trim()) return p.name.toLowerCase().includes(q.toLowerCase());
                 return true;
             });
-            
-            const isLiked = (p) => currSellerId ? p.likedBy.includes(currSellerId) : false;
-            const half = Math.ceil(filtered.length / 2);
-            const row1 = filtered.slice(0, half), row2 = filtered.slice(half);
+            const isLiked = p => currSellerId?p.likedBy.includes(currSellerId):false;
+            const half = Math.ceil(filtered.length/2);
+            const row1=filtered.slice(0,half), row2=filtered.slice(half);
 
             return (
-                <div className="flex flex-col h-full" style={{ position: 'relative' }}>
-                    {/* شريط الفئات القابل للسحب */}
-                    <div className="sticky top-0 z-10 bg-white border-b px-2 py-1.5" style={{ position: 'sticky', top: 0 }}>
+                <div className="flex flex-col h-full relative">
+                    <div className="sticky top-0 z-10 bg-white border-b px-2 py-1.5">
                         <div className="categories-scroll">
                             {categories.map(c => (
-                                <button
-                                    key={c.id}
-                                    onClick={() => setCat(c.id)}
-                                    className={`px-3 py-1.5 rounded-full text-xs whitespace-nowrap flex-shrink-0 flex items-center gap-1 transition-all ${cat === c.id ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                                >
+                                <button key={c.id} onClick={()=>setCat(c.id)}
+                                    className={`px-3 py-1.5 rounded-full text-xs whitespace-nowrap flex-shrink-0 flex items-center gap-1 transition-all ${cat===c.id?'bg-orange-500 text-white shadow-md':'bg-gray-100 text-gray-600'}`}>
                                     <span className="text-sm">{c.icon}</span> {c.label}
                                 </button>
                             ))}
                         </div>
                     </div>
-                    
-                    {/* صف العروض و VIP وأزرار العرض */}
                     <div className="flex items-center gap-3 px-3 py-2 bg-white border-b">
-                        <button onClick={onShowOffers} className="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-xl hover:bg-orange-100 transition-colors">🎁 عروض</button>
-                        <button onClick={onShowVIP} className="text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-xl hover:bg-yellow-100 transition-colors">👑 VIP</button>
+                        <button onClick={onShowOffers} className="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-xl">🎁 عروض</button>
+                        <button onClick={onShowVIP} className="text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-xl">👑 VIP</button>
                         <div className="flex-1"></div>
-                        <button onClick={() => setView('grid')} className={`p-1.5 rounded-lg ${view==='grid'?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-th text-sm"></i></button>
-                        <button onClick={() => setView('list')} className={`p-1.5 rounded-lg ${view==='list'?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-list-ul text-sm"></i></button>
+                        <button onClick={()=>setView('grid')} className={`p-1.5 rounded-lg ${view==='grid'?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-th text-sm"></i></button>
+                        <button onClick={()=>setView('list')} className={`p-1.5 rounded-lg ${view==='list'?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-list-ul text-sm"></i></button>
                     </div>
-
-                    {/* شريط البحث المنبثق */}
                     {showSearch && (
                         <div className="search-overlay">
                             <div className="flex gap-2 items-center">
                                 <i className="fas fa-search text-gray-400"></i>
-                                <input
-                                    type="text"
-                                    className="flex-1 p-2 bg-gray-50 rounded-xl text-sm outline-none"
-                                    placeholder="ابحث عن منتج..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    autoFocus
-                                />
-                                <button onClick={() => { setShowSearch(false); setSearchQuery(''); }} className="text-gray-400 hover:text-gray-600">
-                                    <i className="fas fa-times"></i>
-                                </button>
+                                <input type="text" className="flex-1 p-2 bg-gray-50 rounded-xl text-sm outline-none" placeholder="ابحث عن منتج..."
+                                    value={q} onChange={e=>setQ(e.target.value)} autoFocus />
+                                <button onClick={()=>{setShowSearch(false); setQ('');}} className="text-gray-400"><i className="fas fa-times"></i></button>
                             </div>
                         </div>
                     )}
-
-                    {/* عرض المنتجات */}
                     <div className="flex-1 overflow-auto p-2">
-                        {filtered.length === 0 && (
-                            <div className="text-center py-16 text-gray-400">
-                                <i className="fas fa-search text-4xl mb-3 block"></i>
-                                لا توجد منتجات
-                            </div>
-                        )}
-                        {view === 'grid' && (
+                        {filtered.length===0 && <div className="text-center py-16 text-gray-400"><i className="fas fa-search text-4xl mb-3 block"></i>لا توجد منتجات</div>}
+                        {view==='grid' && (
                             <div className="space-y-2.5">
-                                {row1.length > 0 && (
-                                    <div className="flex gap-2.5 overflow-x-auto pb-1 px-0.5">
-                                        {row1.map(p => {
-                                            const s = sellers[p.sellerId];
-                                            return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={() => onLike(p.id)} onWhats={() => onWhats(p)} onClick={() => onProductClick(p)} onRate={(r) => onRate(p.id, r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={() => onSellerProfile(p.sellerId)} isList={false} />;
-                                        })}
-                                    </div>
-                                )}
-                                {row2.length > 0 && (
-                                    <div className="flex gap-2.5 overflow-x-auto pb-1 px-0.5">
-                                        {row2.map(p => {
-                                            const s = sellers[p.sellerId];
-                                            return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={() => onLike(p.id)} onWhats={() => onWhats(p)} onClick={() => onProductClick(p)} onRate={(r) => onRate(p.id, r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={() => onSellerProfile(p.sellerId)} isList={false} />;
-                                        })}
-                                    </div>
-                                )}
+                                {row1.length>0 && <div className="flex gap-2.5 overflow-x-auto pb-1 px-0.5">{row1.map(p=>{const s=sellers[p.sellerId]; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={false}/>})}</div>}
+                                {row2.length>0 && <div className="flex gap-2.5 overflow-x-auto pb-1 px-0.5">{row2.map(p=>{const s=sellers[p.sellerId]; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={false}/>})}</div>}
                             </div>
                         )}
-                        {view === 'list' && (
-                            <div className="flex flex-col gap-2">
-                                {filtered.map(p => {
-                                    const s = sellers[p.sellerId];
-                                    return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={() => onLike(p.id)} onWhats={() => onWhats(p)} onClick={() => onProductClick(p)} onRate={(r) => onRate(p.id, r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={() => onSellerProfile(p.sellerId)} isList={true} />;
-                                })}
-                            </div>
-                        )}
+                        {view==='list' && <div className="flex flex-col gap-2">{filtered.map(p=>{const s=sellers[p.sellerId]; return <ProductCard key={p.id} prod={p} liked={isLiked(p)} onLike={()=>onLike(p.id)} onWhats={()=>onWhats(p)} onClick={()=>onProductClick(p)} onRate={r=>onRate(p.id,r)} sellerAvatar={s?.avatar} sellerVerification={s?.verificationBadge} onSellerClick={()=>onSellerProfile(p.sellerId)} isList={true}/>})}</div>}
                     </div>
                 </div>
             );
         }
 
-        // مكون تسجيل الدخول
         function LoginPage({ sellers, onLogin, onGoJoin, onBack }) {
-            const [email, setEmail] = useState(''); const [pass, setPass] = useState(''); const [err, setErr] = useState('');
-            const doLogin = () => {
-                const em = email.trim(), pw = pass.trim();
-                if (em === ADMIN_EMAIL && pw === ADMIN_PASS) {
-                    const a = Object.values(sellers).find(s => s.email === ADMIN_EMAIL);
-                    if (a) { onLogin(a); return; }
-                }
-                const s = Object.values(sellers).find(s => s.email === em && s.password === pw);
-                if (s) onLogin(s); else setErr('بيانات غير صحيحة');
+            const [email,setEmail]=useState('');const [pass,setPass]=useState('');const [err,setErr]=useState('');
+            const dologin=()=>{
+                const e=email.trim(),p=pass.trim();
+                if(e===ADMIN_EMAIL && p===ADMIN_PASS){const a=Object.values(sellers).find(s=>s.email===ADMIN_EMAIL);if(a){onLogin(a);return;}}
+                const s=Object.values(sellers).find(s=>s.email===e && s.password===p);
+                s?onLogin(s):setErr('بيانات غير صحيحة');
             };
-            return (
-                <div className="flex flex-col h-full bg-white">
-                    <div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1></div>
-                    <div className="p-6 space-y-4">
-                        {err && <div className="bg-red-50 p-2 rounded-xl text-red-600 text-sm">{err}</div>}
-                        <input className="w-full p-3 bg-gray-100 rounded-xl" placeholder="البريد" value={email} onChange={e=>setEmail(e.target.value)} />
-                        <input type="password" className="w-full p-3 bg-gray-100 rounded-xl" placeholder="كلمة المرور" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&doLogin()} />
-                        <button onClick={doLogin} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">دخول</button>
-                        <div className="text-center text-gray-400">أو</div>
-                        <button onClick={onGoJoin} className="w-full py-3 border rounded-xl">انضم كتاجر جديد</button>
-                    </div>
-                </div>
-            );
+            return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h1 className="flex-1 text-center font-bold">تسجيل الدخول</h1></div><div className="p-6 space-y-4">{err&&<div className="bg-red-50 p-2 rounded-xl text-red-600 text-sm">{err}</div>}<input className="w-full p-3 bg-gray-100 rounded-xl" placeholder="البريد" value={email} onChange={e=>setEmail(e.target.value)}/><input type="password" className="w-full p-3 bg-gray-100 rounded-xl" placeholder="كلمة المرور" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&dologin()}/><button onClick={dologin} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">دخول</button><div className="text-center text-gray-400">أو</div><button onClick={onGoJoin} className="w-full py-3 border rounded-xl">انضم كتاجر جديد</button></div></div>);
         }
 
         // ---------- التطبيق الرئيسي ----------
         function App() {
-            const [state, setState] = useState(null);
-            const [page, setPage] = useState('home');
-            const [editProd, setEditProd] = useState(null);
-            const [detailProd, setDetailProd] = useState(null);
-            const [showSearch, setShowSearch] = useState(false);
-            const [dark, setDark] = useState(() => localStorage.getItem(THEME_KEY) === 'dark');
+            const [state,setState]=useState(null); const [page,setPage]=useState('home');
+            const [editProd,setEditProd]=useState(null); const [detailProd,setDetailProd]=useState(null);
+            const [showSearch,setShowSearch]=useState(false); const [dark,setDark]=useState(()=>localStorage.getItem(THEME_KEY)==='dark');
 
-            useEffect(() => { setState(loadState()); }, []);
-            useEffect(() => { if (state) saveState(state); }, [state]);
-            useEffect(() => {
-                document.body.classList.toggle('dark', dark);
-                localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
-            }, [dark]);
+            useEffect(()=>{setState(loadState());},[]);
+            useEffect(()=>{if(state)saveState(state);},[state]);
+            useEffect(()=>{document.body.classList.toggle('dark',dark); localStorage.setItem(THEME_KEY,dark?'dark':'light');},[dark]);
 
-            if (!state) return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-orange-500 text-xl"><i className="fas fa-spinner fa-spin ml-2"></i> جار التحميل...</div></div>;
+            if(!state) return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-orange-500 text-xl"><i className="fas fa-spinner fa-spin ml-2"></i> جار التحميل...</div></div>;
 
             const currentSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
-            const update = (up) => setState(prev => up(prev));
-
-            const handleLogin = (s) => { update(st => ({ ...st, currentSellerId: s.id })); setPage(s.isAdmin ? 'profile' : 'seller'); };
-            const handleRegister = (s) => { update(st => ({ ...st, sellers: { ...st.sellers, [s.id]: s }, currentSellerId: s.id })); setPage('seller'); };
-            const handleLogout = () => { update(st => ({ ...st, currentSellerId: null })); setPage('home'); };
-            const handleLike = (pid) => {
-                if (!currentSeller) return;
-                update(s => {
-                    const p = s.products[pid];
-                    const liked = p.likedBy.includes(currentSeller.id);
-                    const nl = liked ? p.likedBy.filter(id => id !== currentSeller.id) : [...p.likedBy, currentSeller.id];
-                    return { ...s, products: { ...s.products, [pid]: { ...p, likes: liked ? p.likes-1 : p.likes+1, likedBy: nl } } };
-                });
-            };
-            const handleWhats = (p) => {
-                const phone = state.sellers[p.sellerId]?.phone?.replace(/\D/g, '') || '201113694362';
-                const msg = encodeURIComponent(`السلام عليكم، مهتم بـ *${p.name}* بسعر *${p.price} ج.م*`);
-                window.open(`https://wa.me/2${phone}?text=${msg}`, '_blank');
-            };
-            const handleAdd = (data) => {
-                if (!currentSeller) return;
-                if (editProd) {
-                    update(s => ({ ...s, products: { ...s.products, [editProd.id]: { ...s.products[editProd.id], ...data } } }));
-                } else {
-                    const np = createProduct({ ...data, sellerId: currentSeller.id, sellerName: currentSeller.storeName, sellerCountry: currentSeller.country });
-                    update(s => ({
-                        ...s,
-                        products: { ...s.products, [np.id]: np },
-                        sellers: { ...s.sellers, [currentSeller.id]: { ...s.sellers[currentSeller.id], products: [...(s.sellers[currentSeller.id]?.products || []), np.id] } }
-                    }));
-                }
-                setEditProd(null); setPage('seller');
-            };
-            const handleDelete = (pid) => {
-                if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
-                update(s => {
-                    const np = { ...s.products }; delete np[pid];
-                    const ns = { ...s.sellers };
-                    if (ns[currentSeller.id]) ns[currentSeller.id].products = ns[currentSeller.id].products.filter(id => id !== pid);
-                    return { ...s, products: np, sellers: ns };
-                });
-            };
-            const handleSend = (txt) => { update(s => { let ns = addMessage(s, { role: 'user', text: txt }); return addMessage(ns, { role: 'bot', text: botReply(txt) }); }); };
-            const handlePurchase = (type, amt, pts) => {
-                update(s => {
-                    const sel = s.sellers[currentSeller.id];
-                    return { ...s, sellers: { ...s.sellers, [currentSeller.id]: { ...sel, points: sel.points + (pts || 0), verified: type === 'verify' ? true : sel.verified } } };
-                });
-            };
-            const handleRate = (pid, rating) => {
-                update(s => {
-                    const p = s.products[pid];
-                    return { ...s, products: { ...s.products, [pid]: { ...p, rating } } };
-                });
-            };
+            const update = up => setState(prev => up(prev));
+            const handleLogin = s => { update(st=>({...st,currentSellerId:s.id})); setPage(s.isAdmin?'profile':'seller'); };
+            const handleRegister = s => { update(st=>({...st, sellers:{...st.sellers,[s.id]:s}, currentSellerId:s.id})); setPage('seller'); };
+            const handleLogout = () => { update(st=>({...st,currentSellerId:null})); setPage('home'); };
+            const handleLike = pid => { if(!currentSeller) return; update(s=>{const p=s.products[pid]; const liked=p.likedBy.includes(currentSeller.id); const nl=liked?p.likedBy.filter(id=>id!==currentSeller.id):[...p.likedBy,currentSeller.id]; return {...s, products:{...s.products,[pid]:{...p, likes:liked?p.likes-1:p.likes+1, likedBy:nl}}}; }); };
+            const handleWhats = p => { const phone=state.sellers[p.sellerId]?.phone?.replace(/\D/g,'')||'201113694362'; window.open(`https://wa.me/2${phone}?text=${encodeURIComponent(`السلام عليكم، مهتم بـ *${p.name}* بسعر *${p.price} ج.م*`)}`,'_blank'); };
+            const handleAdd = data => { if(!currentSeller) return; if(editProd){ update(s=>({...s, products:{...s.products,[editProd.id]:{...s.products[editProd.id],...data}}})); } else { const np=createProduct({...data, sellerId:currentSeller.id, sellerName:currentSeller.storeName, sellerCountry:currentSeller.country}); update(s=>({...s, products:{...s.products,[np.id]:np}, sellers:{...s.sellers,[currentSeller.id]:{...s.sellers[currentSeller.id], products:[...(s.sellers[currentSeller.id]?.products||[]), np.id]}}})); } setEditProd(null); setPage('seller'); };
+            const handleDelete = pid => { if(!confirm('حذف المنتج؟')) return; update(s=>{const np={...s.products}; delete np[pid]; const ns={...s.sellers}; if(ns[currentSeller.id]) ns[currentSeller.id].products=ns[currentSeller.id].products.filter(id=>id!==pid); return {...s, products:np, sellers:ns};}); };
+            const handleSend = txt => { update(s=>{let ns=addMessage(s,{role:'user',text:txt}); return addMessage(ns,{role:'bot',text:botReply(txt)});}); };
+            const handleRate = (pid,rating) => { update(s=>{const p=s.products[pid]; return {...s, products:{...s.products,[pid]:{...p,rating}}};}); };
 
             return (
                 <div className="min-h-screen flex flex-col">
-                    {page === 'home' && (
-                        <>
-                            <header className="sticky top-0 z-30 bg-white border-b px-3 py-2 flex items-center justify-between shadow-sm">
-                                <div className="flex items-center gap-2">
-                                    <i className="fas fa-store text-orange-500 text-lg"></i>
-                                    <span className="text-sm font-bold text-orange-600">VICKS MARKET</span>
-                                </div>
-                                <div className="flex gap-1.5">
-                                    {/* أيقونة البحث الجديدة */}
-                                    <button onClick={() => setShowSearch(!showSearch)} className={`p-1.5 rounded-lg ${showSearch ? 'bg-orange-100 text-orange-500' : 'bg-gray-100 text-gray-500'} transition-colors`}>
-                                        <i className="fas fa-search text-sm"></i>
-                                    </button>
-                                    {/* أيقونة الوضع الليلي */}
-                                    <button onClick={() => setDark(!dark)} className="p-1.5 rounded-lg bg-gray-100 text-gray-500 transition-colors">
-                                        <i className={`fas fa-${dark ? 'sun' : 'moon'} text-sm`}></i>
-                                    </button>
-                                    {/* أيقونة الملف الشخصي */}
-                                    <button onClick={() => currentSeller ? (currentSeller.isAdmin ? setPage('profile') : setPage('seller')) : setPage('login')}
-                                            className="p-1.5 rounded-lg bg-gray-100 text-gray-500 transition-colors">
-                                        <i className="fas fa-user-circle text-sm"></i>
-                                    </button>
-                                </div>
-                            </header>
-                            <main className="flex-1 overflow-hidden">
-                                <HomePage
-                                    products={state.products}
-                                    sellers={state.sellers}
-                                    currSellerId={state.currentSellerId}
-                                    onLike={handleLike}
-                                    onWhats={handleWhats}
-                                    onProductClick={p => { setDetailProd(p); setPage('detail'); }}
-                                    onShowOffers={() => setPage('offers')}
-                                    onShowVIP={() => setPage('vip')}
-                                    onRate={handleRate}
-                                    onSellerProfile={(sid) => alert(`ملف التاجر: ${state.sellers[sid]?.storeName || sid}`)}
-                                />
-                            </main>
-                            <button onClick={() => setPage('chat')} className="fixed bottom-20 right-4 w-12 h-12 rounded-full bg-orange-500 text-white shadow-xl flex items-center justify-center z-30 hover:bg-orange-600 active:scale-95 transition-all">
-                                <i className="fas fa-robot text-lg"></i>
-                            </button>
-                        </>
-                    )}
-                    {page === 'login' && <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={() => setPage('join')} onBack={() => setPage('home')} />}
-                    
-                    {page === 'chat' && <ChatPage messages={state.chatMessages} onSend={handleSend} onBack={() => setPage(currentSeller ? (currentSeller.isAdmin ? 'profile' : 'seller') : 'home')} />}
-                    
-                    {page === 'detail' && detailProd && (
-                        <div className="p-4">
-                            <button onClick={() => setPage('home')} className="mb-3"><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                            <div className="bg-white rounded-2xl p-5 text-center shadow-lg">
-                                <div className="text-7xl mb-4">{detailProd.emoji}</div>
-                                <h2 className="text-xl font-bold">{detailProd.name}</h2>
-                                <p className="text-2xl text-orange-500 font-bold mt-2">{detailProd.price.toLocaleString()} ج.م</p>
-                                <p className="text-gray-500 mt-2">{detailProd.description}</p>
-                                <div className="flex justify-center gap-3 mt-4">
-                                    <button onClick={() => handleLike(detailProd.id)} className={`px-4 py-2 rounded-xl text-sm ${currentSeller && detailProd.likedBy.includes(currentSeller.id) ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}>
-                                        <i className="fas fa-heart ml-1"></i> إعجاب ({detailProd.likes})
-                                    </button>
-                                    <button onClick={() => handleWhats(detailProd)} className="px-4 py-2 rounded-xl bg-green-500 text-white text-sm">
-                                        <i className="fab fa-whatsapp ml-1"></i> واتساب
-                                    </button>
-                                </div>
+                    {page==='home' && <>
+                        <header className="sticky top-0 z-30 bg-white border-b px-3 py-2 flex items-center justify-between shadow-sm">
+                            <div className="flex items-center gap-2"><i className="fas fa-store text-orange-500 text-lg"></i><span className="text-sm font-bold text-orange-600">VICKS MARKET</span></div>
+                            <div className="flex gap-1.5">
+                                <button onClick={()=>setShowSearch(!showSearch)} className={`p-1.5 rounded-lg ${showSearch?'bg-orange-100 text-orange-500':'bg-gray-100 text-gray-500'}`}><i className="fas fa-search text-sm"></i></button>
+                                <button onClick={()=>setDark(!dark)} className="p-1.5 rounded-lg bg-gray-100 text-gray-500"><i className={`fas fa-${dark?'sun':'moon'} text-sm`}></i></button>
+                                <button onClick={()=>currentSeller?(currentSeller.isAdmin?setPage('profile'):setPage('seller')):setPage('login')} className="p-1.5 rounded-lg bg-gray-100 text-gray-500"><i className="fas fa-user-circle text-sm"></i></button>
                             </div>
-                        </div>
-                    )}
-                    
-                    {page === 'profile' && currentSeller?.isAdmin && (
-                        <div className="p-4">
-                            <button onClick={() => setPage('home')} className="mb-4"><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                            <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
-                                <div className="text-6xl mb-4">👑</div>
-                                <h2 className="text-xl font-bold">{currentSeller.ownerName}</h2>
-                                <p className="text-gray-500">مالك المنصة</p>
-                                <p className="text-gray-400 text-sm mt-1">{currentSeller.email}</p>
-                                <div className="mt-4 p-3 bg-gray-50 rounded-xl">
-                                    <p>النقاط: {currentSeller.points.toLocaleString()} ⭐</p>
-                                    <p>الباقة: {currentSeller.subscription}</p>
-                                </div>
-                                <button onClick={handleLogout} className="mt-4 w-full py-2 bg-red-500 text-white rounded-xl">تسجيل الخروج</button>
-                            </div>
-                        </div>
-                    )}
-                    
-                    {page === 'seller' && currentSeller && !currentSeller.isAdmin && (
-                        <div className="flex flex-col h-full">
-                            <div className="flex items-center p-3 border-b bg-white">
-                                <button onClick={() => setPage('home')}><i className="fas fa-arrow-right ml-2"></i></button>
-                                <h1 className="flex-1 text-center font-bold">{currentSeller.storeName}</h1>
-                                <button onClick={handleLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button>
-                            </div>
-                            <div className="p-3 bg-white">
-                                <p>النقاط: {currentSeller.points} ⭐</p>
-                                <p>الحالة: {currentSeller.verified ? '✅ موثق' : '❌ غير موثق'}</p>
-                                <button onClick={() => { setEditProd(null); setPage('addProduct'); }} className="mt-3 w-full py-2 bg-orange-500 text-white rounded-xl text-sm">+ إضافة منتج جديد</button>
-                            </div>
-                            <div className="flex-1 overflow-auto p-3">
-                                <h3 className="font-semibold mb-2">منتجاتي</h3>
-                                {currentSeller.products.length === 0 ? <p className="text-gray-400 text-center py-8">لا توجد منتجات بعد</p> :
-                                    currentSeller.products.map(pid => {
-                                        const p = state.products[pid];
-                                        if (!p) return null;
-                                        return (
-                                            <div key={pid} className="flex gap-3 p-2 bg-white rounded-xl border mb-2 text-sm items-center">
-                                                <span className="text-2xl">{p.emoji}</span>
-                                                <div className="flex-1"><div className="font-semibold">{p.name}</div><div className="text-orange-600">{p.price} ج.م</div></div>
-                                                <button onClick={() => { setEditProd(p); setPage('addProduct'); }} className="text-blue-500 p-1"><i className="fas fa-edit"></i></button>
-                                                <button onClick={() => handleDelete(pid)} className="text-red-500 p-1"><i className="fas fa-trash-alt"></i></button>
-                                            </div>
-                                        );
-                                    })
-                                }
-                            </div>
-                        </div>
-                    )}
-                    
-                    {page === 'addProduct' && currentSeller && (
-                        <div className="p-4">
-                            <button onClick={() => { setEditProd(null); setPage('seller'); }} className="mb-3"><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                            <div className="bg-white p-4 rounded-2xl shadow space-y-3">
-                                <h2 className="font-bold">{editProd ? 'تعديل منتج' : 'إضافة منتج'}</h2>
-                                <input id="name" placeholder="اسم المنتج" className="w-full p-2 border rounded-xl" defaultValue={editProd?.name || ''} />
-                                <input id="price" type="number" placeholder="السعر" className="w-full p-2 border rounded-xl" defaultValue={editProd?.price || ''} />
-                                <select id="cat" className="w-full p-2 border rounded-xl" defaultValue={editProd?.category || 'electronics'}>
-                                    {categories.filter(c => c.id !== 'all').map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
-                                </select>
-                                <input id="emoji" placeholder="رمز المنتج" className="w-full p-2 border rounded-xl" defaultValue={editProd?.emoji || '📦'} />
-                                <button onClick={() => {
-                                    const name = document.getElementById('name').value.trim();
-                                    const price = document.getElementById('price').value.trim();
-                                    const cat = document.getElementById('cat').value;
-                                    const emoji = document.getElementById('emoji').value.trim();
-                                    if (!name || !price) return alert('الاسم والسعر مطلوبان');
-                                    handleAdd({ name, price: Number(price), category: cat, emoji: emoji || '📦', description: '', vip: false, sellerCountry: currentSeller.country });
-                                }} className="w-full py-2 bg-orange-500 text-white rounded-xl">حفظ</button>
-                            </div>
-                        </div>
-                    )}
-                    
-                    {page === 'offers' && (
-                        <div className="p-4">
-                            <button onClick={() => setPage('home')} className="mb-3"><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                            <h2 className="font-bold mb-3">🎁 عروض خاصة</h2>
-                            <div className="grid grid-cols-2 gap-3">
-                                {Object.values(state.products).filter(p => p.price < 300 || p.vip).map(p => (
-                                    <div key={p.id} onClick={() => { setDetailProd(p); setPage('detail'); }} className="bg-white p-3 rounded-xl border cursor-pointer hover:shadow-md">
-                                        <div className="text-3xl text-center">{p.emoji}</div>
-                                        <div className="font-semibold text-sm">{p.name}</div>
-                                        <div className="text-orange-600 font-bold">{p.price} ج.م</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                    
-                    {page === 'vip' && (
-                        <div className="p-4 bg-black min-h-screen">
-                            <button onClick={() => setPage('home')} className="text-white mb-4"><i className="fas fa-arrow-right ml-2"></i> رجوع</button>
-                            <div className="text-center text-white mb-6">
-                                <i className="fas fa-crown text-5xl text-yellow-500 mb-2 block"></i>
-                                <h2 className="text-2xl font-bold">VIP اشتراكات</h2>
-                            </div>
-                            <div className="space-y-4">
-                                {[{ name: 'فضي', price: 99, color: 'gray' }, { name: 'ذهبي', price: 199, color: 'yellow' }, { name: 'بلاتيني', price: 299, color: 'blue' }].map(pkg => (
-                                    <div key={pkg.name} className="bg-gray-900 border border-gray-700 rounded-2xl p-4 text-center">
-                                        <h3 className="text-white text-lg">{pkg.name}</h3>
-                                        <p className="text-yellow-500 text-2xl font-bold">{pkg.price} ج.م</p>
-                                        <button onClick={() => window.open(`https://wa.me/201113694362?text=طلب اشتراك VIP ${pkg.name}`, '_blank')} className="mt-3 w-full py-2 bg-yellow-600 text-white rounded-xl">اشترك الآن</button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                        </header>
+                        <main className="flex-1 overflow-hidden"><HomePage products={state.products} sellers={state.sellers} currSellerId={state.currentSellerId} onLike={handleLike} onWhats={handleWhats} onProductClick={p=>{setDetailProd(p);setPage('detail');}} onShowOffers={()=>setPage('offers')} onShowVIP={()=>setPage('vip')} onRate={handleRate} onSellerProfile={sid=>alert(`ملف التاجر: ${state.sellers[sid]?.storeName||sid}`)} /></main>
+                        <button onClick={()=>setPage('chat')} className="fixed bottom-20 right-4 w-12 h-12 rounded-full bg-orange-500 text-white shadow-xl flex items-center justify-center z-30 hover:bg-orange-600 active:scale-95 transition-all"><i className="fas fa-robot text-lg"></i></button>
+                    </>}
+                    {page==='login' && <LoginPage sellers={state.sellers} onLogin={handleLogin} onGoJoin={()=>setPage('join')} onBack={()=>setPage('home')}/>}
+                    {page==='chat' && <ChatPage messages={state.chatMessages} onSend={handleSend} onBack={()=>setPage(currentSeller?(currentSeller.isAdmin?'profile':'seller'):'home')}/>}
+                    {page==='detail' && detailProd && <div className="p-4"><button onClick={()=>setPage('home')} className="mb-3"><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white rounded-2xl p-5 text-center shadow-lg"><div className="text-7xl mb-4">{detailProd.emoji}</div><h2 className="text-xl font-bold">{detailProd.name}</h2><p className="text-2xl text-orange-500 font-bold mt-2">{detailProd.price.toLocaleString()} ج.م</p><p className="text-gray-500 mt-2">{detailProd.description}</p><div className="flex justify-center gap-3 mt-4"><button onClick={()=>handleLike(detailProd.id)} className={`px-4 py-2 rounded-xl text-sm ${currentSeller&&detailProd.likedBy.includes(currentSeller.id)?'bg-orange-500 text-white':'bg-gray-100'}`}><i className="fas fa-heart ml-1"></i> إعجاب ({detailProd.likes})</button><button onClick={()=>handleWhats(detailProd)} className="px-4 py-2 rounded-xl bg-green-500 text-white text-sm"><i className="fab fa-whatsapp ml-1"></i> واتساب</button></div></div></div>}
+                    {page==='profile' && currentSeller?.isAdmin && <div className="p-4"><button onClick={()=>setPage('home')} className="mb-4"><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white rounded-2xl p-6 text-center shadow-lg"><div className="text-6xl mb-4">👑</div><h2 className="text-xl font-bold">{currentSeller.ownerName}</h2><p className="text-gray-500">مالك المنصة</p><p className="text-gray-400 text-sm mt-1">{currentSeller.email}</p><div className="mt-4 p-3 bg-gray-50 rounded-xl"><p>النقاط: {currentSeller.points.toLocaleString()} ⭐</p><p>الباقة: {currentSeller.subscription}</p></div><button onClick={handleLogout} className="mt-4 w-full py-2 bg-red-500 text-white rounded-xl">تسجيل الخروج</button></div></div>}
+                    {page==='seller' && currentSeller && !currentSeller.isAdmin && <div className="flex flex-col h-full"><div className="flex items-center p-3 border-b bg-white"><button onClick={()=>setPage('home')}><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold">{currentSeller.storeName}</h1><button onClick={handleLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div><div className="p-3 bg-white"><p>النقاط: {currentSeller.points} ⭐</p><p>الحالة: {currentSeller.verified?'✅ موثق':'❌ غير موثق'}</p><button onClick={()=>{setEditProd(null);setPage('addProduct');}} className="mt-3 w-full py-2 bg-orange-500 text-white rounded-xl text-sm">+ إضافة منتج جديد</button></div><div className="flex-1 overflow-auto p-3"><h3 className="font-semibold mb-2">منتجاتي</h3>{currentSeller.products.length===0?<p className="text-gray-400 text-center py-8">لا توجد منتجات بعد</p>:currentSeller.products.map(pid=>{const p=state.products[pid]; if(!p) return null; return <div key={pid} className="flex gap-3 p-2 bg-white rounded-xl border mb-2 text-sm items-center"><span className="text-2xl">{p.emoji}</span><div className="flex-1"><div className="font-semibold">{p.name}</div><div className="text-orange-600">{p.price} ج.م</div></div><button onClick={()=>{setEditProd(p);setPage('addProduct');}} className="text-blue-500 p-1"><i className="fas fa-edit"></i></button><button onClick={()=>handleDelete(pid)} className="text-red-500 p-1"><i className="fas fa-trash-alt"></i></button></div>;})}</div></div>}
+                    {page==='addProduct' && currentSeller && <div className="p-4"><button onClick={()=>{setEditProd(null);setPage('seller');}} className="mb-3"><i className="fas fa-arrow-right ml-2"></i> رجوع</button><div className="bg-white p-4 rounded-2xl shadow space-y-3"><h2 className="font-bold">{editProd?'تعديل منتج':'إضافة منتج'}</h2><input id="name" placeholder="اسم المنتج" className="w-full p-2 border rounded-xl" defaultValue={editProd?.name||''}/><input id="price" type="number" placeholder="السعر" className="w-full p-2 border rounded-xl" defaultValue={editProd?.price||''}/><select id="cat" className="w-full p-2 border rounded-xl" defaultValue={editProd?.category||'electronics'}>{categories.filter(c=>c.id!=='all').map(c=><option key={c.id} value={c.id}>{c.label}</option>)}</select><input id="emoji" placeholder="رمز المنتج" className="w-full p-2 border rounded-xl" defaultValue={editProd?.emoji||'📦'}/><button onClick={()=>{const name=document.getElementById('name').value.trim();const price=document.getElementById('price').value.trim();const cat=document.getElementById('cat').value;const emoji=document.getElementById('emoji').value.trim();if(!name||!price)return alert('الاسم والسعر مطلوبان');handleAdd({name,price:Number(price),category:cat,emoji:emoji||'📦',description:'',vip:false,sellerCountry:currentSeller.country});}} className="w-full py-2 bg-orange-500 text-white rounded-xl">حفظ</button></div></div>}
+                    {page==='offers' && <div className="p-4"><button onClick={()=>setPage('home')} className="mb-3"><i className="fas fa-arrow-right ml-2"></i> رجوع</button><h2 className="font-bold mb-3">🎁 عروض خاصة</h2><div className="grid grid-cols-2 gap-3">{Object.values(state.products).filter(p=>p.price<300||p.vip).map(p=><div key={p.id} onClick={()=>{setDetailProd(p);setPage('detail');}} className="bg-white p-3 rounded-xl border cursor-pointer hover:shadow-md"><div className="text-3xl text-center">{p.emoji}</div><div className="font-semibold text-sm">{p.name}</div><div className="text-orange-600 font-bold">{p.price} ج.م</div></div>)}</div></div>}
                 </div>
             );
         }
