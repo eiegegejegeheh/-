@@ -1,173 +1,1323 @@
-:root {
-    --orange: #ff6600; /* اللون البرتقالي اللي في الصور */
-    --bg-light: #f4f7f6; /* لون الخلفية الهادي */
-    --card-bg: #ffffff;
-    --text-main: #2d3436;
-    --border: #eeeeee;
-    --radius: 16px;
-    --shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VICKS MARKET - فيكس ماركت</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0d0d14;
+            --bg-card: #1a1a25;
+            --bg-surface: #15151f;
+            --gold: #d4a853;
+            --gold-light: #e8c97a;
+            --gold-dark: #b8932f;
+            --silver: #a8b8c8;
+            --bronze: #c4946c;
+            --blue-accent: #3b7ddd;
+            --blue-verify: #4a90d9;
+            --text-primary: #e8e8ec;
+            --text-secondary: #b0b0bb;
+            --text-muted: #7a7a8a;
+            --border: #2a2a38;
+            --border-light: #34344a;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --gradient-gold: linear-gradient(135deg, #d4a853, #e8c97a, #d4a853);
+            --gradient-vip: linear-gradient(135deg, #1a1a25, #2a2030, #1a1a25);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --transition: 0.3s ease;
+        }
 
-body {
-    background-color: var(--bg-light) !important;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* تعديل شكل كارت المنتج ليطابق الصور */
-.product-card {
-    background: var(--card-bg) !important;
-    border-radius: var(--radius) !important;
-    border: 1px solid rgba(0,0,0,0.03) !important;
-    box-shadow: var(--shadow) !important;
-    padding: 12px !important;
-    transition: 0.3s;
-}
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(212, 168, 83, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 60%, rgba(59, 125, 221, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(212, 168, 83, 0.02) 0%, transparent 50%);
+        }
 
-/* شريط أيقونات التواصل السريع أسفل الكارت */
-.contact-actions-bar {
-    display: flex;
-    justify-content: space-around;
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 8px;
-    margin-top: 10px;
-}
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold-dark);
+        }
 
-.contact-actions-bar i {
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: 0.2s;
-}
+        /* ============ HEADER / NAVBAR ============ */
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            cursor: pointer;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+        .navbar .logo i {
+            font-size: 1.8rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .navbar .logo span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links button {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 9px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links button:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 168, 83, 0.05);
+        }
+        .nav-links button.active {
+            background: var(--gradient-gold);
+            color: #000;
+            border-color: transparent;
+            font-weight: 700;
+        }
+        .nav-links .btn-vip {
+            border-color: var(--gold);
+            color: var(--gold);
+            animation: vipPulse 2s infinite;
+        }
+        @keyframes vipPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 168, 83, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(212, 168, 83, 0);
+            }
+        }
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-surface);
+            padding: 6px 14px;
+            border-radius: 25px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .nav-user:hover {
+            border-color: var(--gold);
+        }
+        .nav-user .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--gradient-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #000;
+            font-size: 0.85rem;
+        }
+        .nav-user .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .nav-user .user-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+        .nav-user .user-role {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .badge-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: var(--blue-accent);
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .badge-verified i {
+            font-size: 0.6rem;
+        }
+        .badge-vip-gold {
+            background: var(--gradient-gold);
+            color: #000;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
 
-.fa-whatsapp { color: #25D366; }
-.fa-telegram { color: #0088cc; }
-.fa-comment-dots { color: var(--orange); }
-.fa-heart.liked { color: #ff4757; }
+        /* ============ MAIN CONTAINER ============ */
+        .main-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .page {
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-/* شريط الأقسام المتحرك */
-.categories-slider {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding: 15px;
-    scrollbar-width: none;
-}
+        /* ============ SECTION TITLES ============ */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+        .section-title i {
+            color: var(--gold);
+        }
+        .section-title .line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
 
-.cat-item {
-    background: white;
-    padding: 8px 20px;
-    border-radius: 25px;
-    box-shadow: var(--shadow);
-    font-weight: bold;
-    white-space: nowrap;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
+        /* ============ HOME PAGE ============ */
+        .categories-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .category-chip {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+        .category-chip:hover,
+        .category-chip.active {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            font-weight: 700;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+        .product-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .product-card .product-img {
+            width: 100%;
+            height: 180px;
+            background: var(--bg-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text-muted);
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card .product-img i {
+            font-size: 3.5rem;
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+        .product-card:hover .product-img i {
+            opacity: 0.8;
+            color: var(--gold);
+        }
+        .product-card .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .product-card .product-info {
+            padding: 14px 16px;
+        }
+        .product-card .product-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+        .product-card .product-price {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--gold);
+        }
+        .product-card .product-rating {
+            color: var(--gold);
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
 
-.cat-item.active {
-    background: var(--orange);
-    color: white;
-}
- // جوه دالة buildHomePage استبدل جزء الهيدر بهذا:
-const headerHTML = `
-    <header class="vicks-main-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
-        <div style="display: flex; gap: 15px; font-size: 1.2rem; color: #555;">
-            <i class="fas fa-user-circle" onclick="navigate('profile')"></i>
-            <i class="fas fa-moon" onclick="document.body.classList.toggle('dark')"></i>
-            <i class="fas fa-search" onclick="toggleSearch()"></i>
+        /* ============ REGISTRATION PAGE ============ */
+        .register-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        .register-container h2 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 800;
+            color: var(--gold);
+        }
+        .register-container .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+        .account-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .account-type-selector button {
+            flex: 1;
+            padding: 12px;
+            border-radius: var(--radius);
+            border: 2px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .account-type-selector button.selected {
+            border-color: var(--gold);
+            background: rgba(212, 168, 83, 0.1);
+            color: var(--gold);
+        }
+        .input-group {
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.1);
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 13px;
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: var(--radius);
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 168, 83, 0.3);
+        }
+        .social-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .social-buttons button {
+            flex: 1;
+            padding: 10px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .social-buttons button:hover {
+            border-color: var(--gold);
+            background: rgba(212, 168, 83, 0.05);
+        }
+        .social-buttons .google-btn i {
+            color: #ea4335;
+        }
+        .social-buttons .fb-btn i {
+            color: #1877f2;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 16px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .login-link a {
+            color: var(--gold);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* ============ TRADER / CUSTOMER DASHBOARD ============ */
+        .dashboard-header {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .dashboard-header .user-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .dashboard-header .avatar-lg {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #000;
+            font-size: 1.2rem;
+        }
+        .tabs-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .tab-btn.active,
+        .tab-btn:hover {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            font-weight: 700;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        /* ============ ADMIN / OWNER PANEL ============ */
+        .admin-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .admin-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .admin-card h3 {
+            margin-bottom: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+        }
+        .admin-card .admin-input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .admin-card input,
+        .admin-card select {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 0.85rem;
+            flex: 1;
+            min-width: 120px;
+        }
+        .admin-card input:focus,
+        .admin-card select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .btn-sm {
+            padding: 9px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        .btn-warning {
+            background: var(--warning);
+            color: #000;
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+        }
+        .btn-gold:hover {
+            background: var(--gold-light);
+        }
+        .btn-blue {
+            background: var(--blue-accent);
+            color: #fff;
+        }
+        .badge-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .badge-tag {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border-color: var(--border);
+        }
+        .badge-tag:hover,
+        .badge-tag.selected {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 168, 83, 0.1);
+        }
+
+        /* ============ VIP PAGE ============ */
+        .vip-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        .vip-container h2 {
+            text-align: center;
+            font-weight: 900;
+            color: var(--gold);
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+        .vip-container .vip-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+        .vip-section {
+            margin-bottom: 28px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            background: var(--bg-surface);
+        }
+        .vip-section h3 {
+            margin-bottom: 16px;
+            font-weight: 700;
+            color: var(--gold-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .badge-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .badge-option {
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge-option:hover,
+        .badge-option.selected {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 168, 83, 0.08);
+        }
+        .badge-option.gold-badge {
+            border-color: #d4a853;
+            color: #d4a853;
+        }
+        .badge-option.silver-badge {
+            border-color: #a8b8c8;
+            color: #a8b8c8;
+        }
+        .badge-option.bronze-badge {
+            border-color: #c4946c;
+            color: #c4946c;
+        }
+        .badge-option.blue-badge {
+            border-color: #4a90d9;
+            color: #4a90d9;
+        }
+        .duration-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .duration-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+        }
+        .duration-chip:hover,
+        .duration-chip.selected {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            font-weight: 700;
+        }
+        .discount-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .discount-slider-container input[type="range"] {
+            flex: 1;
+            accent-color: var(--gold);
+            height: 6px;
+        }
+        .discount-value {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--gold);
+            min-width: 50px;
+            text-align: center;
+        }
+        .points-packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+        .points-package {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .points-package:hover {
+            border-color: var(--gold);
+            box-shadow: var(--shadow);
+        }
+        .points-package .points-amount {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--gold);
+        }
+        .points-package .points-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .custom-points-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .custom-points-row input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: 'Tajawal', sans-serif;
+        }
+        .custom-points-row input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .estimated-price {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        /* ============ TOAST NOTIFICATIONS ============ */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--gold);
+            color: var(--text-primary);
+            padding: 14px 28px;
+            border-radius: 30px;
+            z-index: 9999;
+            font-weight: 600;
+            animation: toastIn 0.4s ease, toastOut 0.4s ease 2.5s forwards;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            max-width: 90vw;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            .navbar .logo {
+                font-size: 1.1rem;
+            }
+            .nav-links button {
+                padding: 7px 10px;
+                font-size: 0.75rem;
+            }
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+            .product-card .product-img {
+                height: 130px;
+            }
+            .register-container {
+                padding: 20px 14px;
+            }
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            .points-packages {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        @media (max-width: 480px) {
+            .nav-links {
+                gap: 4px;
+            }
+            .nav-links button {
+                padding: 6px 8px;
+                font-size: 0.7rem;
+                border-radius: 18px;
+            }
+            .nav-user {
+                padding: 4px 10px;
+                gap: 6px;
+            }
+            .nav-user .avatar {
+                width: 26px;
+                height: 26px;
+                font-size: 0.7rem;
+            }
+            .nav-user .user-name {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('home')" title="الرئيسية">
+            <i class="fa-solid fa-crown"></i>
+            <span>VICKS MARKET</span>
         </div>
-        
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-weight: 900; font-size: 1.1rem; color: #222;">VICKS MARKET</span>
-            <img src="https://i.ibb.co/v4m8m8y/146928.png" style="height: 35px; border-radius: 5px;">
+        <div class="nav-links" id="navLinks">
+            <button onclick="navigateTo('home')" class="active" data-page="home">
+                <i class="fa-solid fa-house"></i> الرئيسية
+            </button>
+            <button onclick="navigateTo('register')" data-page="register">
+                <i class="fa-solid fa-user-plus"></i> إنشاء حساب
+            </button>
+            <button onclick="navigateTo('customer')" data-page="customer">
+                <i class="fa-solid fa-user"></i> زبون
+            </button>
+            <button onclick="navigateTo('trader')" data-page="trader">
+                <i class="fa-solid fa-store"></i> تاجر
+            </button>
+            <button onclick="navigateTo('owner')" data-page="owner">
+                <i class="fa-solid fa-shield-halved"></i> المالك
+            </button>
+            <button onclick="navigateTo('vip')" data-page="vip" class="btn-vip">
+                <i class="fa-solid fa-gem"></i> VICKS VIP
+            </button>
         </div>
-    </header>
-`;
-function createProductCard(prod) {
-    const seller = state.sellers[prod.sellerId] || {};
-    const isLoggedIn = !!state.currentSellerId;
-    const liked = isLoggedIn ? prod.likedBy.includes(state.currentSellerId) : isGuestLiked(prod.id);
-    
-    // تنسيق النجوم بناءً على التقييم
-    let starsHtml = '';
-    for(let i=1; i<=5; i++) {
-        starsHtml += `<i class="${i <= (prod.rating || 5) ? 'fas' : 'far'} fa-star" style="font-size: 10px; color: #ffc107;"></i>`;
-    }
-
-    return `
-        <div class="product-card" onclick="openPreview('${prod.id}')">
-            <div class="product-image" style="height: 130px; background: #fdfdfd; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; border-radius: 12px; margin-bottom: 8px;">
-                ${prod.emoji || '📦'}
+        <div class="nav-user" id="navUser" onclick="navigateTo('customer')" title="حسابي">
+            <div class="avatar">م</div>
+            <div class="user-info">
+                <span class="user-name">محمد</span>
+                <span class="user-role">زبون</span>
             </div>
-            
-            <div style="text-align: center; font-weight: 700; font-size: 0.85rem; color: #333; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                ${prod.name}
-            </div>
+            <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;color:var(--text-muted);"></i>
+        </div>
+    </nav>
 
-            <div style="text-align: center; color: var(--orange); font-weight: 900; font-size: 0.95rem; margin-bottom: 5px;">
-                ${prod.price} ج.م
-            </div>
+    <!-- ==================== MAIN CONTAINER ==================== -->
+    <div class="main-container">
 
-            <div style="display: flex; justify-content: center; gap: 2px; margin-bottom: 6px;">
-                ${starsHtml}
+        <!-- ========== HOME PAGE ========== -->
+        <div class="page active" id="page-home">
+            <div class="section-title">
+                <i class="fa-solid fa-fire"></i> السوق - VICKS MARKET
+                <span class="line"></span>
             </div>
+            <div class="categories-row" id="categoriesRow">
+                <span class="category-chip active" data-cat="all">الكل</span>
+                <span class="category-chip" data-cat="beauty"><i class="fa-solid fa-spa"></i> جمال وعناية</span>
+                <span class="category-chip" data-cat="supermarket"><i class="fa-solid fa-cart-shopping"></i> سوبر ماركت</span>
+                <span class="category-chip" data-cat="used"><i class="fa-solid fa-recycle"></i> مستعمل</span>
+                <span class="category-chip" data-cat="electronics"><i class="fa-solid fa-mobile-screen"></i> إلكترونيات</span>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products rendered by JS -->
+            </div>
+        </div>
 
-            <div style="display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.7rem; color: #888; margin-bottom: 8px;">
-                <div style="width: 18px; height: 18px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.5rem;">
-                    ${seller.avatar || '👤'}
+        <!-- ========== REGISTER PAGE ========== -->
+        <div class="page" id="page-register">
+            <div class="register-container">
+                <h2><i class="fa-solid fa-user-plus"></i> إنشاء حساب جديد</h2>
+                <p class="subtitle">انضم إلى VICKS MARKET وابدأ رحلتك</p>
+                <div class="account-type-selector">
+                    <button id="typeTrader" onclick="selectAccountType('trader')">
+                        <i class="fa-solid fa-store"></i> تاجر
+                    </button>
+                    <button id="typeCustomer" class="selected" onclick="selectAccountType('customer')">
+                        <i class="fa-solid fa-user"></i> زبون
+                    </button>
                 </div>
-                <span>${seller.storeName || 'متجر'}</span>
+                <div class="input-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="regName" placeholder="أدخل الاسم الكامل">
+                </div>
+                <div class="input-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="regEmail" placeholder="example@email.com">
+                </div>
+                <div class="input-group">
+                    <label>تأكيد الكود المرسل (سيتم إرسال كود التفعيل عبر البريد)</label>
+                    <input type="text" id="regCode" placeholder="أدخل كود التفعيل">
+                </div>
+                <div class="input-group">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" id="regPhone" placeholder="+20 1XX XXX XXXX">
+                </div>
+                <button class="btn-primary" onclick="handleRegister()">
+                    <i class="fa-solid fa-check-circle"></i> إنشاء حساب
+                </button>
+                <div class="social-buttons">
+                    <button class="google-btn" onclick="showToast('تم التسجيل عبر Google بنجاح ✅')">
+                        <i class="fa-brands fa-google"></i> متابعة عبر Google
+                    </button>
+                    <button class="fb-btn" onclick="showToast('تم التسجيل عبر Facebook بنجاح ✅')">
+                        <i class="fa-brands fa-facebook-f"></i> متابعة عبر Facebook
+                    </button>
+                </div>
+                <p class="login-link">لديك حساب بالفعل؟ <a onclick="showToast('توجيه إلى صفحة تسجيل الدخول...')">تسجيل دخول</a></p>
             </div>
+        </div>
 
-            <div class="contact-actions-bar" onclick="event.stopPropagation()">
-                <i class="fas fa-heart ${liked ? 'liked' : ''}" onclick="toggleLike('${prod.id}')"></i>
-                <i class="fas fa-comment-dots" onclick="openComments('${prod.id}')"></i>
-                <i class="fab fa-telegram" onclick="window.open('https://t.me/${seller.phone}')"></i>
-                <i class="fab fa-whatsapp" onclick="window.open('https://wa.me/${seller.phone}')"></i>
+        <!-- ========== CUSTOMER PAGE ========== -->
+        <div class="page" id="page-customer">
+            <div class="dashboard-header">
+                <div class="user-details">
+                    <div class="avatar-lg">م</div>
+                    <div>
+                        <strong style="font-size:1.1rem;">الزبون: محمد</strong>
+                        <br><span style="color:var(--text-muted);font-size:0.85rem;">+20 123 456 789 | mohamed.market@email.com</span>
+                    </div>
+                </div>
+                <span class="badge-verified"><i class="fa-solid fa-circle-check"></i> موثق</span>
+            </div>
+            <div class="tabs-row">
+                <button class="tab-btn active" onclick="switchCustomerTab('products')">المنتجات</button>
+                <button class="tab-btn" onclick="switchCustomerTab('search')">ما تبحث عنه</button>
+            </div>
+            <div class="tab-content active" id="customerTab-products">
+                <div class="products-grid" id="customerProductsGrid"></div>
+            </div>
+            <div class="tab-content" id="customerTab-search">
+                <div class="admin-card" style="text-align:center;padding:30px;">
+                    <i class="fa-solid fa-magnifying-glass" style="font-size:3rem;color:var(--text-muted);margin-bottom:12px;"></i>
+                    <p style="color:var(--text-muted);">سجل البحث الخاص بالزبون يظهر هنا</p>
+                    <input type="text" placeholder="ابحث عن منتج..." style="width:100%;max-width:400px;padding:10px;border-radius:20px;border:1px solid var(--border);background:var(--bg-surface);color:var(--text-primary);font-family:'Tajawal',sans-serif;margin-top:10px;">
+                </div>
             </div>
         </div>
-    `;
-}
-// ابحث عن السطر ده وتأكد إنه كده:
-<div class="product-grid"> 
-    ${Object.values(state.products).map(p => createProductCard(p)).join('')}
-</div>
-// جوه دالة buildHomePage، حط الكود ده تحت الهيدر مباشرة:
-const categoriesHTML = `
-    <div class="categories-slider" style="display: flex; gap: 10px; overflow-x: auto; padding: 15px 10px; background: var(--bg-light); scrollbar-width: none; -ms-overflow-style: none;">
-        <style>.categories-slider::-webkit-scrollbar { display: none; }</style>
-        
-        <div class="cat-item ${activeCategory === 'all' ? 'active' : ''}" onclick="filterCategory('all')" style="display: flex; align-items: center; gap: 8px;">
-            <span>الكل</span>
-        </div>
-        
-        <div class="cat-item ${activeCategory === 'used' ? 'active' : ''}" onclick="filterCategory('used')" style="display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-recycle" style="color: #4caf50;"></i>
-            <span>مستعمل</span>
+
+        <!-- ========== TRADER PAGE ========== -->
+        <div class="page" id="page-trader">
+            <div class="dashboard-header">
+                <div class="user-details">
+                    <div class="avatar-lg">م</div>
+                    <div>
+                        <strong style="font-size:1.1rem;">التاجر: محمد <span class="badge-verified"><i class="fa-solid fa-circle-check"></i> موثق</span></strong>
+                        <br><span style="color:var(--text-muted);font-size:0.85rem;">ID: 0000000000 | +20 123 456 789 | mohamed.market@email.com</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tabs-row">
+                <button class="tab-btn active" onclick="switchTraderTab('products')">المنتجات</button>
+                <button class="tab-btn" onclick="switchTraderTab('offers')">العروض</button>
+                <button class="tab-btn" onclick="switchTraderTab('categories')">الفئات</button>
+            </div>
+            <div class="tab-content active" id="traderTab-products">
+                <div class="products-grid" id="traderProductsGrid"></div>
+            </div>
+            <div class="tab-content" id="traderTab-offers">
+                <div class="admin-card" style="text-align:center;padding:30px;">
+                    <i class="fa-solid fa-tags" style="font-size:3rem;color:var(--gold);margin-bottom:12px;"></i>
+                    <p>العروض الخاصة بالتاجر تظهر هنا</p>
+                </div>
+            </div>
+            <div class="tab-content" id="traderTab-categories">
+                <div class="admin-card" style="text-align:center;padding:30px;">
+                    <i class="fa-solid fa-layer-group" style="font-size:3rem;color:var(--text-muted);margin-bottom:12px;"></i>
+                    <p>فئات المنتجات تظهر هنا</p>
+                </div>
+            </div>
         </div>
 
-        <div class="cat-item ${activeCategory === 'supermarket' ? 'active' : ''}" onclick="filterCategory('supermarket')" style="display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-shopping-basket" style="color: #ff9800;"></i>
-            <span>سوبر ماركت</span>
+        <!-- ========== OWNER / ADMIN PAGE ========== -->
+        <div class="page" id="page-owner">
+            <div class="dashboard-header">
+                <div class="user-details">
+                    <div class="avatar-lg" style="background:var(--danger);">م</div>
+                    <div>
+                        <strong style="font-size:1.1rem;">المالك <span class="badge-vip-gold"><i class="fa-solid fa-crown"></i> مالك</span></strong>
+                        <br><span style="color:var(--text-muted);font-size:0.85rem;">ID: 0000000000 | +20 123 456 789 | mohamed.market@email.com</span>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-panel">
+                <div class="admin-grid">
+                    <!-- حظر الحساب -->
+                    <div class="admin-card">
+                        <h3><i class="fa-solid fa-ban"></i> حظر الحساب</h3>
+                        <div class="admin-input-row">
+                            <input type="text" placeholder="رقم الـ ID" id="blockId">
+                            <input type="number" placeholder="مدة الحظر (بالأيام)" id="blockDays" min="1" value="5">
+                        </div>
+                        <button class="btn-sm btn-danger" onclick="handleBlock()"><i class="fa-solid fa-lock"></i> حظر الحساب</button>
+                        <button class="btn-sm btn-success" style="margin-right:6px;" onclick="handleUnblock()"><i class="fa-solid fa-unlock"></i> فك الحظر</button>
+                    </div>
+                    <!-- إدارة ID -->
+                    <div class="admin-card">
+                        <h3><i class="fa-solid fa-id-card"></i> إدارة العمليات - ID</h3>
+                        <div class="admin-input-row">
+                            <input type="text" placeholder="رقم الـ ID" id="manageId">
+                        </div>
+                        <button class="btn-sm btn-warning" onclick="handleIdAction('increase')"><i class="fa-solid fa-plus"></i> +10</button>
+                        <button class="btn-sm btn-danger" style="margin-right:6px;" onclick="handleIdAction('decrease')"><i class="fa-solid fa-minus"></i> -10</button>
+                        <button class="btn-sm btn-blue" style="margin-right:6px;" onclick="handleIdAction('clear')"><i class="fa-solid fa-rotate"></i> إفراغ</button>
+                        <button class="btn-sm btn-gold" style="margin-right:6px;" onclick="handleIdAction('new')"><i class="fa-solid fa-plus-circle"></i> أي دي جديد</button>
+                    </div>
+                    <!-- أولوية الظهور -->
+                    <div class="admin-card">
+                        <h3><i class="fa-solid fa-arrow-up-wide-short"></i> إدارة أولوية الظهور</h3>
+                        <div class="admin-input-row">
+                            <input type="text" placeholder="رقم الـ ID" id="priorityId">
+                            <select id="priorityDuration">
+                                <option value="">اختر المدة</option>
+                                <option value="يوم كامل">يوم كامل</option>
+                                <option value="3 أيام">3 أيام</option>
+                                <option value="1 شهر">1 شهر</option>
+                                <option value="3 شهور">3 شهور</option>
+                                <option value="6 شهور">6 شهور</option>
+                                <option value="1 سنة">1 سنة</option>
+                            </select>
+                        </div>
+                        <button class="btn-sm btn-gold" onclick="handlePriority()"><i class="fa-solid fa-check-circle"></i> تفعيل الأولوية</button>
+                    </div>
+                    <!-- توثيق الحساب -->
+                    <div class="admin-card">
+                        <h3><i class="fa-solid fa-certificate"></i> توثيق الحساب</h3>
+                        <div class="admin-input-row">
+                            <input type="text" placeholder="رقم الـ ID" id="verifyId">
+                            <select id="verifyBadge">
+                                <option value="">اختر علامة التوثيق</option>
+                                <option value="ذهبية">علامة توثيق ذهبية</option>
+                                <option value="فضية">علامة توثيق فضية</option>
+                                <option value="برونزية">علامة توثيق برونزية</option>
+                                <option value="زرقاء">علامة توثيق زرقاء</option>
+                            </select>
+                        </div>
+                        <button class="btn-sm btn-gold" onclick="handleVerify()"><i class="fa-solid fa-check-double"></i> توثيق</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="cat-item ${activeCategory === 'beauty' ? 'active' : ''}" onclick="filterCategory('beauty')" style="display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-magic" style="color: #e91e63;"></i>
-            <span>جمال وعناية</span>
+        <!-- ========== VIP PAGE ========== -->
+        <div class="page" id="page-vip">
+            <div class="vip-container">
+                <h2><i class="fa-solid fa-gem"></i> VICKS VIP</h2>
+                <p class="vip-subtitle">خدمات التوثيق والظهور - علامات التوثيق ومدد الأولوية</p>
+
+                <!-- علامة التوثيق -->
+                <div class="vip-section">
+                    <h3><i class="fa-solid fa-certificate"></i> اختيار علامة التوثيق</h3>
+                    <div class="badge-options" id="badgeOptions">
+                        <span class="badge-option gold-badge selected" data-badge="gold"><i class="fa-solid fa-crown"></i> ذهبية</span>
+                        <span class="badge-option silver-badge" data-badge="silver"><i class="fa-solid fa-medal"></i> فضية</span>
+                        <span class="badge-option bronze-badge" data-badge="bronze"><i class="fa-solid fa-award"></i> برونزية</span>
+                        <span class="badge-option blue-badge" data-badge="blue"><i class="fa-solid fa-shield"></i> زرقاء</span>
+                    </div>
+                    <p style="margin-top:12px;font-weight:600;color:var(--text-secondary);">مدد علامة التوثيق:</p>
+                    <div class="duration-options" id="badgeDurationOptions">
+                        <span class="duration-chip" data-dur="3-شهور">3 شهور</span>
+                        <span class="duration-chip selected" data-dur="6-شهور">6 شهور</span>
+                        <span class="duration-chip" data-dur="1-سنة">1 سنة</span>
+                    </div>
+                </div>
+
+                <!-- أولوية الظهور -->
+                <div class="vip-section">
+                    <h3><i class="fa-solid fa-arrow-up-wide-short"></i> مدد أولوية الظهور</h3>
+                    <div class="duration-options" id="priorityDurationOptions">
+                        <span class="duration-chip selected" data-dur="يوم-كامل">يوم كامل</span>
+                        <span class="duration-chip" data-dur="3-ايام">3 أيام</span>
+                        <span class="duration-chip" data-dur="1-شهر">1 شهر</span>
+                        <span class="duration-chip" data-dur="3-شهور">3 شهور</span>
+                        <span class="duration-chip" data-dur="1-سنة">1 سنة</span>
+                    </div>
+                </div>
+
+                <!-- العروض والخصومات -->
+                <div class="vip-section">
+                    <h3><i class="fa-solid fa-percent"></i> إدارة العروض والخصومات</h3>
+                    <p style="font-weight:600;color:var(--text-secondary);">عرض الجمعة البيضاء - خصم 50% - إعلان مميز</p>
+                    <div class="discount-slider-container" style="margin-top:12px;">
+                        <span>0%</span>
+                        <input type="range" min="0" max="100" value="50" id="discountSlider" oninput="updateDiscount()">
+                        <span>100%</span>
+                        <span class="discount-value" id="discountDisplay">50%</span>
+                    </div>
+                </div>
+
+                <!-- حزم النقاط -->
+                <div class="vip-section">
+                    <h3><i class="fa-solid fa-coins"></i> حزم النقاط والاشتراكات</h3>
+                    <div class="points-packages">
+                        <div class="points-package" onclick="selectPoints(1000, this)">
+                            <div class="points-amount">1,000</div>
+                            <div class="points-label">Points</div>
+                            <div style="font-size:0.75rem;color:var(--text-muted);">باقة الاشتراكات الأساسية</div>
+                        </div>
+                        <div class="points-package" onclick="selectPoints(2500, this)">
+                            <div class="points-amount">2,500</div>
+                            <div class="points-label">Points</div>
+                            <div style="font-size:0.75rem;color:var(--text-muted);">باقة توثيق الحساب</div>
+                        </div>
+                        <div class="points-package" onclick="selectPoints(7500, this)">
+                            <div class="points-amount">7,500</div>
+                            <div class="points-label">Points</div>
+                            <div style="font-size:0.75rem;color:var(--text-muted);">باقة إدارة العروض</div>
+                        </div>
+                        <div class="points-package" onclick="selectPoints(15000, this)" style="border-color:var(--gold);">
+                            <div class="points-amount" style="font-size:2rem;">15,000</div>
+                            <div class="points-label">Points</div>
+                            <div style="font-size:0.75rem;color:var(--gold);">باقة ظهور الأولوية ⭐</div>
+                            <div style="font-size:0.7rem;color:var(--gold-light);">عروض غير محدودة + ميزة رؤية</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- طلب نقاط مخصصة -->
+                <div class="vip-section">
+                    <h3><i class="fa-solid fa-cart-plus"></i> طلب نقاط مخصصة</h3>
+                    <div class="custom-points-row">
+                        <input type="number" id="customPoints" placeholder="أدخل عدد النقاط المطلوب" min="1">
+                        <span class="estimated-price" id="estimatedPrice">السعر التقديري: -- EGP</span>
+                        <button class="btn-sm btn-gold" onclick="handleCustomPoints()"><i class="fa-solid fa-shopping-cart"></i> طلب شراء</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="cat-item ${activeCategory === 'electronics' ? 'active' : ''}" onclick="filterCategory('electronics')" style="display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-mobile-alt" style="color: #2196f3;"></i>
-            <span>إلكترونيات</span>
-        </div>
     </div>
-`;
 
-// لازم تعدل الـ return بتاع الدالة عشان يضيف الـ categoriesHTML في النص:
-// return container (بعد ما تجمع فيه الهيدر + الأقسام + شبكة المنتجات)
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // ============ GLOBAL STATE ============
+        let currentPage = 'home';
+        let selectedAccountType = 'customer';
+        let selectedVipBadge = 'gold';
+        let selectedBadgeDuration = '6-شهور';
+        let selectedPriorityDuration = 'يوم-كامل';
+        let selectedDiscount = 50;
+        let selectedPointsPackage = null;
 
-function filterCategory(cat) {
-    activeCategory = cat;
-    // هنا ممكن تضيف كود الفلترة الفعلي للمنتجات لو حابب
-    render(); // إعادة بناء الصفحة بالشكل الجديد
-}
+        // ============ NAVIGATION ============
+        function navigateTo(page) {
+            currentPage = page;
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show target page
+            const targetPage = document.getElementById('page-' + page);
+            if (targetPage) targetPage.classList.add('active');
+            // Update nav buttons
+            document.querySelectorAll('#navLinks button').forEach(b => {
+                b.classList.remove('active');
+                if (b.getAttribute('data-page') === page) b.classList.add('active');
+            });
+            // Update nav user info based on page
+            updateNavUser(page);
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Render products if needed
+            if (page === 'home') renderHomeProducts();
+            if (page === 'customer') renderCustomerProducts();
+            if (page === 'trader') renderTraderProducts();
+        }
+
+        function updateNavUser(page) {
+            const navUser = document.getElementById('navUser');
+            const avatar = navUser.querySelector('.avatar');
+            const userName = navUser.querySelector('.user-name');
+            const userRole = navUser.querySelector('.user-role');
+            switch (page) {
+                case 'owner':
+                    avatar.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+                    userName.textContent = 'محمد';
+                    userRole.textContent = 'المالك';
+                    break;
+                case 'trader':
+                    avatar.style.background = 'var(--gradient-gold)';
+                    userName.textContent = 'محمد';
+                    userRole.textContent = 'تاجر موثق';
+                    break;
+                case 'vip':
+                    avatar.style.background =
+                    'linear-gradient(135deg, #d4a853, #e8c97a, #d4a853)';
+                    userName.textConten
