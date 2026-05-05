@@ -120,8 +120,8 @@
         const { useState, useEffect, useRef } = React;
 
         // ---------- ثوابت ----------
-        const STORAGE_KEY = 'vicks_market_final_v5';
-        const THEME_KEY = 'vicks_theme_v5';
+        const STORAGE_KEY = 'vicks_market_final_v6';
+        const THEME_KEY = 'vicks_theme_v6';
         const ADMIN_EMAIL = 'mom1113694362@gmail.com';
         const ADMIN_PASS = 'momMOM2023#';
         const ADMIN_ID = '10000000000';
@@ -282,32 +282,40 @@
                    onClick={e=>{e.stopPropagation(); onRate(i+1);}}></i>);
             const short = prod.sellerName.length>10?prod.sellerName.slice(0,8)+'..':prod.sellerName;
 
+            // عنصر اسم المتجر مع الأفاتار والتحقق (سيتم وضعه في الأعلى)
+            const sellerElement = (
+                <div className="flex items-center gap-1 cursor-pointer" onClick={e=>{e.stopPropagation(); onSellerClick();}}>
+                    <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar||'🏪'}</span>
+                    <span className="text-[10px] text-gray-500 max-w-[60px] truncate">{short}</span>
+                    {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
+                </div>
+            );
+
             if(isList) {
                 return (
                     <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer hover:shadow-md transition-shadow">
-                        <div onClick={e=>{e.stopPropagation(); onImageClick&&onImageClick(prod);}}
-                             className="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center text-4xl flex-shrink-0 cursor-pointer hover:bg-gray-100 transition-colors"
-                             title="اضغط لتكبير الصورة">
-                            {prod.emoji}
-                        </div>
                         <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-sm truncate">{prod.name}</div>
-                            <div className="flex gap-0.5 my-1">{stars}</div>
-                            <div className="flex items-center gap-2 mt-1">
-                                <button onClick={e=>{e.stopPropagation(); onSellerClick();}} className="flex items-center gap-1">
-                                    <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar||'🏪'}</span>
-                                    <span className="text-[10px] text-gray-500">{short}</span>
-                                    {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
-                                </button>
-                            </div>
-                            <div className="flex justify-between items-center mt-2">
-                                <div className="flex items-center gap-2">
-                                    <button onClick={e=>{e.stopPropagation(); onLike();}} className={`action-btn-sm ${liked?'bg-orange-500 text-white':'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
-                                    <span className="text-sm font-bold text-orange-600">{prod.price.toLocaleString()} ج.م</span>
+                            {/* اسم المتجر في الأعلى محاذي لليمين */}
+                            <div className="flex justify-start mb-1">{sellerElement}</div>
+                            <div className="flex gap-3">
+                                <div onClick={e=>{e.stopPropagation(); onImageClick&&onImageClick(prod);}}
+                                     className="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center text-4xl flex-shrink-0 cursor-pointer hover:bg-gray-100 transition-colors"
+                                     title="اضغط لتكبير الصورة">
+                                    {prod.emoji}
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <button onClick={e=>{e.stopPropagation(); onWhats();}} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
-                                    <button onClick={e=>{e.stopPropagation(); onCommentsClick&&onCommentsClick(prod);}} className="action-btn-sm bg-blue-100 text-blue-600"><i className="fas fa-comment"></i></button>
+                                <div className="flex-1 min-w-0">
+                                    <div className="font-semibold text-sm truncate">{prod.name}</div>
+                                    <div className="flex gap-0.5 my-1">{stars}</div>
+                                    <div className="flex justify-between items-center mt-2">
+                                        <div className="flex items-center gap-2">
+                                            <button onClick={e=>{e.stopPropagation(); onLike();}} className={`action-btn-sm ${liked?'bg-orange-500 text-white':'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
+                                            <span className="text-sm font-bold text-orange-600">{prod.price.toLocaleString()} ج.م</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <button onClick={e=>{e.stopPropagation(); onWhats();}} className="action-btn-sm bg-green-100 text-green-600"><i className="fab fa-whatsapp"></i></button>
+                                            <button onClick={e=>{e.stopPropagation(); onCommentsClick&&onCommentsClick(prod);}} className="action-btn-sm bg-blue-100 text-blue-600"><i className="fas fa-comment"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -315,8 +323,11 @@
                 );
             }
 
+            // Grid view
             return (
                 <div onClick={onClick} className="p-3 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md w-[172px] flex-shrink-0 transition-shadow">
+                    {/* اسم المتجر في الأعلى محاذي لليمين */}
+                    <div className="flex justify-start mb-2">{sellerElement}</div>
                     <div onClick={e=>{e.stopPropagation(); onImageClick&&onImageClick(prod);}}
                          className="h-24 flex items-center justify-center bg-gray-50 rounded-xl text-5xl mb-2 cursor-pointer hover:bg-gray-100 transition-colors"
                          title="اضغط لتكبير الصورة">
@@ -324,13 +335,7 @@
                     </div>
                     <h3 className="font-semibold text-xs truncate text-center">{prod.name}</h3>
                     <div className="flex justify-center gap-0.5 my-1.5">{stars}</div>
-                    <div className="flex justify-center mb-2">
-                        <button onClick={e=>{e.stopPropagation(); onSellerClick();}} className="flex items-center gap-1">
-                            <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[9px]">{sellerAvatar||'🏪'}</span>
-                            <span className="text-[9px] text-gray-500 max-w-[55px] truncate">{short}</span>
-                            {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[8px]"></i>}
-                        </button>
-                    </div>
+                    {/* الصف السفلي: اليمين (لايك + سعر)، اليسار (واتساب + تعليقات) */}
                     <div className="flex justify-between items-center mt-1">
                         <div className="flex items-center gap-1.5">
                             <button onClick={e=>{e.stopPropagation(); onLike();}} className={`action-btn-sm ${liked?'bg-orange-500 text-white':'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
@@ -361,6 +366,7 @@
 
             return (
                 <div className="flex flex-col h-full relative">
+                    {/* شريط الفئات */}
                     <div className="sticky top-0 z-10 bg-white border-b px-2 py-1.5">
                         <div className="categories-scroll">
                             {categories.map(c => (
@@ -372,6 +378,7 @@
                         </div>
                     </div>
 
+                    {/* شريط البحث يظهر فوق أزرار العروض و VIP عند تفعيله */}
                     {showSearch && (
                         <div className="search-overlay">
                             <div className="flex gap-2 items-center">
@@ -386,11 +393,13 @@
                         </div>
                     )}
 
+                    {/* الشريط الذي يحتوي على عروض، VIP، أيقونة البحث، الشبكة والقائمة */}
                     <div className="flex items-center gap-3 px-3 py-2 bg-white border-b">
                         <button onClick={onShowOffers} className="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-xl hover:bg-orange-100 transition-colors">🎁 عروض</button>
                         <button onClick={onShowVIP} className="text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-xl hover:bg-yellow-100 transition-colors">👑 VIP</button>
                         <div className="flex-1"></div>
-                        <button onClick={()=>setShowSearch(true)} className="p-1.5 rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors" title="بحث">
+                        {/* أيقونة البحث بجانب أيقونة الشبكة من جهة اليمين (RTL: العدسة أولاً) */}
+                        <button onClick={()=>setShowSearch(!showSearch)} className={`p-1.5 rounded-lg transition-colors ${showSearch?'bg-orange-100 text-orange-500':'bg-gray-100 text-gray-500 hover:bg-gray-200'}`} title="بحث">
                             <i className="fas fa-search text-sm"></i>
                         </button>
                         <button onClick={()=>setView('grid')} className={`p-1.5 rounded-lg transition-colors ${view==='grid'?'bg-orange-500 text-white':'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
@@ -401,6 +410,7 @@
                         </button>
                     </div>
 
+                    {/* منطقة المنتجات */}
                     <div className="flex-1 overflow-auto p-2">
                         {filtered.length===0 && <div className="text-center py-16 text-gray-400"><i className="fas fa-search text-4xl mb-3 block"></i>لا توجد منتجات مطابقة</div>}
                         {view==='grid' && (
@@ -503,6 +513,7 @@
             return (
                 <div className="min-h-screen flex flex-col">
                     {page==='home' && <>
+                        {/* الهيدر بدون أيقونة البحث */}
                         <header className="sticky top-0 z-30 bg-white border-b px-3 py-2 flex items-center justify-between shadow-sm">
                             <div className="flex items-center gap-2"><i className="fas fa-store text-orange-500 text-lg"></i><span className="text-sm font-bold text-orange-600">VICKS MARKET</span></div>
                             <div className="flex gap-1.5">
