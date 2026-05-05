@@ -2,255 +2,618 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VICKS MARKET | PRO EDITION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>VICKS MARKET | PRO OWNER EDITION</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
+    
     <style>
         :root {
             --orange: #ff6600;
-            --gold: #FFD700;
-            --bg-dark: #0a0a0a;
+            --orange-light: #fff7ed;
+            --bg-light: #f9fafb;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+            --border: #e5e7eb;
+            --input-bg: #f3f4f6;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --gold: #FFD700; /* اللون الذهبي للتاج والتوثيق */
+        }
+
+        body.dark {
+            --bg-light: #0a0a0a;
             --card-bg: #121212;
+            --text-main: #ffffff;
+            --text-sub: #cccccc;
             --border: #2a2a2a;
+            --orange-light: #1a1006;
+            --input-bg: #1e1e1e;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            max-width: 100vw;
             overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* 1. تعديلات الهيدر */
+        /* تنسيق التاج وعلامة التوثيق المشرشرة */
+        .crown-icon {
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            font-size: 24px;
+            color: var(--gold);
+            transform: rotate(-20deg);
+            z-index: 10;
+        }
+
+        .verified-badge-pro {
+            background: var(--gold);
+            color: black;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            border: 1px solid var(--card-bg);
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* الهيدر المطور بطلبك */
         .header {
+            flex-shrink: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
+            padding: 10px 14px;
             background: var(--card-bg);
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: var(--shadow);
         }
-        .header-left { display: flex; gap: 18px; order: -1; }
-        .header-right { display: flex; gap: 18px; align-items: center; }
+        /* تابع الجزء الثاني: تنسيقات الهيدر والبروفايل الملكي */
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            order: -1; /* يضمن بقاء البحث والشبكة في أقصى اليسار */
+        }
 
-        /* 2. تصميم البروفايل الملكي */
-        .owner-profile { text-align: center; padding: 20px; position: relative; }
-        .avatar-container {
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--orange);
+            letter-spacing: 1px;
+            text-align: center;
+            flex: 1;
+        }
+
+        /* تنسيق بروفايل المالك الأسطوري */
+        .owner-profile-card {
+            text-align: center;
+            padding: 30px 20px;
             position: relative;
-            width: 110px;
-            height: 110px;
+            background: linear-gradient(180deg, var(--orange-light) 0%, var(--card-bg) 100%);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        body.dark .owner-profile-card {
+            background: linear-gradient(180deg, #1a1006 0%, var(--card-bg) 100%);
+        }
+
+        .owner-avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
             margin: 0 auto 15px;
         }
-        .avatar-img {
+
+        .owner-avatar-img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 3px solid var(--gold);
+            border: 4px solid var(--gold);
             object-fit: cover;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
-        .owner-crown {
-            position: absolute;
-            top: -18px;
-            left: -12px;
-            font-size: 32px;
+
+        /* ماكينة النقاط المدمجة في البروفايل */
+        .points-machine-container {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 340px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .points-display {
+            font-size: 1.8rem;
+            font-weight: 900;
             color: var(--gold);
-            transform: rotate(-20deg);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
         }
-        .verified-gold {
+
+        .points-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .pts-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .pts-btn:active { transform: scale(0.9); }
+        .pts-btn.plus { background: var(--orange); }
+        .pts-btn.minus { background: #ef4444; }
+
+        .points-input {
+            width: 80px;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+        /* تابع الجزء الثالث: تنسيق المنتجات والبوت */
+        .product-scroll-area {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 10px 4px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .product-scroll-area::-webkit-scrollbar {
+            display: none; /* إخفاء شريط التمرير لشكل أنظف */
+        }
+
+        .market-card {
+            min-width: 160px;
+            max-width: 160px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 8px;
+            scroll-snap-align: start;
+            box-shadow: var(--shadow);
+        }
+
+        .market-card .img-placeholder {
+            width: 100%;
+            height: 120px;
+            background: var(--input-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 8px;
+        }
+
+        .market-card .price-tag {
+            color: var(--orange);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        /* تنسيق واجهة البوت VICKS AI */
+        .ai-chat-wrapper {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-light);
+            z-index: 200;
+            display: none; /* يظهر عند الضغط على الزر */
+            flex-direction: column;
+        }
+
+        .ai-header {
+            background: var(--orange);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .ai-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 20px 20px; /* شكل شبكة خفيفة كخلفية للبوت */
+        }
+
+        .ai-watermark-bg {
             position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background: var(--gold);
-            color: black;
-            width: 22px;
-            height: 22px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--border);
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+        }
+
+        .ai-input-area {
+            padding: 12px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-input-area input {
+            flex: 1;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            padding: 10px 15px;
+            border-radius: 25px;
+            outline: none;
+            color: var(--text-main);
+        }
+        /* تابع الجزء الرابع: نهاية التنسيقات وبداية الهيكل */
+        .ai-action-btn {
+            color: var(--orange);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .ai-action-btn:active { transform: scale(0.8); }
+
+        .floating-ai-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: var(--orange);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+            z-index: 150;
+            cursor: pointer;
         }
-        .pts-inf { position: absolute; top: 10px; right: 20px; color: var(--gold); font-weight: 900; }
 
-        /* 3. بطاقة المنتج الماركت */
-        .product-scroll-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 12px;
-            padding: 15px;
-            scroll-snap-type: x mandatory;
-        }
-        .product-card {
-            min-width: 260px;
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 12px;
-            border: 1px solid var(--border);
-        }
-        .product-img {
-            width: 100%;
-            height: 190px;
-            background: #1a1a1a;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-        .price-stars-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-
-        /* 4. واجهة البوت */
-        .ai-chat-box {
+        .toast-msg {
             position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            z-index: 500;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 1000;
             display: none;
-            flex-direction: column;
-        }
-        .ai-watermark {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 5rem;
-            color: rgba(255, 102, 0, 0.04);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .ai-bottom-bar {
-            padding: 12px;
-            background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-top: 1px solid var(--border);
-        }
-
-        /* ماكينة النقاط */
-        .points-box {
-            background: #181818;
-            border: 1px solid var(--orange);
-            border-radius: 15px;
-            padding: 15px;
-            margin: 20px auto;
-            max-width: 350px;
         }
     </style>
 </head>
-<body>
+<body class="dark"> <div id="app" class="app-container">
+        <header class="header">
+            <div class="header-left">
+                <button class="icon-btn" onclick="toggleSearch()" title="بحث">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="icon-btn" onclick="toggleView()" title="عرض الشبكة">
+                    <i class="fas fa-th-large"></i>
+                </button>
+            </div>
 
-<div id="app">
-    <header class="header">
-        <div class="header-left">
-            <i class="fas fa-search text-xl cursor-pointer"></i>
-            <i class="fas fa-th-large text-xl cursor-pointer"></i>
+            <div class="logo-text">VICKS MARKET</div>
+
+            <div class="header-right">
+                <button class="icon-btn" onclick="navigate('offers')" style="color: #ef4444;" title="العروض">
+                    <i class="fas fa-percentage"></i>
+                </button>
+                <button class="icon-btn" onclick="navigate('vip')" style="color: var(--gold);" title="VIP">
+                    <i class="fas fa-crown"></i>
+                </button>
+                <button class="icon-btn" onclick="navigate('profile')" title="حسابي">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+            </div>
+        </header>
+
+        <div id="search-bar" class="search-overlay" style="display: none;">
+            <div class="search-wrapper">
+                <i class="fas fa-search text-gray-500"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن منتج أو متجر..." oninput="handleSearch()">
+            </div>
         </div>
-        <div class="text-orange-500 font-black text-2xl">V-FIX</div>
-        <div class="header-right">
-            <i class="fas fa-crown text-gold cursor-pointer"></i>
-            <i class="fas fa-percentage cursor-pointer"></i>
-            <i class="fas fa-user-circle text-2xl cursor-pointer" onclick="showProfile()"></i>
+
+        <main class="content-scroll" id="main-content">
+            </main>
+    </div>
+    <div id="ai-chat-ui" class="ai-chat-wrapper">
+        <div class="ai-header">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-robot"></i>
+                <span>VICKS AI SUPPORT</span>
+            </div>
+            <i class="fas fa-times cursor-pointer" onclick="toggleChat(false)"></i>
         </div>
-    </header>
+        
+        <div class="ai-messages" id="ai-messages-list">
+            <div class="ai-watermark-bg">VICKS AI</div>
+            </div>
 
-    <main id="content" class="p-4">
-        <h2 class="text-lg font-bold mb-2">أحدث العروض</h2>
-        <div id="product-list" class="product-scroll-container"></div>
-    </main>
-</div>
-
-<div id="ai-chat" class="ai-chat-box">
-    <div class="ai-watermark">VICKS AI</div>
-    <div class="p-4 bg-orange-600 flex justify-between font-bold">
-        <span>VICKS AI SUPPORT</span>
-        <i class="fas fa-times cursor-pointer" onclick="toggleChat(false)"></i>
+        <div class="ai-input-area">
+            <i class="fas fa-plus ai-action-btn"></i>
+            <i class="fas fa-camera ai-action-btn"></i>
+            <input type="text" id="ai-user-input" placeholder="كيف يمكنني مساعدتك يا كينج؟">
+            <i class="fas fa-paper-plane ai-action-btn" onclick="sendAiMessage()"></i>
+        </div>
     </div>
-    <div class="flex-1 p-4 overflow-y-auto" id="chat-content"></div>
-    <div class="ai-bottom-bar">
-        <i class="fas fa-plus text-gray-500 text-xl cursor-pointer"></i>
-        <i class="fas fa-camera text-gray-500 text-xl cursor-pointer"></i>
-        <input type="text" placeholder="اكتب رسالتك..." class="flex-1 bg-transparent outline-none">
-        <i class="fas fa-paper-plane text-orange-500 text-xl cursor-pointer"></i>
+
+    <div class="floating-ai-btn" onclick="toggleChat(true)">
+        <i class="fas fa-robot"></i>
     </div>
-</div>
 
-<button class="fixed bottom-6 right-6 w-14 h-14 bg-orange-600 rounded-full shadow-lg z-50 flex items-center justify-center text-2xl" onclick="toggleChat(true)">
-    <i class="fas fa-robot"></i>
-</button>
+    <div id="toast" class="toast-msg"></div>
 
-<script>
-    // بيانات تجريبية
-    const userEmail = "mom1113694362@gmail.com"; 
+    <script>
+        // إعدادات الحالة والمالك
+        const OWNER_EMAIL = "mom1113694362@gmail.com";
+        const OWNER_ID = "1000000000";
+        
+        let state = {
+            currentUser: null, // سيتم تعبئته عند الدخول
+            isAdmin: false,
+            pointsToTransfer: 0,
+            viewMode: 'grid'
+        };
 
-    function renderProducts() {
-        const list = document.getElementById('product-list');
-        for(let i=1; i<=10; i++) {
-            list.innerHTML += `
-                <div class="product-card">
-                    <div class="product-img">📱</div>
-                    <div class="mt-2 font-bold text-center">آيفون 15 برو ماكس</div>
-                    <div class="price-stars-row">
-                        <span class="text-orange-500 font-black">1200 دينار</span>
-                        <div class="text-gold text-xs">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center mt-3">
-                        <div class="flex items-center gap-1 text-[10px] text-gray-400">
-                             <div class="w-4 h-4 bg-gray-600 rounded-full"></div> متجر زيرو
-                        </div>
-                        <div class="flex gap-2 text-gray-400 text-sm">
-                            <i class="fas fa-heart"></i><i class="fas fa-comment"></i><i class="fab fa-telegram"></i>
-                        </div>
-                    </div>
-                </div>`;
+        // دالة التنقل بين الصفحات
+        function navigate(page) {
+            const main = document.getElementById('main-content');
+            if (page === 'profile') {
+                renderProfilePage(main);
+            } else if (page === 'home') {
+                renderHomePage(main);
+            } else {
+                main.innerHTML = `<div class="p-10 text-center">صفحة ${page} قيد التطوير...</div>`;
+            }
         }
-    }
 
-    function showProfile() {
-        const main = document.getElementById('content');
-        main.innerHTML = `
-            <div class="owner-profile">
-                <div class="pts-inf">النقاط: ∞</div>
-                <div class="avatar-container">
-                    <i class="fas fa-crown owner-crown"></i>
-                    <img src="https://via.placeholder.com/150" class="avatar-img">
-                    <div class="verified-gold"><i class="fas fa-check"></i></div>
-                </div>
-                <h1 class="text-2xl font-bold">Z҉E҉R҉O҉</h1>
-                <p class="text-gray-500 text-sm">الإيميل: ${userEmail}</p>
-                <p class="text-gray-500 text-sm">ID: 1000000000</p>
+        // دالة إظهار التنبيهات (Toast)
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 2000);
+        }
 
-                <div class="points-box">
-                    <h3 class="text-orange-500 font-bold mb-3">ماكينة تحويل النقاط</h3>
-                    <input type="text" id="target" placeholder="ID المستخدم" class="w-full bg-black p-2 rounded border border-gray-800 mb-3 text-center">
-                    <div class="flex justify-center gap-2 items-center mb-4">
-                        <button onclick="change(10)" class="bg-orange-700 px-3 py-1 rounded">+10</button>
-                        <button onclick="change(1)" class="bg-orange-500 px-3 py-1 rounded">+1</button>
-                        <span id="val" class="font-bold mx-2">0</span>
-                        <button onclick="change(-1)" class="bg-red-500 px-3 py-1 rounded">-1</button>
-                        <button onclick="change(-10)" class="bg-red-700 px-3 py-1 rounded">-10</button>
+        // تحكم في فتح وإغلاق البوت
+        function toggleChat(show) {
+            document.getElementById('ai-chat-ui').style.display = show ? 'flex' : 'none';
+        }
+        // تابع الجزء السادس: بناء بروفايل المالك وماكينة النقاط
+        function renderProfilePage(container) {
+            // التحقق إذا كان المستخدم هو المالك Z҉E҉R҉O҉
+            const isOwner = (OWNER_EMAIL === "mom1113694362@gmail.com"); 
+            
+            container.innerHTML = `
+                <div class="owner-profile-card">
+                    <div class="owner-avatar-wrapper">
+                        ${isOwner ? '<i class="fas fa-crown crown-icon"></i>' : ''}
+                        <img src="https://via.placeholder.com/150" class="owner-avatar-img" alt="Avatar">
+                        ${isOwner ? '<div class="verified-badge-pro" style="position:absolute; bottom:5px; right:5px;"><i class="fas fa-check"></i></div>' : ''}
                     </div>
-                    <button class="w-full bg-white text-black font-bold py-2 rounded">تأكيد التحويل</button>
+                    
+                    <h2 class="text-2xl font-black mb-1">${isOwner ? 'Z҉E҉R҉O҉' : 'مستخدم فيكس'}</h2>
+                    <p class="text-sm text-gray-500 mb-1">ID: ${isOwner ? OWNER_ID : '123456789'}</p>
+                    <p class="text-xs text-orange-500 font-bold">${OWNER_EMAIL}</p>
+
+                    <div class="points-machine-container">
+                        <h3 class="text-sm font-bold mb-3 text-gray-400">إدارة نقاط VICKS</h3>
+                        <div class="points-display" id="total-pts">${isOwner ? '∞' : '0'}</div>
+                        
+                        <div class="flex flex-col gap-3 mt-4">
+                            <input type="text" id="target-id" placeholder="أدخل ID المستخدم" class="points-input w-full">
+                            
+                            <div class="points-controls">
+                                <button class="pts-btn plus" onclick="updatePoints(10)">+10</button>
+                                <button class="pts-btn plus" onclick="updatePoints(1)">+1</button>
+                                <input type="number" id="pts-amount" value="0" class="points-input" readonly>
+                                <button class="pts-btn minus" onclick="updatePoints(-1)">-1</button>
+                                <button class="pts-btn minus" onclick="updatePoints(-10)">-10</button>
+                            </div>
+                            
+                            <button class="w-full bg-white text-black font-bold py-3 rounded-xl mt-2 hover:bg-gray-200 transition" 
+                                    onclick="confirmTransfer()">
+                                تأكيد تحويل النقاط
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>`;
-    }
+            `;
+        }
 
-    let currentVal = 0;
-    function change(v) { currentVal += v; document.getElementById('val').innerText = currentVal; }
-    function toggleChat(show) { document.getElementById('ai-chat').style.display = show ? 'flex' : 'none'; }
+        // دالة تحديث الرقم في الماكينة
+        function updatePoints(val) {
+            let input = document.getElementById('pts-amount');
+            let current = parseInt(input.value) || 0;
+            input.value = current + val;
+        }
 
-    renderProducts();
-</script>
+        function confirmTransfer() {
+            const id = document.getElementById('target-id').value;
+            const amount = document.getElementById('pts-amount').value;
+            if(!id) return showToast("يرجى إدخال ID المستخدم");
+            showToast(`تم إرسال ${amount} نقطة إلى الـ ID: ${id} بنجاح! ✅`);
+            document.getElementById('pts-amount').value = 0;
+        }
+        // تابع الجزء السابع: دالة الصفحة الرئيسية وعرض الـ 10 منتجات
+        function renderHomePage(container) {
+            container.innerHTML = `
+                <div class="p-4">
+                    <h2 class="text-lg font-black mb-3 flex justify-between items-center">
+                        <span>🔥 عروض الماركت</span>
+                        <span class="text-xs text-orange-500">سحب لليسار لرؤية المزيد</span>
+                    </h2>
+                    
+                    <div class="product-scroll-area" id="horizontal-products">
+                        </div>
 
+                    <div class="mt-8">
+                        <h2 class="text-lg font-black mb-3">🛍️ جميع الفئات</h2>
+                        <div class="grid grid-cols-2 gap-3" id="main-grid">
+                            </div>
+                    </div>
+                </div>
+            `;
+            
+            generateMarketProducts();
+        }
+
+        // دالة توليد 10 منتجات تجريبية للسحب الأفقي
+        function generateMarketProducts() {
+            const scrollArea = document.getElementById('horizontal-products');
+            const mainGrid = document.getElementById('main-grid');
+            if(!scrollArea) return;
+
+            for(let i = 1; i <= 10; i++) {
+                const productHTML = `
+                    <div class="market-card">
+                        <div class="img-placeholder">📱</div>
+                        <div class="font-bold text-xs truncate">منتج فيكس رقم ${i}</div>
+                        <div class="price-tag mt-1">${(i * 150)} ج.م</div>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="text-[10px] text-gray-500">⭐ 4.9</div>
+                            <i class="fas fa-cart-plus text-orange-500 cursor-pointer"></i>
+                        </div>
+                    </div>
+                `;
+                scrollArea.innerHTML += productHTML;
+                
+                // إضافة نفس المنتجات للشبكة الرئيسية للتجربة
+                if(mainGrid) mainGrid.innerHTML += productHTML;
+            }
+        }
+
+        // تحكم في شريط البحث
+        function toggleSearch() {
+            const bar = document.getElementById('search-bar');
+            bar.style.display = bar.style.display === 'none' ? 'block' : 'none';
+            if(bar.style.display === 'block') document.getElementById('searchInput').focus();
+        }
+
+        // تشغيل الموقع لأول مرة
+        window.onload = () => {
+            navigate('home'); // يبدأ الموقع بصفحة المنتجات
+            showToast("مرحباً بك في VICKS MARKET 🧡");
+        };
+        // تابع الجزء الثامن والأخير: برمجة البوت وإغلاق الكود
+        function sendAiMessage() {
+            const input = document.getElementById('ai-user-input');
+            const container = document.getElementById('ai-messages-list');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            // إضافة رسالة المستخدم
+            container.innerHTML += `
+                <div class="self-end bg-orange-500 text-white p-3 rounded-2xl rounded-tr-none max-w-[80%] text-sm shadow-sm">
+                    ${text}
+                </div>
+            `;
+
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // رد البوت الآلي (VICKS AI)
+            setTimeout(() => {
+                let response = "أهلاً بك يا كينج! أنا مساعدك الذكي في VICKS MARKET، كيف يمكنني خدمتك اليوم؟";
+                
+                if(text.includes("نقط") || text.includes("شحن")) {
+                    response = "لشحن النقاط، يرجى التواصل مع الإدارة أو استخدام ماكينة النقاط في بروفايلك إذا كنت تملك الصلاحية.";
+                } else if(text.includes("سلام") || text.includes("مرحبا")) {
+                    response = "وعليكم السلام يا غالي! منور ماركت فيكس 🧡";
+                }
+
+                container.innerHTML += `
+                    <div class="self-start bg-gray-200 dark:bg-gray-800 text-main p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm shadow-sm relative">
+                        ${response}
+                    </div>
+                `;
+                container.scrollTop = container.scrollHeight;
+            }, 800);
+        }
+
+        // دالة تغيير شكل العرض (Grid / List)
+        function toggleView() {
+            state.viewMode = state.viewMode === 'grid' ? 'list' : 'grid';
+            showToast(state.viewMode === 'grid' ? "تم تفعيل عرض الشبكة" : "تم تفعيل عرض القائمة");
+            renderHomePage(document.getElementById('main-content'));
+        }
+
+        // دالة البحث البسيطة
+        function handleSearch() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            if(q.length > 2) {
+                showToast("جاري البحث عن: " + q);
+            }
+        }
+    </script>
 </body>
 </html>
