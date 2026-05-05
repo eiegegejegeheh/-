@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -10,59 +10,18 @@
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
     <style>
-        /* الأنماط الأساسية والوضع الليلي */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        /* خلفيات الوضع الليلي */
-        body.dark {
-            background-color: #000000;
-        }
-        body.dark .bg-white,
-        body.dark .bg-gray-50,
-        body.dark .bg-gray-100,
-        body.dark .bg-card {
-            background-color: #121212 !important;
-        }
-        body.dark .text-gray-800,
-        body.dark .text-gray-600,
-        body.dark .text-gray-500,
-        body.dark .text-blue-600 {
-            color: #f97316 !important;
-        }
-        body.dark .border,
-        body.dark .border-gray-100,
-        body.dark .border-gray-200 {
-            border-color: #f97316 !important;
-        }
-        body.dark .bg-orange-50,
-        body.dark .bg-yellow-50,
-        body.dark .bg-indigo-50,
-        body.dark .bg-green-50 {
-            background-color: #1a1a1a !important;
-        }
-        body.dark button.bg-gray-100 {
-            background-color: #1a1a1a !important;
-            color: #f97316 !important;
-        }
-        body.dark button.bg-gray-100:hover {
-            background-color: #f97316 !important;
-            color: #000000 !important;
-        }
-        /* شريط الدردشة الثابت */
-        .chat-fixed-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: inherit;
-            z-index: 20;
-        }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        /* Dark mode premium */
+        body.dark { background-color: #000000; }
+        body.dark .bg-white, body.dark .bg-gray-50, body.dark .bg-gray-100, body.dark .bg-card { background-color: #121212 !important; }
+        body.dark .text-gray-800, body.dark .text-gray-600, body.dark .text-gray-500, body.dark .text-blue-600 { color: #f97316 !important; }
+        body.dark .border, body.dark .border-gray-100, body.dark .border-gray-200 { border-color: #f97316 !important; }
+        body.dark .bg-orange-50, body.dark .bg-yellow-50, body.dark .bg-indigo-50, body.dark .bg-green-50 { background-color: #1a1a1a !important; }
+        body.dark button.bg-gray-100 { background-color: #1a1a1a !important; color: #f97316 !important; }
+        body.dark button.bg-gray-100:hover { background-color: #f97316 !important; color: #000000 !important; }
+        .chat-fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: inherit; z-index: 20; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -70,23 +29,21 @@
 
     <script type="text/babel" data-presets="react,typescript">
         // --------------------------------------------------------------
-        // 1. البيانات الثابتة والوظائف المساعدة (خالية من الأخطاء)
+        // 1. الثوابت والبيانات الأساسية (مع تصحيح المالك)
         // --------------------------------------------------------------
-        const STORAGE_KEY = 'vicks_market_fixed';
-        const THEME_KEY = 'vicks_theme_fixed';
-        const LANG_KEY = 'vicks_lang_fixed';
-        const COUNTRY_KEY = 'vicks_country_fixed';
-
-        // بيانات المالك الثابتة (حساسة لحالة الأحرف)
+        const STORAGE_KEY = 'vicks_market_final';
+        const THEME_KEY = 'vicks_theme_final';
+        const LANG_KEY = 'vicks_lang_final';
+        const COUNTRY_KEY = 'vicks_country_final';
+        
+        // بيانات المالك (حساسة للمسافات - سنستخدم trim)
         const OWNER_EMAIL = 'mom1113694362@gmail.com';
         const OWNER_PASS = 'momMOM2023#';
         const OWNER_ID = '10000000000';
-
-        function generateId() {
-            return Math.random().toString(36).slice(2) + Date.now().toString(36);
-        }
-
-        // قائمة البلدان
+        
+        function generateId() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+        
+        // قائمة البلدان (ستستخدم فقط في الإعدادات)
         const countriesList = [
             { code: 'EG', name: 'مصر', currency: 'EGP' },
             { code: 'SA', name: 'السعودية', currency: 'SAR' },
@@ -97,8 +54,8 @@
             { code: 'FR', name: 'France', currency: 'EUR' },
             { code: 'TR', name: 'Turkey', currency: 'TRY' }
         ];
-
-        // التصنيفات (مع ترجمة 'all' إلى 'الجميع')
+        
+        // التصنيفات (مع ترجمة all)
         const categoriesData = [
             { id: 'all', label: 'الجميع', icon: 'fa-grid' },
             { id: 'electronics', label: 'الإلكترونيات', icon: 'fa-microchip' },
@@ -107,8 +64,8 @@
             { id: 'toys', label: 'الألعاب', icon: 'fa-gamepad' },
             { id: 'books', label: 'الكتب', icon: 'fa-book' }
         ];
-
-        // بيانات أولية للبائعين والمنتجات
+        
+        // البيانات الأولية
         const initialSellers = {
             admin: {
                 id: OWNER_ID, email: OWNER_EMAIL, password: OWNER_PASS,
@@ -131,7 +88,7 @@
                 country: 'السعودية', isAdmin: false, vipExpiry: null
             }
         };
-
+        
         const initialProducts = {
             p1: { id: 'p1', name: 'ايفون 14 Pro مستعمل', price: 18000, category: 'electronics', emoji: '📱', sellerId: 's1', sellerName: 'متجر النور', sellerCountry: 'مصر', likes: 8, likedBy: [], description: 'بطارية 92%', createdAt: Date.now() - 86400000 * 2, vip: true, comments: [], rating: 0 },
             p2: { id: 'p2', name: 'زيت زيتون بكر 1 لتر', price: 185, category: 'home', emoji: '🫒', sellerId: 's2', sellerName: 'سوبر ماركت الفرح', sellerCountry: 'السعودية', likes: 5, likedBy: [], description: 'زيت طبيعي', createdAt: Date.now() - 86400000, vip: false, comments: [], rating: 0 },
@@ -143,7 +100,7 @@
         initialSellers.admin.products = [];
         initialSellers.s1.products = ['p1', 'p3', 'p5'];
         initialSellers.s2.products = ['p2', 'p4', 'p6'];
-
+        
         function getInitialState() {
             return {
                 sellers: JSON.parse(JSON.stringify(initialSellers)),
@@ -153,7 +110,7 @@
                 notifications: []
             };
         }
-
+        
         function loadState() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
@@ -190,11 +147,11 @@
             if (m.includes('نقاط')) return 'يمكنك شراء النقاط من صفحة المتجر (حسابي ← المتجر).';
             return 'شكراً لتواصلك! كيف أقدر أساعدك؟';
         }
-
+        
         const { useState, useEffect, useCallback, useRef } = React;
-
+        
         // --------------------------------------------------------------
-        // 2. مكون بطاقة المنتج
+        // 2. مكون المنتج (ProductCard)
         // --------------------------------------------------------------
         function ProductCard({ product, isLiked, onLike, onWhatsApp, onClick, onComment, onRate, t, isVIPseller }) {
             const stars = [];
@@ -207,7 +164,7 @@
             const shortSeller = product.sellerName.length > 12 ? product.sellerName.slice(0, 10) + '..' : product.sellerName;
             return (
                 <div onClick={onClick} className="bg-white rounded-xl border shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition relative">
-                    {product.vip && <span className="absolute top-2 right-2 bg-yellow-400 text-white rounded-full px-2 py-0.5 text-xs z-10"><i className="fas fa-crown"></i> VIP</span>}
+                    {product.vip && <span className="absolute top-2 right-2 bg-yellow-400 text-white rounded-full px-2 py-0.5 text-xs"><i className="fas fa-crown"></i> VIP</span>}
                     <div className="aspect-square flex items-center justify-center bg-gray-50 text-7xl">{product.emoji}</div>
                     <div className="p-3">
                         <h3 className="font-semibold line-clamp-2">{product.name}</h3>
@@ -225,9 +182,9 @@
                 </div>
             );
         }
-
+        
         // --------------------------------------------------------------
-        // 3. صفحة الرئيسية (بدون زر حسابي مكرر)
+        // 3. الصفحة الرئيسية (بدون اختيار البلد وبدون زر حسابي مكرر)
         // --------------------------------------------------------------
         function HomePage({ products, sellers, currentSellerId, selectedCountry, onLike, onWhatsApp, onProductClick, onShowOffers, onShowVIPPage, onComment, onRate, t }) {
             const [category, setCategory] = useState('all');
@@ -235,7 +192,6 @@
             const filtered = React.useMemo(() => {
                 let arr = Object.values(products).filter(p => p.sellerCountry === selectedCountry);
                 if (category !== 'all') arr = arr.filter(p => p.category === category);
-                // ترتيب حسب VIP
                 arr.sort((a, b) => {
                     const sa = sellers[a.sellerId], sb = sellers[b.sellerId];
                     const va = sa?.subscription !== 'free' && sa?.vipExpiry > Date.now();
@@ -273,18 +229,16 @@
                             {filtered.map(p => {
                                 const seller = sellers[p.sellerId];
                                 const isVIPseller = seller?.subscription !== 'free' && seller?.vipExpiry > Date.now();
-                                return (
-                                    <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={() => onLike(p.id)} onWhatsApp={() => onWhatsApp(p)} onClick={() => onProductClick(p)} onComment={() => onComment(p.id)} onRate={(rating) => onRate(p.id, rating)} t={t} isVIPseller={isVIPseller} />
-                                );
+                                return <ProductCard key={p.id} product={p} isLiked={isLiked(p)} onLike={() => onLike(p.id)} onWhatsApp={() => onWhatsApp(p)} onClick={() => onProductClick(p)} onComment={() => onComment(p.id)} onRate={(rating) => onRate(p.id, rating)} t={t} isVIPseller={isVIPseller} />;
                             })}
                         </div>
                     </div>
                 </div>
             );
         }
-
+        
         // --------------------------------------------------------------
-        // 4. صفحة VIP
+        // 4. صفحة VIP (مكون كامل بألوان داكنة وذهبية)
         // --------------------------------------------------------------
         function VIPPage({ seller, onBack, onPurchaseSubscription, t }) {
             const [planType, setPlanType] = useState('monthly');
@@ -335,9 +289,9 @@
                 </div>
             );
         }
-
+        
         // --------------------------------------------------------------
-        // 5. صفحات عامة (تسجيل الدخول، انضمام، إلخ)
+        // 5. صفحات تسجيل الدخول والانضمام والإعدادات (مع دعم المالك)
         // --------------------------------------------------------------
         function LoginPage({ sellers, onLogin, onGoJoin, onBack, t }) {
             const [email, setEmail] = useState('');
@@ -346,7 +300,7 @@
             const handleLogin = () => {
                 const trimmedEmail = email.trim();
                 const trimmedPass = pass.trim();
-                // تحقق من المالك
+                // أولاً: التحقق من حساب المالك (باستخدام trim)
                 if (trimmedEmail === OWNER_EMAIL && trimmedPass === OWNER_PASS) {
                     const admin = Object.values(sellers).find(s => s.email === OWNER_EMAIL);
                     if (admin) onLogin(admin);
@@ -372,7 +326,7 @@
                 </div>
             );
         }
-
+        
         function JoinPage({ sellers, onRegister, onBack, t }) {
             const [form, setForm] = useState({ ownerName: '', phone: '', email: '', password: '', country: 'مصر' });
             const [error, setError] = useState('');
@@ -424,7 +378,19 @@
                 </div>
             );
         }
-
+        
+        function SettingsPage({ selectedCountry, setSelectedCountry, t }) {
+            return (
+                <div className="flex flex-col h-full bg-white">
+                    <div className="flex items-center p-4 border-b"><button onClick={() => window.history.back()} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold"><i className="fas fa-cog text-orange-500 ml-2"></i> {t('settings')}</h1></div>
+                    <div className="p-6"><label className="block text-sm font-medium mb-2">{t('your_country')}</label><select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full p-3 bg-gray-100 rounded-xl">{countriesList.map(c => <option key={c.code} value={c.name}>{c.name}</option>)}</select></div>
+                </div>
+            );
+        }
+        
+        // --------------------------------------------------------------
+        // 6. صفحة الدردشة (مع شريط ثابت وأيقونة +)
+        // --------------------------------------------------------------
         function ChatPage({ messages, onSendMessage, onBack, t, onImageUpload }) {
             const [input, setInput] = useState('');
             const fileRef = useRef(null);
@@ -444,26 +410,21 @@
                 </div>
             );
         }
-
-        function SettingsPage({ selectedCountry, setSelectedCountry, t }) {
-            return (
-                <div className="flex flex-col h-full bg-white">
-                    <div className="flex items-center p-4 border-b"><button onClick={() => window.history.back()} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold"><i className="fas fa-cog text-orange-500 ml-2"></i> {t('settings')}</h1></div>
-                    <div className="p-6"><label className="block text-sm font-medium mb-2">{t('your_country')}</label><select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full p-3 bg-gray-100 rounded-xl">{countriesList.map(c => <option key={c.code} value={c.name}>{c.name}</option>)}</select></div>
-                </div>
-            );
-        }
-
-        // اختصار لباقي الصفحات (لوحة البائع، المتجر، إضافة منتج، الخ) - تعريفات سريعة لكنها تعمل
+        
+        // --------------------------------------------------------------
+        // 7. باقي الصفحات (Seller, Store, AddProduct, ProductDetail, Offers, Admin)
+        // --------------------------------------------------------------
         function SellerPage({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack, onChangeLang, currentLang, t, onOpenSettings }) {
             const myProducts = seller.products.map(pid => products[pid]).filter(p => p);
             return (<div className="flex flex-col h-full"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right"></i></button><h1 className="flex-1 text-center font-bold">{seller.storeName}</h1><button onClick={onLogout} className="text-red-500"><i className="fas fa-sign-out-alt"></i></button></div><div className="p-4 grid grid-cols-2 gap-3"><button onClick={onGoStore} className="bg-indigo-50 p-4 rounded-2xl"><i className="fas fa-store"></i> {t('store_points')}</button><button onClick={onGoChat} className="bg-green-50 p-4 rounded-2xl"><i className="fas fa-comment-dots"></i> {t('ai_support')}</button><button onClick={onAddProduct} className="bg-blue-50 p-4 rounded-2xl"><i className="fas fa-plus-circle"></i> {t('add_product')}</button><button onClick={() => onChangeLang(currentLang === 'ar' ? 'en' : 'ar')} className="bg-yellow-50 p-4 rounded-2xl"><i className="fas fa-globe"></i> {currentLang === 'ar' ? 'English' : 'عربي'}</button><button onClick={onOpenSettings} className="bg-purple-50 p-4 rounded-2xl"><i className="fas fa-cog"></i> {t('settings')}</button></div><div className="px-4 font-semibold">{t('my_products')} ({myProducts.length})</div><div className="flex-1 overflow-auto p-4 space-y-2">{myProducts.map(p => <div key={p.id} className="flex gap-3 p-3 bg-white rounded-xl border"><div className="text-3xl">{p.emoji}</div><div className="flex-1"><div>{p.name}</div><div className="text-blue-600">{p.price} {t('currency')}</div></div><button onClick={() => onEditProduct(p)}><i className="fas fa-edit"></i></button><button onClick={() => onDeleteProduct(p.id)}><i className="fas fa-trash-alt text-red-500"></i></button></div>)}</div></div>);
         }
+        
         function StorePage({ seller, onBack, onPurchaseComplete, t }) {
             const buyPoints = (pts, cost) => { if (confirm(`شراء ${pts} نقطة بـ ${cost} ${t('currency')}؟`)) setTimeout(() => onPurchaseComplete('points', cost, pts), 300); };
             const buyVerify = () => { if (seller.verified) alert('موثق بالفعل'); else if (confirm('شراء شارة التوثيق 150 ج.م؟')) setTimeout(() => onPurchaseComplete('verify', 150), 300); };
             return (<div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right"></i> {t('back')}</button><div className="bg-white rounded-2xl p-6 text-center"><div className="text-5xl mb-2">⭐ {seller.points} {t('points')}</div><div>{seller.verified ? '✓ موثق' : 'غير موثق'}</div><div className="mb-4">الباقة: {seller.subscription}</div><div className="space-y-3"><button onClick={() => buyPoints(100,30)} className="w-full py-3 bg-amber-500 rounded-xl">100 نقطة - 30 ج.م</button><button onClick={() => buyPoints(500,120)} className="w-full py-3 bg-amber-600 rounded-xl">500 نقطة - 120 ج.م</button><button onClick={buyVerify} className="w-full py-3 bg-blue-600 rounded-xl">توثيق المتجر - 150 ج.م</button></div></div></div>);
         }
+        
         function AddProductPage({ onSave, onBack, editProduct, sellerCountry, t }) {
             const [name, setName] = useState(editProduct?.name || '');
             const [price, setPrice] = useState(editProduct?.price || '');
@@ -474,6 +435,7 @@
             const submit = () => { if (!name || !price) return; onSave({ name, price: Number(price), category, emoji, description: desc, vip: isVip, sellerCountry }); };
             return (<div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><div className="bg-white p-5 rounded-2xl shadow space-y-3"><h2 className="text-xl font-bold">{editProduct ? 'تعديل منتج' : 'إضافة منتج'}</h2><input placeholder="اسم المنتج" className="w-full p-3 border rounded-xl" value={name} onChange={e => setName(e.target.value)} /><input type="number" placeholder="السعر" className="w-full p-3 border rounded-xl" value={price} onChange={e => setPrice(e.target.value)} /><select className="w-full p-3 border rounded-xl" value={category} onChange={e => setCategory(e.target.value)}>{categoriesData.filter(c => c.id !== 'all').map(c => <option key={c.id} value={c.id}>{t(c.id)}</option>)}</select><input placeholder="رمز تعبيري" className="w-full p-3 border rounded-xl" value={emoji} onChange={e => setEmoji(e.target.value)} /><textarea placeholder="الوصف" rows="3" className="w-full p-3 border rounded-xl" value={desc} onChange={e => setDesc(e.target.value)} /><label><input type="checkbox" checked={isVip} onChange={e => setIsVip(e.target.checked)} /> <i className="fas fa-crown text-yellow-500"></i> منتج VIP</label><button onClick={submit} className="w-full py-3 bg-orange-500 text-white rounded-xl">حفظ</button></div></div>);
         }
+        
         function ProductDetailPage({ product, seller, isLiked, onLike, onBack, onComment, onRate, t }) {
             const [showComment, setShowComment] = useState(false);
             const [newComment, setNewComment] = useState('');
@@ -481,10 +443,12 @@
             const addComment = () => { if (newComment.trim()) { onComment(newComment); setNewComment(''); setShowComment(false); } };
             return (<div className="p-5"><button onClick={onBack} className="mb-4"><i className="fas fa-arrow-right ml-2"></i>{t('back')}</button><div className="bg-white rounded-2xl p-5"><div className="text-8xl text-center mb-4">{product.emoji}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} {t('currency')}</p><div className="flex gap-2 mt-2 justify-center">{stars()}</div><p className="text-gray-600 mt-3">{product.description || t('no_description')}</p><div className="mt-5 flex justify-between"><div><i className="fas fa-store"></i> {seller?.storeName}</div><div className="flex gap-2"><button onClick={onLike} className={`flex gap-2 px-5 py-2 rounded-full ${isLiked ? 'bg-orange-500 text-white' : 'bg-gray-100'}`}><i className="fas fa-heart"></i> {product.likes}</button><button onClick={() => setShowComment(true)} className="flex gap-2 px-5 py-2 rounded-full bg-blue-100 text-blue-600"><i className="fas fa-comment"></i> {t('comment')}</button></div></div>{showComment && (<div className="mt-4 p-3 bg-gray-100 rounded-xl"><textarea className="w-full p-2 border rounded-lg" rows="2" placeholder={t('write_comment')} value={newComment} onChange={e => setNewComment(e.target.value)} /><div className="flex gap-2 mt-2"><button onClick={addComment} className="px-4 py-2 bg-green-500 text-white rounded-lg">{t('publish')}</button><button onClick={() => setShowComment(false)} className="px-4 py-2 bg-gray-300 rounded-lg">{t('cancel')}</button></div></div>)}<div className="mt-4"><h3 className="font-semibold">{t('comments')}:</h3>{product.comments?.length === 0 ? <p>{t('no_comments')}</p> : product.comments?.map((c,i) => <div key={i} className="border-t pt-2 mt-2 text-sm">{c}</div>)}</div></div></div>);
         }
+        
         function OffersPage({ products, selectedCountry, onProductClick, onBack, t }) {
             const offers = Object.values(products).filter(p => (p.likes > 0 || p.price < 300) && p.sellerCountry === selectedCountry);
             return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack}><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold">{t('special_offers')}</h1></div><div className="flex-1 overflow-auto p-4 grid grid-cols-2 gap-4">{offers.map(p => <div key={p.id} onClick={() => onProductClick(p)} className="bg-white rounded-xl border p-3 cursor-pointer"><div className="text-6xl text-center">{p.emoji}</div><h3 className="font-semibold line-clamp-2">{p.name}</h3><p className="text-orange-600 font-bold">{p.price} {t('currency')}</p></div>)}</div></div>);
         }
+        
         function AdminDashboard({ sellers, products, onBack, onDeleteSeller, onDeleteProduct, onAddProductForSeller, onActivateVIP, t }) {
             const [selSeller, setSelSeller] = useState('');
             const [pName, setPName] = useState('');
@@ -492,9 +456,9 @@
             const sellerList = Object.values(sellers).filter(s => !s.isAdmin);
             return (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold">لوحة التحكم (Admin)</h1></div><div className="flex-1 overflow-auto p-4 space-y-6"><div><h2 className="text-xl font-bold mb-3">إدارة البائعين</h2>{sellerList.map(s => (<div key={s.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl"><div><div className="font-semibold">{s.storeName}</div><div className="text-sm text-gray-500">{s.email}</div></div><div><button onClick={() => onActivateVIP(s.id)} className="text-yellow-500 ml-2"><i className="fas fa-crown"></i> VIP</button><button onClick={() => onDeleteSeller(s.id)} className="text-red-500"><i className="fas fa-trash-alt"></i></button></div></div>))}</div><div><h2 className="text-xl font-bold mb-3">إضافة منتج لبائع</h2><select className="w-full p-3 border rounded-xl" value={selSeller} onChange={e => setSelSeller(e.target.value)}><option value="">اختر بائع</option>{sellerList.map(s => <option key={s.id} value={s.id}>{s.storeName}</option>)}</select><input placeholder="اسم المنتج" className="w-full p-3 border rounded-xl mt-2" value={pName} onChange={e => setPName(e.target.value)} /><input type="number" placeholder="السعر" className="w-full p-3 border rounded-xl mt-2" value={pPrice} onChange={e => setPPrice(e.target.value)} /><button onClick={() => { if (selSeller && pName && pPrice) onAddProductForSeller(selSeller, pName, parseFloat(pPrice)); }} className="mt-3 w-full py-3 bg-orange-500 text-white rounded-xl">إضافة</button></div></div></div>);
         }
-
+        
         // --------------------------------------------------------------
-        // 6. التطبيق الرئيسي (App)
+        // 8. التطبيق الرئيسي (App)
         // --------------------------------------------------------------
         function App() {
             const [state, setState] = useState(null);
@@ -509,25 +473,25 @@
             const [darkMode, setDarkMode] = useState(() => localStorage.getItem(THEME_KEY) === 'dark');
             const [selectedCountry, setSelectedCountry] = useState(() => localStorage.getItem(COUNTRY_KEY) || 'مصر');
             const cameraRef = useRef(null);
-
+            
             const translations = {
                 ar: { currency: 'ج.م', electronics: 'الإلكترونيات', fashion: 'الموضة', home: 'المنزل والمطبخ', toys: 'الألعاب', books: 'الكتب', offers: 'عروض', vip_subscriptions: 'اشتراكات VIP', no_products: 'لا توجد منتجات', back: 'رجوع', special_offers: 'العروض الخاصة', vip_membership: 'العضوية VIP', silver: 'فضي', gold: 'ذهبي', platinum: 'بلاتيني', monthly: 'شهرياً', yearly: 'سنوياً', subscribe_now: 'اشترك الآن', free_plan_note: 'الباقة المجانية: 10 منتجات', login: 'تسجيل الدخول', email: 'البريد الإلكتروني', password: 'كلمة المرور', login_btn: 'دخول', or: 'أو', join_seller: 'انضم كتاجر جديد', join_seller_title: 'انضم كتاجر', owner_name: 'اسم المالك', phone: 'رقم الهاتف', register: 'تسجيل', send_code: 'إرسال كود', enter_code: 'أدخل الكود', forgot_password: 'نسيت كلمة السر؟', store_points: 'المتجر والنقاط', ai_support: 'الدعم الذكي', add_product: 'إضافة منتج', my_products: 'منتجاتي', points: 'نقطة', package: 'الباقة', buy_100_points: '100 نقطة - 30 ج.م', buy_500_points: '500 نقطة - 120 ج.م', verify_store: 'توثيق المتجر - 150 ج.م', edit_product: 'تعديل منتج', product_name: 'اسم المنتج', price: 'السعر', emoji: 'رمز تعبيري', description: 'الوصف', vip_product: 'منتج VIP', save: 'حفظ', no_description: 'لا يوجد وصف', comment: 'تعليق', write_comment: 'اكتب تعليقك...', publish: 'نشر', cancel: 'إلغاء', comments: 'التعليقات', no_comments: 'لا توجد تعليقات', settings: 'الإعدادات', your_country: 'بلدك', invalid_credentials: 'بيانات غير صحيحة' },
                 en: { currency: 'EGP', electronics: 'Electronics', fashion: 'Fashion', home: 'Home & Kitchen', toys: 'Toys', books: 'Books', offers: 'Offers', vip_subscriptions: 'VIP Subscriptions', no_products: 'No products', back: 'Back', special_offers: 'Special Offers', vip_membership: 'VIP Membership', silver: 'Silver', gold: 'Gold', platinum: 'Platinum', monthly: 'Monthly', yearly: 'Yearly', subscribe_now: 'Subscribe Now', free_plan_note: 'Free plan: max 10 products', login: 'Login', email: 'Email', password: 'Password', login_btn: 'Login', or: 'Or', join_seller: 'Join as seller', join_seller_title: 'Join as Seller', owner_name: 'Owner Name', phone: 'Phone', register: 'Register', send_code: 'Send code', enter_code: 'Enter code', forgot_password: 'Forgot password?', store_points: 'Store & Points', ai_support: 'AI Support', add_product: 'Add Product', my_products: 'My Products', points: 'points', package: 'Package', buy_100_points: '100 points - 30 EGP', buy_500_points: '500 points - 120 EGP', verify_store: 'Verify Store - 150 EGP', edit_product: 'Edit Product', product_name: 'Product Name', price: 'Price', emoji: 'Emoji', description: 'Description', vip_product: 'VIP Product', save: 'Save', no_description: 'No description', comment: 'Comment', write_comment: 'Write comment...', publish: 'Publish', cancel: 'Cancel', comments: 'Comments', no_comments: 'No comments', settings: 'Settings', your_country: 'Your country', invalid_credentials: 'Invalid credentials' }
             };
             const t = (key) => translations[lang][key] || key;
-
+            
             useEffect(() => { setState(loadState()); }, []);
             useEffect(() => { if (state) saveState(state); }, [state]);
             useEffect(() => { document.dir = lang === 'ar' ? 'rtl' : 'ltr'; localStorage.setItem(LANG_KEY, lang); }, [lang]);
             useEffect(() => { if (darkMode) document.body.classList.add('dark'); else document.body.classList.remove('dark'); localStorage.setItem(THEME_KEY, darkMode ? 'dark' : 'light'); }, [darkMode]);
             useEffect(() => { localStorage.setItem(COUNTRY_KEY, selectedCountry); }, [selectedCountry]);
-
+            
             if (!state) return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-2xl text-orange-500">VICKS MARKET</div></div>;
-
+            
             const currentSeller = state.currentSellerId ? state.sellers[state.currentSellerId] : null;
             const isAdminUser = currentSeller?.isAdmin === true;
             const updateState = (updater) => setState(prev => updater(prev));
-
+            
             const handleLogin = (s) => { updateState(st => ({ ...st, currentSellerId: s.id })); setPage(isAdmin(s) ? 'admin' : 'seller'); };
             const handleRegister = (s) => { updateState(st => ({ ...st, sellers: { ...st.sellers, [s.id]: s }, currentSellerId: s.id })); setPage('seller'); };
             const handleLogout = () => { updateState(st => ({ ...st, currentSellerId: null })); setPage('home'); };
@@ -549,7 +513,7 @@
             const handleComment = (pid, text) => { updateState(s => { const p = s.products[pid]; return { ...s, products: { ...s.products, [pid]: { ...p, comments: [...(p.comments || []), text] } } }; }); };
             const handleRate = (pid, rating) => { updateState(s => { const p = s.products[pid]; return { ...s, products: { ...s.products, [pid]: { ...p, rating } } }; }); };
             const isLiked = (p) => currentSeller ? p.likedBy.includes(currentSeller.id) : false;
-
+            
             return (
                 <div className="min-h-screen flex flex-col">
                     {page === 'home' && (
@@ -587,7 +551,7 @@
                 </div>
             );
         }
-
+        
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
