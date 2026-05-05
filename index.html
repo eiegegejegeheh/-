@@ -13,18 +13,64 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        body.dark { background-color: #1e1f20; }
-        body.dark .bg-white, body.dark .bg-gray-50 { background-color: #1e1f20; }
-        body.dark .bg-gray-100 { background-color: #2c2d30; }
-        body.dark .text-gray-800, body.dark .text-gray-600, body.dark .text-gray-500 { color: #e8eaed; }
-        body.dark .border-gray-100, body.dark .border-gray-200 { border-color: #3c4043; }
-        body.dark .bg-indigo-50, body.dark .bg-green-50, body.dark .bg-blue-50, body.dark .bg-yellow-50, body.dark .bg-orange-50 { background-color: #2a2f3a; }
-        body.dark .chat-watermark { color: rgba(255,255,255,0.05); }
-        .chat-fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: inherit; z-index: 20; }
-        /* أنماط إضافية لصفحة VIP */
-        .vip-gold { background: linear-gradient(135deg, #1a1a2e, #0f0f1a); border: 1px solid #d4af37; }
-        .vip-card { transition: all 0.3s ease; }
-        .vip-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        
+        /* الوضع الليلي الاحترافي - متغيرات CSS */
+        body.dark {
+            background-color: #000000;
+        }
+        body.dark .bg-white, 
+        body.dark .bg-gray-50, 
+        body.dark .bg-gray-100,
+        body.dark .bg-card,
+        body.dark .bg-muted {
+            background-color: #121212 !important;
+        }
+        body.dark .text-gray-800, 
+        body.dark .text-gray-600, 
+        body.dark .text-gray-500 {
+            color: #f97316 !important;
+        }
+        body.dark .border-gray-100, 
+        body.dark .border-gray-200,
+        body.dark .border {
+            border-color: #f97316 !important;
+        }
+        body.dark .bg-indigo-50, 
+        body.dark .bg-green-50, 
+        body.dark .bg-blue-50, 
+        body.dark .bg-yellow-50, 
+        body.dark .bg-orange-50 {
+            background-color: #1a1a1a !important;
+        }
+        body.dark .chat-watermark {
+            color: rgba(249, 115, 22, 0.08);
+        }
+        body.dark .logo-text {
+            color: #f97316 !important;
+        }
+        body.dark .text-orange-600, body.dark .text-orange-500, body.dark .text-blue-600 {
+            color: #f97316 !important;
+        }
+        body.dark button.bg-gray-100 {
+            background-color: #1a1a1a !important;
+            color: #f97316 !important;
+        }
+        body.dark button.bg-gray-100:hover {
+            background-color: #f97316 !important;
+            color: #000000 !important;
+        }
+        body.dark .bg-white\/50 {
+            background-color: #121212 !important;
+        }
+        
+        .chat-fixed-bottom { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background: inherit; 
+            z-index: 20; 
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -36,23 +82,23 @@
         const THEME_KEY = 'vicks_theme';
         const LANG_KEY = 'vicks_lang';
         const COUNTRY_KEY = 'vicks_country';
-        // بيانات المالك الثابتة (Hardcoded Admin)
+        // بيانات المالك الثابتة
         const ADMIN_EMAIL = 'mom1113694362@gmail.com';
         const ADMIN_PASS = 'momMOM2023#';
         const ADMIN_ID = '10000000000';
         function generateId(): string { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 
-        // قائمة جميع دول العالم
+        // قائمة الدول
         const countriesList = [
             { code: 'EG', name: 'مصر', currency: 'EGP' }, { code: 'SA', name: 'السعودية', currency: 'SAR' },
             { code: 'AE', name: 'الإمارات', currency: 'AED' }, { code: 'US', name: 'United States', currency: 'USD' },
             { code: 'GB', name: 'United Kingdom', currency: 'GBP' }, { code: 'DE', name: 'Germany', currency: 'EUR' },
-            { code: 'FR', name: 'France', currency: 'EUR' }, { code: 'TR', name: 'Turkey', currency: 'TRY' },
-            { code: 'JO', name: 'Jordan', currency: 'JOD' }, { code: 'KW', name: 'Kuwait', currency: 'KWD' }
+            { code: 'FR', name: 'France', currency: 'EUR' }, { code: 'TR', name: 'Turkey', currency: 'TRY' }
         ];
         
+        // التصنيفات - مع تغيير 'all' إلى 'الجميع'
         const categories = [
-            { id: 'all', label: 'الكل', icon: 'fa-grid' }, { id: 'electronics', label: 'الإلكترونيات', icon: 'fa-microchip' },
+            { id: 'all', label: 'الجميع', icon: 'fa-grid' }, { id: 'electronics', label: 'الإلكترونيات', icon: 'fa-microchip' },
             { id: 'fashion', label: 'الموضة', icon: 'fa-tshirt' }, { id: 'home', label: 'المنزل والمطبخ', icon: 'fa-home' },
             { id: 'toys', label: 'الألعاب', icon: 'fa-gamepad' }, { id: 'books', label: 'الكتب', icon: 'fa-book' }
         ];
@@ -92,9 +138,9 @@
 
         const { useState, useEffect, useCallback, useRef } = React;
 
-        // ==================== مكونات الموقع بعد الإصلاح ====================
-
-        // ----- بطاقة المنتج -----
+        // ==================== مكونات الصفحات ====================
+        
+        // بطاقة المنتج
         const ProductCard = ({ product, isLiked, onLike, onWhatsApp, onClick, onComment, onRate, t, isVIPseller }: any) => {
             const ratingStars = (rating: number) => {
                 let stars = [];
@@ -123,7 +169,7 @@
             );
         };
 
-        // ----- صفحة الرئيسية -----
+        // صفحة الرئيسية (تم إزالة أيقونة حسابي المكررة)
         const HomePage = ({ products, sellers, currentSellerId, selectedCountry, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIPPage, imgSearchResults, onClearImgSearch, onComment, onRate, searchText, onSearchChange, showSearchBar, t }: any) => {
             const [selectedCategory, setSelectedCategory] = useState('all');
             const [viewMode, setViewMode] = useState('grid');
@@ -149,9 +195,9 @@
                             <div className="relative"><i className="fas fa-search absolute right-3 top-3 text-gray-400"></i><input type="text" placeholder={t('search_placeholder')} className="w-full p-3 pr-10 bg-gray-100 rounded-xl" value={searchText} onChange={(e) => onSearchChange(e.target.value)} autoFocus /></div>
                         </div>
                     )}
-                    <div className="sticky top-0 z-10 bg-white border-b px-2 py-2 overflow-x-auto scrollbar-hide"><div className="flex gap-2">{categories.map((cat: any) => (<button key={cat.id} onClick={() => { setSelectedCategory(cat.id); onClearImgSearch(); }} className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${selectedCategory === cat.id && !imgSearchResults ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-orange-100'}`}><i className={`fas ${cat.icon} text-xs`}></i> {t(cat.id) || cat.label}</button>))}</div></div>
+                    <div className="sticky top-0 z-10 bg-white border-b px-2 py-2 overflow-x-auto scrollbar-hide"><div className="flex gap-2">{categories.map((cat: any) => (<button key={cat.id} onClick={() => { setSelectedCategory(cat.id); onClearImgSearch(); }} className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${selectedCategory === cat.id && !imgSearchResults ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-orange-100'}`}><i className={`fas ${cat.icon} text-xs`}></i> {cat.label}</button>))}</div></div>
                     <div className="flex items-center gap-3 px-4 py-3 bg-white border-b">
-                        <button onClick={onAccountBtn} className="flex gap-2 px-4 py-2 rounded-xl bg-gray-100 text-sm"><i className="fas fa-user-circle"></i> {t('my_account')}</button>
+                        {/* تم إزالة أيقونة "حسابي" من هنا، أزيل هذا الزر */}
                         <button onClick={onShowOffers} className="flex gap-2 px-4 py-2 rounded-xl bg-orange-50 text-orange-600 text-sm">{t('offers')}</button>
                         <button onClick={onShowVIPPage} className="flex gap-2 px-4 py-2 rounded-xl bg-yellow-50 text-yellow-700 text-sm">{t('vip_subscriptions')}</button>
                         <div className="flex-1"></div>
@@ -167,18 +213,18 @@
             );
         };
 
-        // ----- صفحة VIP المعاد بناؤها (بدون أخطاء) -----
+        // صفحة VIP (بنفس وظائف السابق)
         const VIPPage = ({ seller, onBack, onPurchaseSubscription, t }: any) => {
             const [planType, setPlanType] = useState('monthly');
             const monthlyPlans = [
-                { id: 'silver', name: t('silver'), price: 99, features: ['50 منتج', 'دعم أساسي', 'نقاط مضاعفة'], color: '#9ca3af' },
-                { id: 'gold', name: t('gold'), price: 199, features: ['منتجات غير محدودة', 'دعم أولوية', 'نقاط ×2', 'ظهور مميز'], color: '#d4af37' },
-                { id: 'platinum', name: t('platinum'), price: 299, features: ['كل ميزات الذهبي', 'استشارات تسويقية', 'توثيق مجاني'], color: '#e5e4e2' }
+                { id: 'silver', name: t('silver'), price: 99, features: ['50 منتج', 'دعم أساسي', 'نقاط مضاعفة'] },
+                { id: 'gold', name: t('gold'), price: 199, features: ['منتجات غير محدودة', 'دعم أولوية', 'نقاط ×2', 'ظهور مميز'] },
+                { id: 'platinum', name: t('platinum'), price: 299, features: ['كل ميزات الذهبي', 'استشارات تسويقية', 'توثيق مجاني'] }
             ];
             const yearlyPlans = [
-                { id: 'silver', name: t('silver'), price: 990, features: ['50 منتج', 'دعم أساسي', 'نقاط مضاعفة', 'خصم 15%'], color: '#9ca3af' },
-                { id: 'gold', name: t('gold'), price: 1990, features: ['منتجات غير محدودة', 'دعم أولوية', 'نقاط ×3', 'ظهور مميز', 'خصم 20%'], color: '#d4af37' },
-                { id: 'platinum', name: t('platinum'), price: 2990, features: ['كل ميزات الذهبي', 'استشارات تسويقية', 'توثيق مجاني', 'خصم 25%'], color: '#e5e4e2' }
+                { id: 'silver', name: t('silver'), price: 990, features: ['50 منتج', 'دعم أساسي', 'نقاط مضاعفة', 'خصم 15%'] },
+                { id: 'gold', name: t('gold'), price: 1990, features: ['منتجات غير محدودة', 'دعم أولوية', 'نقاط ×3', 'ظهور مميز', 'خصم 20%'] },
+                { id: 'platinum', name: t('platinum'), price: 2990, features: ['كل ميزات الذهبي', 'استشارات تسويقية', 'توثيق مجاني', 'خصم 25%'] }
             ];
             const currentPlans = planType === 'monthly' ? monthlyPlans : yearlyPlans;
             const buySubscription = (plan: any) => {
@@ -186,9 +232,6 @@
                 const msg = encodeURIComponent(`طلب اشتراك VIP من التاجر ${seller.storeName} - الباقة: ${plan.name} - المبلغ: ${plan.price} ${t('currency')}`);
                 window.open(`https://wa.me/2${phone}?text=${msg}`, '_blank');
                 alert(`تم إرسال طلب الاشتراك إلى الإدارة عبر واتساب. سيتم تفعيل اشتراكك بعد تأكيد الدفع.`);
-                if (window.confirm(`هل تريد تفعيل الاشتراك تجريبياً (محاكاة)؟`)) {
-                    onPurchaseSubscription(plan.id, plan.price);
-                }
             };
             return (
                 <div className="flex flex-col h-full bg-black">
@@ -198,14 +241,14 @@
                     </div>
                     <div className="flex-1 overflow-auto p-4 bg-gradient-to-b from-gray-900 to-black">
                         <div className="flex justify-center gap-4 mb-8"><button onClick={() => setPlanType('monthly')} className={`px-6 py-2 rounded-full font-semibold transition ${planType === 'monthly' ? 'bg-yellow-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300'}`}>{t('monthly')}</button><button onClick={() => setPlanType('yearly')} className={`px-6 py-2 rounded-full font-semibold transition ${planType === 'yearly' ? 'bg-yellow-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300'}`}>{t('yearly')} <span className="text-xs text-yellow-500">-20%</span></button></div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{currentPlans.map((plan: any) => (<div key={plan.id} className="vip-card rounded-2xl p-6 bg-gray-900 border border-yellow-700 hover:border-yellow-500 transition-all duration-300"><div className="text-center"><div className="text-5xl mb-2">{plan.id === 'gold' ? '👑' : plan.id === 'platinum' ? '💎' : '⭐'}</div><h2 className="text-2xl font-bold text-white">{plan.name}</h2><p className="text-3xl font-bold mt-3 text-yellow-500">{plan.price} {t('currency')}<span className="text-sm text-gray-400">/{planType === 'monthly' ? t('monthly') : t('yearly')}</span></p><ul className="mt-4 space-y-2 text-gray-300 text-right">{plan.features.map((f: string, idx: number) => <li key={idx} className="flex items-center gap-2"><i className="fas fa-check-circle text-green-500 text-sm"></i> {f}</li>)}</ul><button onClick={() => buySubscription(plan)} className="mt-6 w-full py-3 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded-xl transition">{t('subscribe_now')}</button></div></div>))}</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{currentPlans.map((plan: any) => (<div key={plan.id} className="rounded-2xl p-6 bg-gray-900 border border-yellow-700 hover:border-yellow-500 transition-all duration-300"><div className="text-center"><div className="text-5xl mb-2">{plan.id === 'gold' ? '👑' : plan.id === 'platinum' ? '💎' : '⭐'}</div><h2 className="text-2xl font-bold text-white">{plan.name}</h2><p className="text-3xl font-bold mt-3 text-yellow-500">{plan.price} {t('currency')}<span className="text-sm text-gray-400">/{planType === 'monthly' ? t('monthly') : t('yearly')}</span></p><ul className="mt-4 space-y-2 text-gray-300 text-right">{plan.features.map((f: string, idx: number) => <li key={idx} className="flex items-center gap-2"><i className="fas fa-check-circle text-green-500 text-sm"></i> {f}</li>)}</ul><button onClick={() => buySubscription(plan)} className="mt-6 w-full py-3 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded-xl transition">{t('subscribe_now')}</button></div></div>))}</div>
                         <p className="text-xs text-center text-gray-500 mt-6">{t('free_plan_note')}</p>
                     </div>
                 </div>
             );
         };
 
-        // ----- صفحة التسجيل المبسطة (الخانات المطلوبة فقط) -----
+        // صفحة التسجيل
         const JoinPage = ({ sellers, onRegister, onBack, t }: any) => {
             const [form, setForm] = useState({ ownerName: '', phone: '', email: '', password: '', country: 'مصر' });
             const [err, setErr] = useState('');
@@ -213,14 +256,13 @@
             const [otpCode, setOtpCode] = useState('');
             const [userOtp, setUserOtp] = useState('');
             
-            // دالة تعبئة بيانات وسائل التواصل بشكل صحيح (اسم المالك والبريد فقط)
             const fillSocial = (type: string) => {
                 if (type === 'google') {
-                    setForm({ ...form, ownerName: 'محمد جوجل', email: 'user@gmail.com', phone: '', country: form.country, password: form.password });
+                    setForm({ ...form, ownerName: 'محمد جوجل', email: 'user@gmail.com' });
                 } else if (type === 'facebook') {
-                    setForm({ ...form, ownerName: 'أحمد فيسبوك', email: 'user@facebook.com', phone: '', country: form.country, password: form.password });
+                    setForm({ ...form, ownerName: 'أحمد فيسبوك', email: 'user@facebook.com' });
                 } else {
-                    setForm({ ...form, ownerName: '', email: '', phone: '' });
+                    setForm({ ...form, ownerName: '', email: '' });
                 }
             };
             const sendOtp = () => {
@@ -251,13 +293,12 @@
             );
         };
 
-        // ----- شاشة تسجيل الدخول (مع المالك الثابت) -----
+        // شاشة تسجيل الدخول
         const LoginPage = ({ sellers, onLogin, onGoJoin, onBack, t }: any) => {
             const [email, setEmail] = useState(''); const [pass, setPass] = useState(''); const [err, setErr] = useState('');
             const doLogin = () => {
                 const trimmedEmail = email.trim();
                 const trimmedPass = pass.trim();
-                // التحقق من المالك أولاً
                 if (trimmedEmail === ADMIN_EMAIL && trimmedPass === ADMIN_PASS) {
                     const adminSeller = Object.values(sellers).find((s: any) => s.email === ADMIN_EMAIL);
                     if (adminSeller) onLogin(adminSeller);
@@ -275,13 +316,14 @@
         };
 
         // ----- باقي المكونات الأساسية (مختصرة مع الحفاظ على الوظائف) -----
-        const SettingsPage = ({ seller, selectedCountry, setSelectedCountry, t }: any) => (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={() => window.history.back()} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold"><i className="fas fa-cog text-orange-500 ml-2"></i> {t('settings')}</h1></div><div className="p-6"><label className="block text-sm font-medium mb-2">{t('your_country')}</label><select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full p-3 bg-gray-100 rounded-xl">{countriesList.map(c => <option key={c.code} value={c.name}>{c.name} ({c.currency})</option>)}</select></div></div>);
+        const SettingsPage = ({ selectedCountry, setSelectedCountry, t }: any) => (<div className="flex flex-col h-full bg-white"><div className="flex items-center p-4 border-b"><button onClick={() => window.history.back()} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i> {t('back')}</button><h1 className="flex-1 text-center font-bold"><i className="fas fa-cog text-orange-500 ml-2"></i> {t('settings')}</h1></div><div className="p-6"><label className="block text-sm font-medium mb-2">{t('your_country')}</label><select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full p-3 bg-gray-100 rounded-xl">{countriesList.map(c => <option key={c.code} value={c.name}>{c.name} ({c.currency})</option>)}</select></div></div>);
+        
         const ChatPage = ({ messages, onSendMessage, onBack, t, onImageUpload }: any) => {
             const [input, setInput] = useState('');
             const fileRef = useRef(null);
             const send = () => { if (input.trim()) { onSendMessage(input); setInput(''); } };
             const handleImage = (e: any) => { if (e.target.files[0] && onImageUpload) onImageUpload(e.target.files[0]); };
-            return (<div className="flex flex-col h-full relative bg-gray-50"><div className="absolute inset-0 flex items-center justify-center pointer-events-none text-4xl font-bold text-black/10 dark:text-white/10">VICKS AI</div><div className="flex items-center p-4 border-b bg-white z-10"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1></div><div className="flex-1 overflow-y-auto p-3 space-y-3 pb-24">{messages.map((m: any) => (<div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`max-w-[80%] p-3 rounded-2xl ${m.role === 'user' ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}>{m.text}</div></div>))}</div><div className="chat-fixed-bottom p-3 border-t flex gap-2 bg-white z-20"><button onClick={() => (fileRef.current as any)?.click()} className="p-3 rounded-xl bg-gray-100 hover:bg-orange-500 hover:text-white"><i className="fas fa-plus"></i></button><input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} /><input className="flex-1 p-3 bg-gray-100 rounded-xl" placeholder={t('chat_placeholder_new')} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} /><button onClick={send} className="px-5 bg-orange-500 text-white rounded-xl"><i className="fas fa-paper-plane"></i></button></div></div>);
+            return (<div className="flex flex-col h-full relative bg-gray-50"><div className="absolute inset-0 flex items-center justify-center pointer-events-none text-4xl font-bold text-black/10 dark:text-white/10">VICKS AI</div><div className="flex items-center p-4 border-b bg-white z-10"><button onClick={onBack} className="hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i></button><h1 className="flex-1 text-center font-bold"><i className="fas fa-robot text-orange-500 ml-2"></i> VICKS AI</h1></div><div className="flex-1 overflow-y-auto p-3 space-y-3 pb-24">{messages.map((m: any) => (<div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`max-w-[80%] p-3 rounded-2xl ${m.role === 'user' ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}>{m.text}</div></div>))}</div><div className="chat-fixed-bottom p-3 border-t flex gap-2 bg-white z-20"><button onClick={() => (fileRef.current as any)?.click()} className="p-3 rounded-xl bg-gray-100 hover:bg-orange-500 hover:text-white"><i className="fas fa-plus"></i></button><input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} /><input className="flex-1 p-3 bg-gray-100 rounded-xl" placeholder="هيا نتحدث.. ما مشكلتك؟" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} /><button onClick={send} className="px-5 bg-orange-500 text-white rounded-xl"><i className="fas fa-paper-plane"></i></button></div></div>);
         };
         const SellerPage = ({ seller, products, onGoStore, onGoChat, onAddProduct, onEditProduct, onDeleteProduct, onLogout, onBack, onChangeLang, currentLang, t, onOpenSettings }: any) => {
             const myProducts = seller.products.map((pid: string) => products[pid]).filter((p: any) => p);
@@ -400,7 +442,7 @@
                     {page === 'chat' && <ChatPage messages={state.chatMessages} onSendMessage={handleSendMessage} onBack={() => setPage(currentSeller ? 'seller' : 'home')} t={t} onImageUpload={handleImageUpload} />}
                     {page === 'addProduct' && currentSeller && <AddProductPage onSave={handleAddProduct} onBack={() => { setEditingProduct(null); setPage('seller'); }} editProduct={editingProduct} sellerCountry={currentSeller.country} t={t} />}
                     {page === 'detail' && detailProduct && <ProductDetailPage product={state.products[detailProduct.id] || detailProduct} seller={state.sellers[detailProduct.sellerId] || null} isLiked={isLiked(state.products[detailProduct.id] || detailProduct)} onLike={() => handleLike(detailProduct.id)} onBack={showHome} onComment={(text: string) => handleComment(detailProduct.id, text)} onRate={(rating: number) => handleRate(detailProduct.id, rating)} t={t} />}
-                    {page === 'settings' && currentSeller && <SettingsPage seller={currentSeller} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} t={t} />}
+                    {page === 'settings' && <SettingsPage selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} t={t} />}
                 </div>
             );
         };
