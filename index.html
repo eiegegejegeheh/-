@@ -34,7 +34,6 @@
         @media (max-width: 640px) {
             .chat-watermark { font-size: 2rem; white-space: normal; text-align: center; width: 80%; }
         }
-        /* الإطار البرتقالي المطلوب للشعار */
         .icon-container {
             border: 2px solid #f97316;
             border-radius: 20px;
@@ -50,7 +49,6 @@
     <div id="root"></div>
 
     <script type="text/babel" data-presets="react,typescript">
-        // ---------- البيانات الأساسية والوظائف ----------
         const STORAGE_KEY = 'vicks_market_state';
         const OWNER_EMAIL = 'mom1113694362@gmail.com';
         const OWNER_PASS = 'MohamedVfix2024Secure';
@@ -91,7 +89,6 @@
 
         const { useState, useEffect, useCallback, useRef } = React;
 
-        // بطاقة المنتج (تم إصلاح الأخطاء النحوية)
         function ProductCard({ product, isLiked, onLike, onWhatsApp, onClick, listMode }) {
             const vipIcon = product.vip ? <i className="fas fa-crown text-yellow-500 text-sm ml-1"></i> : null;
             if (listMode) {
@@ -144,8 +141,7 @@
             );
         }
 
-        // صفحة الرئيسية
-        function HomePage({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, onShowVIP, imgSearchResults, onClearImgSearch }) {
+        function HomePage({ products, currentSellerId, onLike, onWhatsApp, onProductClick, onAccountBtn, onShowOffers, imgSearchResults, onClearImgSearch }) {
             const [category, setCategory] = useState('all');
             const [viewMode, setViewMode] = useState('grid');
             const categories = [
@@ -189,9 +185,6 @@
                         <button onClick={onShowOffers} className="flex gap-2 px-4 py-2 rounded-xl bg-orange-50 text-orange-600 text-sm hover:bg-orange-500 hover:text-white transition">
                             <i className="fas fa-tag"></i> عروض
                         </button>
-                        <button onClick={onShowVIP} className="flex gap-2 px-4 py-2 rounded-xl bg-yellow-50 text-yellow-700 text-sm hover:bg-orange-500 hover:text-white transition">
-                            <i className="fas fa-crown"></i> VIP
-                        </button>
                         <button className="flex gap-2 px-4 py-2 rounded-xl text-orange-600 border border-orange-200 hover:bg-orange-500 hover:text-white transition">
                             <i className="fas fa-shopping-cart"></i> السلة
                         </button>
@@ -214,7 +207,6 @@
             );
         }
 
-        // باقي المكونات (جميعها صحيحة نحويًا)
         function LoginPage({ sellers, onLogin, onGoJoin, onBack }) { 
             const [email,setEmail]=useState(''); const [pass,setPass]=useState(''); const [err,setErr]=useState('');
             const [forgotMode, setForgotMode] = useState(false); const [resetEmail, setResetEmail] = useState(''); const [resetSent, setResetSent] = useState(false);
@@ -230,7 +222,6 @@
         function AddProductPage({ onSave, onBack, editProduct }) { const [name,setName]=useState(editProduct?.name||''); const [price,setPrice]=useState(editProduct?.price||''); const [category,setCategory]=useState(editProduct?.category||'used'); const [emoji,setEmoji]=useState(editProduct?.emoji||'📦'); const [desc,setDesc]=useState(editProduct?.description||''); const [isVip, setIsVip] = useState(editProduct?.vip||false); const submit=()=>{if(!name||!price) return; onSave({name,price:Number(price),category,emoji,description:desc, vip:isVip});}; return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white p-5 rounded-2xl shadow space-y-3"><h2 className="text-xl font-bold">{editProduct?'تعديل منتج':'إضافة منتج'}</h2><input placeholder="اسم المنتج" className="w-full p-3 border rounded-xl" value={name} onChange={e=>setName(e.target.value)}/><input type="number" placeholder="السعر" className="w-full p-3 border rounded-xl" value={price} onChange={e=>setPrice(e.target.value)}/><select className="w-full p-3 border rounded-xl" value={category} onChange={e=>setCategory(e.target.value)}><option value="used">مستعمل</option><option value="screens">سوبر ماركت</option><option value="new">جمال وعناية</option></select><input placeholder="رمز تعبيري" className="w-full p-3 border rounded-xl" value={emoji} onChange={e=>setEmoji(e.target.value)}/><textarea placeholder="وصف المنتج" rows="3" className="w-full p-3 border rounded-xl" value={desc} onChange={e=>setDesc(e.target.value)}></textarea><label className="flex items-center gap-2"><input type="checkbox" checked={isVip} onChange={e=>setIsVip(e.target.checked)}/> <i className="fas fa-crown text-yellow-500"></i> منتج VIP</label><button onClick={submit} className="w-full py-3 bg-orange-500 text-white rounded-xl font-bold">حفظ</button></div></div>);}
         function ProductDetailPage({ product, seller, isLiked, onLike, onBack }) { return (<div className="p-5"><button onClick={onBack} className="mb-4 hover:text-orange-500"><i className="fas fa-arrow-right ml-2"></i>رجوع</button><div className="bg-white rounded-2xl p-5"><div className="text-8xl text-center mb-4 relative">{product.emoji}{product.vip && <span className="absolute top-0 right-1/2 bg-yellow-400 rounded-full px-2 py-0.5 text-xs"><i className="fas fa-crown"></i> VIP</span>}</div><h2 className="text-2xl font-bold">{product.name}</h2><p className="text-3xl text-blue-600 font-bold mt-2">{product.price.toLocaleString()} ج.م</p><p className="text-gray-600 mt-3">{product.description||'لا يوجد وصف'}</p><div className="mt-5 flex justify-between"><div><i className="fas fa-store"></i> {seller?.storeName}</div><button onClick={onLike} className={`flex gap-2 px-5 py-2 rounded-full transition-all duration-200 ${isLiked?'bg-orange-500 text-white':'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-500'}`}><i className={`fas fa-heart ${isLiked?'text-white':''}`}></i> {product.likes}</button></div></div></div>);}
 
-        // التطبيق الرئيسي مع إطار الشعار البرتقالي
         function App() {
             const [state, setState] = useState(null);
             const [page, setPage] = useState('home');
@@ -265,7 +256,6 @@
             const isLiked = (p) => currentSeller ? p.likedBy.includes(currentSeller.id) : false;
             const offersProducts = Object.values(state.products).filter(p=>p.likes>0||p.price<300);
             const handleQuickAdd = () => { if(currentSeller) { setEditingProduct(null); setPage('addProduct'); } else { setPage('login'); } };
-            const handleShowVIP = () => { setCategory('vip'); }; // تعديل بسيط لتجنب خطأ اختيار الزر
 
             return (
                 <div className={`min-h-screen flex flex-col bg-gray-50 ${ownerMode ? 'ring-2 ring-yellow-400' : ''}`}>
@@ -286,7 +276,7 @@
                             <div className="bg-white px-4 pb-3 pt-2 border-b border-gray-100"><input id="searchInput" type="text" placeholder="ابحث عن منتج..." className="w-full p-3 bg-gray-100 rounded-xl focus:ring-2 focus:ring-orange-300 outline-none" value={searchText} onChange={handleSearchChange} /></div>
                             {imgSearchLoading && <div className="bg-blue-50 p-2 text-center text-blue-600 text-sm"><i className="fas fa-spinner fa-pulse"></i> جاري البحث بالصورة...</div>}
                             <main className="flex-1 overflow-hidden">
-                                <HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p=>{ setDetailProduct(p); setPage('detail'); }} onAccountBtn={()=>currentSeller?setPage('seller'):setPage('login')} onShowOffers={()=>setShowOffersModal(true)} onShowVIP={handleShowVIP} imgSearchResults={imgSearchResults} onClearImgSearch={()=>{setImgSearchResults(null); setSearchText('');}} />
+                                <HomePage products={state.products} currentSellerId={state.currentSellerId} onLike={handleLike} onWhatsApp={handleWhatsApp} onProductClick={p=>{ setDetailProduct(p); setPage('detail'); }} onAccountBtn={()=>currentSeller?setPage('seller'):setPage('login')} onShowOffers={()=>setShowOffersModal(true)} imgSearchResults={imgSearchResults} onClearImgSearch={()=>{setImgSearchResults(null); setSearchText('');}} />
                             </main>
                             <button onClick={()=>setPage('chat')} className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-orange-500 text-white shadow-lg flex items-center justify-center hover:bg-orange-600 transition-all duration-200 z-30"><i className="fas fa-robot text-2xl"></i></button>
                         </>
