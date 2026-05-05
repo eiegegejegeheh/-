@@ -1,916 +1,1576 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>VICKS MARKET | منصة تجارة عالمية</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    :root {
-      --orange: #ff6600;
-      --orange-light: #fff7ed;
-      --bg-light: #f9fafb;
-      --card-bg: #ffffff;
-      --text-main: #1f2937;
-      --text-sub: #6b7280;
-      --border: #e5e7eb;
-      --input-bg: #f3f4f6;
-      --shadow: 0 2px 8px rgba(0, 0, 0, 0.06); 
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>VICKS MARKET | منصة تجارة عالمية</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --orange: #ff6600;
+            --orange-light: #fff7ed;
+            --bg-light: #f9fafb;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+            --border: #e5e7eb;
+            --input-bg: #f3f4f6;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
 
-    body.dark {
-      --bg-light: #0a0a0a;
-      --card-bg: #121212;
-      --text-main: #ffffff;
-      --text-sub: #cccccc;
-      --border: #2a2a2a;
-      --orange-light: #1a1006;
-      --input-bg: #1e1e1e;
-      --shadow: 0 2px 8px rgba(255, 255, 255, 0.04);
-    }
+        body.dark {
+            --bg-light: #0a0a0a;
+            --card-bg: #121212;
+            --text-main: #ffffff;
+            --text-sub: #cccccc;
+            --border: #2a2a2a;
+            --orange-light: #1a1006;
+            --input-bg: #1e1e1e;
+            --shadow: 0 2px 8px rgba(255, 255, 255, 0.04);
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-main);
-      max-width: 100vw;
-      overflow-x: hidden;
-      transition: background 0.3s, color 0.3s;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-    .app-container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
-    .header {
-      flex-shrink: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      gap: 8px;
-      box-shadow: var(--shadow);
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-    .logo-text {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--orange);
-      white-space: nowrap;
-    }
-    .content-scroll {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding-bottom: 20px;
-      -webkit-overflow-scrolling: touch;
-    }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 8px;
-    }
-    .product-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 8px;
-    }
-    .product-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: box-shadow 0.2s, transform 0.15s;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow);
-    }
-    .product-card:active {
-      transform: scale(0.98);
-    }
-    .product-card.list-view {
-      flex-direction: row;
-      gap: 12px;
-      padding: 10px;
-      align-items: stretch;
-    }
-    .product-image {
-      background: #f3f4f6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      cursor: pointer;
-      transition: background 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    body.dark .product-image {
-      background: #1a1a1a;
-    }
-    .grid-card .product-image {
-      height: 150px;
-      font-size: 4.5rem;
-      border-radius: 0;
-    }
-    .list-card .product-image {
-      width: 85px;
-      height: 85px;
-      font-size: 2.8rem;
-      border-radius: 12px;
-    }
-    .card-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 8px 10px 10px;
-      gap: 6px;
-      min-width: 0;
-    }
-    .list-view .card-body {
-      padding: 0;
-      gap: 4px;
-    }
-    .product-name {
-      font-weight: 700;
-      font-size: 0.82rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center;
-      color: var(--text-main);
-      line-height: 1.3;
-    }
-    .list-view .product-name {
-      text-align: right;
-      font-size: 0.85rem;
-    }
-    .meta-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .stars {
-      display: flex;
-      gap: 2px;
-      flex-shrink: 0;
-      direction: ltr;
-    }
-    .stars i {
-      font-size: 11px;
-      cursor: pointer;
-      transition: color 0.15s;
-    }
-    .seller-info {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      cursor: pointer;
-      max-width: 95px;
-      overflow: hidden;
-      flex-shrink: 0;
-      font-size: 0.68rem;
-      color: var(--text-sub);
-    }
-    .seller-avatar {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      flex-shrink: 0;
-    }
-    .seller-name-text {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-weight: 500;
-    }
-    .bottom-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: auto;
-      gap: 6px;
-      flex-wrap: wrap;
-      max-width: 100%;
-    }
-    .action-btns {
-      display: flex;
-      gap: 7px;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-    }
-    .action-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-      position: relative;
-      flex-shrink: 0;
-    }
-    .action-btn:active {
-      transform: scale(0.9);
-    }
-    .price {
-      font-weight: 800;
-      color: var(--orange);
-      font-size: 0.9rem;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .search-overlay {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 14px;
-      animation: slideDown 0.25s ease;
-      flex-shrink: 0;
-    }
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .search-wrapper {
-      display: flex;
-      align-items: center;
-      background: var(--input-bg);
-      border-radius: 24px;
-      padding: 0 12px;
-      gap: 8px;
-      border: 1px solid var(--border);
-    }
-    .search-wrapper input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 10px 4px;
-      outline: none;
-      font-size: 0.85rem;
-      color: var(--text-main);
-      min-width: 0;
-    }
-    .search-icon-btn {
-      background: none;
-      border: none;
-      color: var(--text-sub);
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 6px;
-      border-radius: 50%;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-    .icon-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--input-bg);
-      color: var(--text-sub);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-    .icon-btn:hover { background: #e5e7eb; }
-    body.dark .icon-btn:hover { background: #333; }
-    .btn-primary {
-      background: var(--orange);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      padding: 12px 24px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.9rem;
-      width: 100%;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover { background: #e55d00; }
-    .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 12px;
-      border-radius: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      color: var(--text-main);
-      font-size: 0.85rem;
-      transition: background 0.2s;
-    }
-    .social-btn.google { border-color: #ea4335; color: #ea4335; }
-    .social-btn.facebook { border-color: #1877f2; color: #1877f2; }
-    .social-btn:hover { background: var(--input-bg); }
-    .category-btn {
-      padding: 7px 15px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      white-space: nowrap;
-      font-size: 0.78rem;
-      flex-shrink: 0;
-      background: var(--card-bg);
-      color: var(--text-sub);
-      transition: all 0.2s;
-      font-weight: 500;
-    }
-    .category-btn.active {
-      background: var(--orange) !important;
-      color: white !important;
-      border-color: var(--orange) !important;
-      font-weight: 700;
-    }
-    .comments-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 90;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      animation: fadeIn 0.2s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .comments-panel {
-      background: var(--card-bg);
-      border-radius: 18px 18px 0 0;
-      width: 100%;
-      max-height: 35vh;
-      display: flex;
-      flex-direction: column;
-      animation: slideUp 0.3s ease;
-      overflow: hidden;
-    }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    .comments-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .comments-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 22vh;
-    }
-    .comment-bubble {
-      background: var(--input-bg);
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 0.8rem;
-      line-height: 1.4;
-      color: var(--text-main);
-      max-width: 90%;
-      align-self: flex-start;
-      border: 1px solid var(--border);
-    }
-    .comment-input-row {
-      display: flex;
-      gap: 8px;
-      padding: 10px 16px;
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
-      align-items: center;
-    }
-    .comment-input-row input {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--input-bg);
-      outline: none;
-      font-size: 0.8rem;
-      color: var(--text-main);
-      min-width: 0;
-    }
-    .send-comment-btn {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--orange);
-      color: white;
-      border: none;
-      cursor: pointer;
-      flex-shrink: 0;
-      font-size: 0.9rem;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .country-dropdown {
-      max-height: 200px; overflow-y: auto;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-top: 4px;
-      background: var(--card-bg);
-      position: absolute;
-      width: 100%;
-      z-index: 20;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .image-preview-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 100;
-      display: flex; align-items: center; justify-content: center; flex-direction: column;
-      cursor: pointer;
-    }
-    .toast {
-      position: fixed;
-      bottom: 40px; left: 50%; transform: translateX(-50%);
-      background: #1f2937; color: white;
-      padding: 10px 20px; border-radius: 20px; font-size: 0.8rem;
-      z-index: 200;
-      animation: toastIn 0.3s ease, toastOut 0.3s ease 1.8s forwards;
-      pointer-events: none; white-space: nowrap;
-    }
-    @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
-    .hidden-file-input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
-    .chat-fullscreen {
-      position: fixed; inset: 0; z-index: 80;
-      background: var(--bg-light);
-      display: flex; flex-direction: column;
-      animation: fadeIn 0.2s ease;
-    }
-    .chat-fullscreen .chat-header-bar {
-      flex-shrink: 0;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 16px;
-      background: var(--orange); color: white;
-      font-weight: bold; font-size: 1rem;
-    }
-    .chat-fullscreen .chat-messages-area {
-      flex: 1; overflow-y: auto; padding: 16px;
-      display: flex; flex-direction: column; gap: 10px;
-    }
-    .chat-fullscreen .chat-input-bar {
-      flex-shrink: 0;
-      display: flex; gap: 8px;
-      padding: 10px 16px;
-      border-top: 1px solid var(--border);
-      background: var(--card-bg);
-      align-items: center;
-    }
-    .chat-fullscreen .chat-input-bar input {
-      flex: 1; padding: 10px 14px; border-radius: 20px;
-      border: 1px solid var(--border); background: var(--input-bg);
-      outline: none; font-size: 0.85rem; color: var(--text-main); min-width: 0;
-    }
-    .msg-user {
-      background: var(--orange); color: white;
-      padding: 10px 14px; border-radius: 16px 16px 4px 16px;
-      max-width: 80%; align-self: flex-end; font-size: 0.82rem; line-height: 1.4;
-    }
-    .msg-bot {
-      background: var(--input-bg);
-      padding: 10px 14px; border-radius: 16px 16px 16px 4px;
-      max-width: 80%; align-self: flex-start; font-size: 0.82rem; line-height: 1.4;
-      color: var(--text-main); border: 1px solid var(--border);
-    }
-    /* زر AI العائم */
-    .floating-bot-btn {
-      position: fixed;
-      bottom: 24px; right: 24px;
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      background: var(--orange); color: white;
-      border: none; box-shadow: 0 4px 14px rgba(255,102,0,0.4);
-      cursor: pointer; z-index: 75;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .floating-bot-btn:active { transform: scale(0.92); }
-  </style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            max-width: 100vw;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        .header {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            gap: 8px;
+            box-shadow: var(--shadow);
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .logo-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--orange);
+            white-space: nowrap;
+        }
+        .content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 8px;
+        }
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 8px;
+        }
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.15s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+        .product-card:active {
+            transform: scale(0.98);
+        }
+        .product-card.list-view {
+            flex-direction: row;
+            gap: 12px;
+            padding: 10px;
+            align-items: stretch;
+        }
+        .product-image {
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        body.dark .product-image {
+            background: #1a1a1a;
+        }
+        .grid-card .product-image {
+            height: 150px;
+            font-size: 4.5rem;
+            border-radius: 0;
+        }
+        .list-card .product-image {
+            width: 85px;
+            height: 85px;
+            font-size: 2.8rem;
+            border-radius: 12px;
+        }
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 8px 10px 10px;
+            gap: 6px;
+            min-width: 0;
+        }
+        .list-view .card-body {
+            padding: 0;
+            gap: 4px;
+        }
+        .product-name {
+            font-weight: 700;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+        .list-view .product-name {
+            text-align: right;
+            font-size: 0.85rem;
+        }
+        .meta-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .stars {
+            display: flex;
+            gap: 2px;
+            flex-shrink: 0;
+            direction: ltr;
+        }
+        .stars i {
+            font-size: 11px;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+        .seller-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            max-width: 95px;
+            overflow: hidden;
+            flex-shrink: 0;
+            font-size: 0.68rem;
+            color: var(--text-sub);
+        }
+        .seller-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            flex-shrink: 0;
+        }
+        .seller-name-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        .bottom-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            gap: 6px;
+            flex-wrap: wrap;
+            max-width: 100%;
+        }
+        .action-btns {
+            display: flex;
+            gap: 7px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .action-btn:active {
+            transform: scale(0.9);
+        }
+        .price {
+            font-weight: 800;
+            color: var(--orange);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .search-overlay {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 14px;
+            animation: slideDown 0.25s ease;
+            flex-shrink: 0;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border-radius: 24px;
+            padding: 0 12px;
+            gap: 8px;
+            border: 1px solid var(--border);
+        }
+        .search-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 4px;
+            outline: none;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            min-width: 0;
+        }
+        .search-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 6px;
+            border-radius: 50%;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            color: var(--text-sub);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .icon-btn:hover {
+            background: #e5e7eb;
+        }
+        body.dark .icon-btn:hover {
+            background: #333;
+        }
+        .btn-primary {
+            background: var(--orange);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover {
+            background: #e55d00;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .social-btn.google {
+            border-color: #ea4335;
+            color: #ea4335;
+        }
+        .social-btn.facebook {
+            border-color: #1877f2;
+            color: #1877f2;
+        }
+        .social-btn:hover {
+            background: var(--input-bg);
+        }
+        .category-btn {
+            padding: 7px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+            background: var(--card-bg);
+            color: var(--text-sub);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .category-btn.active {
+            background: var(--orange) !important;
+            color: white !important;
+            border-color: var(--orange) !important;
+            font-weight: 700;
+        }
+        .comments-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 90;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .comments-panel {
+            background: var(--card-bg);
+            border-radius: 18px 18px 0 0;
+            width: 100%;
+            max-height: 35vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease;
+            overflow: hidden;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .comments-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 22vh;
+        }
+        .comment-bubble {
+            background: var(--input-bg);
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            max-width: 90%;
+            align-self: flex-start;
+            border: 1px solid var(--border);
+        }
+        .comment-input-row {
+            display: flex;
+            gap: 8px;
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+            align-items: center;
+        }
+        .comment-input-row input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            outline: none;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            min-width: 0;
+        }
+        .send-comment-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--orange);
+            color: white;
+            border: none;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .country-dropdown {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 4px;
+            background: var(--card-bg);
+            position: absolute;
+            width: 100%;
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .image-preview-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 200;
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 1.8s forwards;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+        .hidden-file-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+        .chat-fullscreen {
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            background: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.2s ease;
+        }
+        .chat-fullscreen .chat-header-bar {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--orange);
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .chat-fullscreen .chat-messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-fullscreen .chat-input-bar {
+            flex-shrink: 0;
+            display: flex;
+            gap: 8px;
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+            align-items: center;
+        }
+        .chat-fullscreen .chat-input-bar input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            outline: none;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            min-width: 0;
+        }
+        .msg-user {
+            background: var(--orange);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 16px 16px 4px 16px;
+            max-width: 80%;
+            align-self: flex-end;
+            font-size: 0.82rem;
+            line-height: 1.4;
+        }
+        .msg-bot {
+            background: var(--input-bg);
+            padding: 10px 14px;
+            border-radius: 16px 16px 16px 4px;
+            max-width: 80%;
+            align-self: flex-start;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .vip-badge {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .profile-avatar-large {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--orange-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin: 0 auto 12px;
+            border: 3px solid var(--orange);
+            flex-shrink: 0;
+        }
+        .profile-info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            background: var(--input-bg);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+        .profile-info-row .info-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--orange-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--orange);
+            flex-shrink: 0;
+        }
+        .profile-info-row .info-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .profile-info-row .info-label {
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            margin-bottom: 2px;
+        }
+        .profile-info-row .info-value {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+    </style>
 </head>
 <body>
-  <div id="app" class="app-container"></div>
-  <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden-file-input">
-  <input type="file" id="galleryInput" accept="image/*" class="hidden-file-input">
+    <div id="app" class="app-container"></div>
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden-file-input">
+    <input type="file" id="galleryInput" accept="image/*" class="hidden-file-input">
 
-  <script>
-    (function() {
-      const STORAGE_KEY = 'vicks_final_fixed';
-      const THEME_KEY = 'vicks_theme_fixed';
-      const GUEST_LIKES_KEY = 'vicks_guest_likes_fixed';
-      const CONTACT_KEY = 'vicks_contact_method_fixed';
+    <script>
+        (function() {
+            try {
+                const STORAGE_KEY = 'vicks_final_v4';
+                const THEME_KEY = 'vicks_theme_v4';
+                const GUEST_LIKES_KEY = 'vicks_guest_likes_v4';
+                const CONTACT_KEY = 'vicks_contact_method_v4';
 
-      function getGuestLikes() { try { return JSON.parse(localStorage.getItem(GUEST_LIKES_KEY) || '[]'); } catch { return []; } }
-      function isGuestLiked(pid) { return getGuestLikes().includes(pid); }
-      function toggleGuestLike(pid) { const likes = getGuestLikes(); const idx = likes.indexOf(pid); if (idx >= 0) likes.splice(idx, 1); else likes.push(pid); localStorage.setItem(GUEST_LIKES_KEY, JSON.stringify(likes)); return idx < 0; }
-      function getContactMethod() { return localStorage.getItem(CONTACT_KEY) || 'whatsapp'; }
+                function getGuestLikes() { try { return JSON.parse(localStorage.getItem(GUEST_LIKES_KEY) ||
+                        '[]'); } catch { return []; } }
 
-      function createInitialData() {
-        const sellers = {
-          admin: { id:'admin1',email:'admin@vicks.com',password:'admin123',storeName:'VICKS MARKET',ownerName:'محمد المالك',phone:'01113694362',points:50000,verified:true,subscription:'platinum',country:'مصر',avatar:'👑',verificationBadge:true,accountType:'seller',maxProducts:Infinity,subscriptionExpiry:null },
-          s1: { id:'s1',email:'seller1@test.com',password:'123456',storeName:'متجر النور',ownerName:'أحمد',phone:'01012345678',points:350,verified:true,subscription:'silver',country:'مصر',avatar:'🌟',verificationBadge:true,accountType:'seller',maxProducts:Infinity,subscriptionExpiry:null },
-          s2: { id:'s2',email:'seller2@test.com',password:'123456',storeName:'سوبر ماركت الفرح',ownerName:'فاطمة',phone:'01198765432',points:120,verified:false,subscription:'free',country:'السعودية',avatar:'🛒',verificationBadge:false,accountType:'seller',maxProducts:10,subscriptionExpiry:null },
-          cust1: { id:'cust1',email:'customer@test.com',password:'123456',storeName:'',ownerName:'عميل عادي',phone:'01000000000',points:50,verified:false,subscription:'free',country:'مصر',avatar:'👤',verificationBadge:false,accountType:'customer' }
-        };
-        const products = {};
-        const names = ['ايفون 14 Pro','زيت زيتون','شاشة سامسونج','بلاي ستيشن 5','لاب توب ديل','عطر فاخر','ساعة ذكية','سماعة لاسلكية','طقم مطبخ','لعبة فيفا','سوار ذهبي','كاميرا مراقبة'];
-        const emojis = ['📱','🫒','📺','🎮','💻','🧴','⌚','🎧','🍳','⚽','💎','📷'];
-        const cats = ['electronics','fashion','home','smart','games','accessories'];
-        for (let i=1; i<=14; i++) {
-          const sid = i%2===0?'s2':'s1';
-          products['p'+i] = {
-            id:'p'+i, name:names[(i-1)%12]+(i>10?' '+i:''), price:80+i*50, category:cats[(i-1)%6],
-            emoji:emojis[(i-1)%12], sellerId:sid, sellerName:sid==='s1'?'متجر النور':'سوبر ماركت الفرح',
-            likes:(i*7)%19, likedBy:[], comments:['جيد جداً 👍','ممتاز وسرعة في التوصيل','سعر مناسب وجودة عالية'].slice(0,(i%3)+1), rating:i%5
-          };
-        }
-        return { sellers, products, currentSellerId:null, chatMessages:[{id:'1',role:'bot',text:'أهلاً بك في VICKS MARKET! كيف أقدر أساعدك؟',ts:Date.now()}] };
-      }
+                function isGuestLiked(pid) { return getGuestLikes().includes(pid); }
 
-      function loadState() {
-        try { const raw = localStorage.getItem(STORAGE_KEY); if(raw) { const st=JSON.parse(raw); if(!st.chatMessages) st.chatMessages=[{id:'1',role:'bot',text:'أهلاً بك في VICKS MARKET!',ts:Date.now()}]; return st; } return createInitialData(); }
-        catch { return createInitialData(); }
-      }
-      function saveState(st) { localStorage.setItem(STORAGE_KEY, JSON.stringify(st)); }
+                function toggleGuestLike(pid) { const likes = getGuestLikes();
+                    const idx = likes.indexOf(pid); if (idx >= 0) likes.splice(idx, 1); else likes.push(pid);
+                    localStorage.setItem(GUEST_LIKES_KEY, JSON.stringify(likes)); return idx < 0; }
 
-      let state = loadState();
-      let currentPage = 'home';
-      let viewMode = 'grid';
-      let activeCategory = 'all';
-      let searchQuery = '';
-      let showSearch = false;
-      let showChatFullscreen = false;
-      let commentsProduct = null;
-      let previewProduct = null;
+                function getContactMethod() { return localStorage.getItem(CONTACT_KEY) || 'whatsapp'; }
 
-      const appEl = document.getElementById('app');
-      if (!appEl) throw new Error('app element missing');
+                function setContactMethod(m) { localStorage.setItem(CONTACT_KEY, m); }
 
-      function showToast(msg) {
-        const old = document.querySelector('.toast'); if(old) old.remove();
-        const t = document.createElement('div'); t.className='toast'; t.textContent=msg;
-        document.body.appendChild(t); setTimeout(()=>t.remove(),2200);
-      }
+                function createInitialData() {
+                    const sellers = {
+                        admin: { id: 'admin1', email: 'admin@vicks.com', password: 'admin123', storeName: 'VICKS MARKET',
+                            ownerName: 'محمد المالك', phone: '01113694362', points: 50000, verified: true,
+                            subscription: 'platinum', country: 'مصر', avatar: '👑', verificationBadge: true,
+                            accountType: 'seller', maxProducts: Infinity, subscriptionExpiry: null },
+                        s1: { id: 's1', email: 'seller1@test.com', password: '123456', storeName: 'متجر النور',
+                            ownerName: 'أحمد', phone: '01012345678', points: 350, verified: true, subscription: 'silver',
+                            country: 'مصر', avatar: '🌟', verificationBadge: true, accountType: 'seller',
+                            maxProducts: Infinity, subscriptionExpiry: null },
+                        s2: { id: 's2', email: 'seller2@test.com', password: '123456', storeName: 'سوبر ماركت الفرح',
+                            ownerName: 'فاطمة', phone: '01198765432', points: 120, verified: false,
+                            subscription: 'free', country: 'السعودية', avatar: '🛒', verificationBadge: false,
+                            accountType: 'seller', maxProducts: 10, subscriptionExpiry: null },
+                        cust1: { id: 'cust1', email: 'customer@test.com', password: '123456', storeName: '',
+                            ownerName: 'عميل عادي', phone: '01000000000', points: 50, verified: false,
+                            subscription: 'free', country: 'مصر', avatar: '👤', verificationBadge: false,
+                            accountType: 'customer' }
+                    };
+                    const products = {};
+                    const names = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر',
+                        'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'
+                    ];
+                    const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧', '🍳', '⚽', '💎', '📷'];
+                    const cats = ['electronics', 'fashion', 'home', 'smart', 'games', 'accessories'];
+                    for (let i = 1; i <= 14; i++) {
+                        const sid = i % 2 === 0 ? 's2' : 's1';
+                        products['p' + i] = {
+                            id: 'p' + i,
+                            name: names[(i - 1) % 12] + (i > 10 ? ' ' + i : ''),
+                            price: 80 + i * 50,
+                            category: cats[(i - 1) % 6],
+                            emoji: emojis[(i - 1) % 12],
+                            sellerId: sid,
+                            sellerName: sid === 's1' ? 'متجر النور' : 'سوبر ماركت الفرح',
+                            likes: (i * 7) % 19,
+                            likedBy: [],
+                            comments: ['جيد جداً 👍', 'ممتاز وسرعة في التوصيل', 'سعر مناسب وجودة عالية'].slice(0, (i % 3) +
+                                1),
+                            rating: i % 5
+                        };
+                    }
+                    return { sellers, products, currentSellerId: null, chatMessages: [{ id: '1', role: 'bot',
+                            text: 'أهلاً بك في VICKS MARKET! كيف أقدر أساعدك؟', ts: Date.now() }] };
+                }
 
-      function render() {
-        appEl.innerHTML = '';
-        if (showChatFullscreen) { appEl.appendChild(buildChatFullscreenPage()); return; }
-        if (currentPage === 'login') { appEl.appendChild(buildLoginPage()); return; }
-        if (currentPage === 'join') { appEl.appendChild(buildJoinPage()); return; }
-        if (currentPage === 'vip') { appEl.appendChild(buildVIPPage()); return; }
-        if (currentPage === 'offers') { appEl.appendChild(buildOffersPage()); return; }
-        if (currentPage === 'profile') { appEl.appendChild(buildProfilePage()); return; }
-        appEl.appendChild(buildHomePage());
-      }
+                function loadState() {
+                    try {
+                        const raw = localStorage.getItem(STORAGE_KEY);
+                        if (raw) { const st = JSON.parse(raw); if (!st.chatMessages) st.chatMessages = [{ id: '1',
+                                role: 'bot', text: 'أهلاً بك في VICKS MARKET!', ts: Date.now() }]; return st; }
+                        return createInitialData();
+                    } catch { return createInitialData(); }
+                }
 
-      function buildHomePage() {
-        const container = document.createElement('div'); container.className='app-container';
-        const isLoggedIn = !!state.currentSellerId;
-        const header = document.createElement('div'); header.className='header';
-        const hr = document.createElement('div'); hr.className='header-right';
-        hr.innerHTML = `<span class="logo-text">VICKS MARKET</span>`;
-        const hl = document.createElement('div'); hl.className='header-left';
-        hl.innerHTML = `
-          <button class="icon-btn" onclick="window.toggleSearch?.()"><i class="fas fa-search"></i></button>
-          <button class="icon-btn" onclick="window.toggleTheme?.()"><i class="fas ${document.body.classList.contains('dark')?'fa-sun':'fa-moon'}"></i></button>
-          <button class="icon-btn" onclick="window.openProfile?.()"><i class="fas fa-user"></i></button>
-        `;
-        header.appendChild(hr); header.appendChild(hl); container.appendChild(header);
+                function saveState(st) { localStorage.setItem(STORAGE_KEY, JSON.stringify(st)); }
+                let state = loadState();
+                let currentPage = 'home';
+                let viewMode = 'grid';
+                let activeCategory = 'all';
+                let searchQuery = '';
+                let showSearch = false;
+                let showChatFullscreen = false;
+                let commentsProduct = null;
+                let previewProduct = null;
+                const appEl = document.getElementById('app');
+                if (!appEl) throw new Error('عنصر التطبيق مفقود');
 
-        if (showSearch) {
-          const sd = document.createElement('div'); sd.className='search-overlay';
-          sd.innerHTML = `
-            <div class="search-wrapper">
-              <i class="fas fa-search" style="color:#9ca3af;flex-shrink:0;"></i>
-              <input type="text" placeholder="ابحث عن منتج..." id="searchInput" value="${searchQuery}" oninput="window.updateSearch?.(this.value)">
-              <button class="search-icon-btn" onclick="window.openCamera?.()"><i class="fas fa-camera"></i></button>
-              <button class="search-icon-btn" onclick="window.openGallery?.()"><i class="fas fa-plus"></i></button>
-              <button class="search-icon-btn" onclick="window.closeSearch?.()" style="color:#ef4444;"><i class="fas fa-times"></i></button>
+                function showToast(msg) {
+                    const existing = document.querySelector('.toast');
+                    if (existing) existing.remove();
+                    const toast = document.createElement('div');
+                    toast.className = 'toast';
+                    toast.textContent = msg;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 2200);
+                }
+
+                function render() {
+                    appEl.innerHTML = '';
+                    if (showChatFullscreen) { appEl.appendChild(buildChatFullscreenPage()); return; }
+                    if (currentPage === 'login') { appEl.appendChild(buildLoginPage()); return; }
+                    if (currentPage === 'join') { appEl.appendChild(buildJoinPage()); return; }
+                    if (currentPage === 'vip') { appEl.appendChild(buildVIPPage()); return; }
+                    if (currentPage === 'offers') { appEl.appendChild(buildOffersPage()); return; }
+                    if (currentPage === 'profile') { appEl.appendChild(buildProfilePage()); return; }
+                    appEl.appendChild(buildHomePage());
+                }
+
+                function buildHomePage() {
+                    const container = document.createElement('div');
+                    container.className = 'app-container';
+                    const contactMethod = getContactMethod();
+                    const contactIcon = contactMethod === 'telegram' ? 'fa-telegram-plane' : 'fa-whatsapp';
+                    const contactColor = contactMethod === 'telegram' ? '#0088cc' : '#25D366';
+                    const isLoggedIn = !!state.currentSellerId;
+                    const header = document.createElement('div');
+                    header.className = 'header';
+                    const headerRight = document.createElement('div');
+                    headerRight.className = 'header-right';
+                    headerRight.innerHTML = `
+            <span class="logo-text">VICKS MARKET</span>
+            <button class="icon-btn" style="background:#fff7ed;color:#ff6600;" onclick="if(window.openChatFullscreen)window.openChatFullscreen()" title="المساعد الذكي"><i class="fas fa-robot"></i></button>
+          `;
+                    const headerLeft = document.createElement('div');
+                    headerLeft.className = 'header-left';
+                    headerLeft.innerHTML = `
+            <button class="icon-btn" onclick="if(window.toggleSearch)window.toggleSearch()" title="بحث"><i class="fas fa-search"></i></button>
+            <button class="icon-btn" onclick="if(window.toggleTheme)window.toggleTheme()" title="الوضع الليلي"><i class="fas ${document.body.classList.contains('dark')?'fa-sun':'fa-moon'}"></i></button>
+            <button class="icon-btn" style="background:#fff7ed;color:#ff6600;" onclick="if(window.navigate)window.navigate('profile')" title="الملف الشخصي"><i class="fas fa-user"></i></button>
+          `;
+                    header.appendChild(headerRight);
+                    header.appendChild(headerLeft);
+                    container.appendChild(header);
+                    if (showSearch) {
+                        const searchDiv = document.createElement('div');
+                        searchDiv.className = 'search-overlay';
+                        searchDiv.innerHTML = `
+              <div class="search-wrapper">
+                <i class="fas fa-search" style="color:#9ca3af;flex-shrink:0;"></i>
+                <input type="text" placeholder="ابحث عن منتج..." id="searchInput" value="${searchQuery}" oninput="if(window.updateSearch)window.updateSearch(this.value)">
+                <button class="search-icon-btn" onclick="if(window.openCamera)window.openCamera()" title="كاميرا"><i class="fas fa-camera"></i></button>
+                <button class="search-icon-btn" onclick="if(window.openGallery)window.openGallery()" title="إضافة صورة"><i class="fas fa-plus"></i></button>
+                <button class="search-icon-btn" onclick="if(window.closeSearch)window.closeSearch()" style="color:#ef4444;" title="إغلاق"><i class="fas fa-times"></i></button>
+              </div>
+            `;
+                        container.appendChild(searchDiv);
+                    }
+                    const catBar = document.createElement('div');
+                    catBar.style.cssText =
+                        'display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:var(--card-bg);border-bottom:1px solid var(--border);flex-shrink:0;';
+                    const categories = [{ id: 'all', label: 'الكل', icon: '🌐' }, { id: 'electronics',
+                        label: 'إلكترونيات', icon: '📱' }, { id: 'fashion', label: 'موضة', icon: '👗' }, { id: 'home',
+                        label: 'المنزل', icon: '🏠' }, { id: 'smart', label: 'أدوات ذكية', icon: '🤖' }, { id: 'games',
+                        label: 'ألعاب', icon: '🎮' }, { id: 'accessories', label: 'إكسسوارات', icon: '💍' }];
+                    categories.forEach(cat => { const btn = document.createElement('button');
+                        btn.className = 'category-btn' + (activeCategory === cat.id ? ' active' : '');
+                        btn.textContent = cat.icon + ' ' + cat.label;
+                        btn.onclick = () => { activeCategory = cat.id;
+                            render(); };
+                        catBar.appendChild(btn); });
+                    container.appendChild(catBar);
+                    const toolbar = document.createElement('div');
+                    toolbar.style.cssText =
+                        'display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card-bg);border-bottom:1px solid var(--border);flex-shrink:0;';
+                    toolbar.innerHTML = `
+            <button style="padding:7px 14px;border-radius:20px;background:#fff7ed;color:#ff6600;border:1px solid #fed7aa;cursor:pointer;font-size:0.75rem;font-weight:600;" onclick="if(window.navigate)window.navigate('offers')">🎁 عروض</button>
+            <button style="padding:7px 14px;border-radius:20px;background:#fefce8;color:#a16207;border:1px solid #fde68a;cursor:pointer;font-size:0.75rem;font-weight:600;" onclick="if(window.openVIP)window.openVIP()">👑 VIP</button>
+            <div style="flex:1;"></div>
+            <button style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:${viewMode==='grid'?'var(--orange)':'var(--card-bg)'};color:${viewMode==='grid'?'white':'var(--text-sub)'};" onclick="if(window.setView)window.setView('grid')"><i class="fas fa-th"></i></button>
+            <button style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:${viewMode==='list'?'var(--orange)':'var(--card-bg)'};color:${viewMode==='list'?'white':'var(--text-sub)'};" onclick="if(window.setView)window.setView('list')"><i class="fas fa-list-ul"></i></button>
+          `;
+                    container.appendChild(toolbar);
+                    const content = document.createElement('div');
+                    content.className = 'content-scroll';
+                    const filtered = Object.values(state.products).filter(p => {
+                        if (activeCategory !== 'all' && p.category !== activeCategory) return false;
+                        if (searchQuery.trim()) return p.name.includes(searchQuery.trim());
+                        return true;
+                    });
+                    if (filtered.length === 0) {
+                        content.innerHTML =
+                            `<div style="text-align:center;padding:60px 20px;color:#9ca3af;"><i class="fas fa-search" style="font-size:3.5rem;display:block;margin-bottom:14px;"></i><p>لا توجد منتجات</p></div>`;
+                    } else {
+                        const grid = document.createElement('div');
+                        grid.className = viewMode === 'grid' ? 'product-grid' : 'product-list';
+                        filtered.forEach(prod => grid.appendChild(createProductCard(prod)));
+                        content.appendChild(grid);
+                    }
+                    container.appendChild(content);
+                    if (commentsProduct) container.appendChild(buildCommentsOverlay());
+                    if (previewProduct) {
+                        const prevDiv = document.createElement('div');
+                        prevDiv.className = 'image-preview-overlay';
+                        prevDiv.onclick = () => { previewProduct = null;
+                            render(); };
+                        prevDiv.innerHTML =
+                            `<span style="font-size:9rem;">${previewProduct.emoji}</span><p style="color:white;margin-top:18px;">${previewProduct.name}</p>`;
+                        container.appendChild(prevDiv);
+                    }
+                    return container;
+                }
+
+                function createProductCard(prod) {
+                    const seller = state.sellers[prod.sellerId] || {};
+                    const isLoggedIn = !!state.currentSellerId;
+                    const liked = isLoggedIn ? prod.likedBy.includes(state.currentSellerId) : isGuestLiked(prod.id);
+                    const shortName = (seller.storeName || 'متجر').length > 10 ? (seller.storeName || 'متجر').slice(0,
+                        8) + '..' : (seller.storeName || 'متجر');
+                    const contactMethod = getContactMethod();
+                    const contactIconClass = contactMethod === 'telegram' ? 'fa-telegram-plane' : 'fa-whatsapp';
+                    const contactBtnBg = contactMethod === 'telegram' ? '#e0f4ff' : '#dcfce7';
+                    const contactBtnColor = contactMethod === 'telegram' ? '#0088cc' : '#16a34a';
+                    const card = document.createElement('div');
+                    card.className = `product-card ${viewMode==='list' ? 'list-view' : 'grid-card'}`;
+                    const imgDiv = document.createElement('div');
+                    imgDiv.className = 'product-image';
+                    imgDiv.textContent = prod.emoji;
+                    imgDiv.onclick = (e) => { e.stopPropagation();
+                        previewProduct = prod;
+                        render(); };
+                    card.appendChild(imgDiv);
+                    const cardBody = document.createElement('div');
+                    cardBody.className = 'card-body';
+                    const nameEl = document.createElement('div');
+                    nameEl.className = 'product-name';
+                    nameEl.textContent = prod.name;
+                    cardBody.appendChild(nameEl);
+                    const metaRow = document.createElement('div');
+                    metaRow.className = 'meta-row';
+                    const sellerDiv = document.createElement('div');
+                    sellerDiv.className = 'seller-info';
+                    sellerDiv.innerHTML =
+                        `<span class="seller-avatar">${seller.avatar||'🏪'}</span><span class="seller-name-text">${shortName}</span>${seller.verificationBadge ? '<i class="fas fa-check-circle" style="color:#3b82f6;font-size:9px;"></i>' : ''}`;
+                    sellerDiv.onclick = (e) => { e.stopPropagation();
+                        showToast(`ملف التاجر: ${seller.storeName||'مستخدم'}`); };
+                    metaRow.appendChild(sellerDiv);
+                    const starsDiv = document.createElement('div');
+                    starsDiv.className = 'stars';
+                    for (let i = 0; i < 5; i++) { const star = document.createElement('i');
+                        star.className = `fas fa-star ${i < prod.rating ? 'text-yellow-400' : 'text-gray-300'}`;
+                        star.onclick = (e) => { e.stopPropagation();
+                            prod.rating = i + 1;
+                            saveState(state);
+                            render(); };
+                        starsDiv.appendChild(star); }
+                    metaRow.appendChild(starsDiv);
+                    cardBody.appendChild(metaRow);
+                    const bottomRow = document.createElement('div');
+                    bottomRow.className = 'bottom-row';
+                    const priceEl = document.createElement('span');
+                    priceEl.className = 'price';
+                    priceEl.textContent = prod.price.toLocaleString() + ' ج.م';
+                    bottomRow.appendChild(priceEl);
+                    const actions = document.createElement('div');
+                    actions.className = 'action-btns';
+                    const contactBtn = document.createElement('button');
+                    contactBtn.className = 'action-btn';
+                    contactBtn.style.cssText = `background:${contactBtnBg};color:${contactBtnColor};`;
+                    contactBtn.innerHTML = `<i class="fab ${contactIconClass}"></i>`;
+                    contactBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        const phone = seller.phone || '01113694362';
+                        const msg = encodeURIComponent(`مرحباً، أنا مهتم بمنتج: ${prod.name}`);
+                        if (getContactMethod() === 'telegram') window.open(
+                            `https://t.me/+2${phone}?text=${msg}`, '_blank');
+                        else window.open(`https://wa.me/+2${phone}?text=${msg}`, '_blank');
+                    };
+                    actions.appendChild(contactBtn);
+                    const commBtn = document.createElement('button');
+                    commBtn.className = 'action-btn';
+                    commBtn.style.cssText = 'background:#dbeafe;color:#2563eb;';
+                    commBtn.innerHTML = '<i class="fas fa-comment"></i>';
+                    commBtn.onclick = (e) => { e.stopPropagation();
+                        commentsProduct = prod;
+                        render(); };
+                    actions.appendChild(commBtn);
+                    const likeBtn = document.createElement('button');
+                    likeBtn.className = 'action-btn';
+                    likeBtn.style.cssText =
+                        `background:${liked ? '#ff6600' : '#f3f4f6'};color:${liked ? 'white' : '#6b7280'};`;
+                    likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
+                    likeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        if (isLoggedIn) { const idx = prod.likedBy.indexOf(state.currentSellerId); if (idx >= 0) { prod
+                                .likedBy.splice(idx, 1);
+                                prod.likes = Math.max(0, prod.likes - 1); } else { prod.likedBy.push(state
+                                    .currentSellerId);
+                                prod.likes++; } } else { const nowLiked = toggleGuestLike(prod.id); if (nowLiked) prod
+                                .likes++;
+                            else prod.likes = Math.max(0, prod.likes - 1); }
+                        saveState(state);
+                        render();
+                    };
+                    actions.appendChild(likeBtn);
+                    bottomRow.appendChild(actions);
+                    cardBody.appendChild(bottomRow);
+                    card.appendChild(cardBody);
+                    return card;
+                }
+
+                function buildCommentsOverlay() {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'comments-overlay';
+                    overlay.onclick = (e) => { if (e.target === overlay) { commentsProduct = null;
+                            render(); } };
+                    const panel = document.createElement('div');
+                    panel.className = 'comments-panel';
+                    panel.onclick = (e) => e.stopPropagation();
+                    panel.innerHTML =
+                        `<div class="comments-header"><h3>💬 تعليقات ${commentsProduct.name}</h3><button onclick="if(window.closeComments)window.closeComments()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-sub);"><i class="fas fa-times"></i></button></div>`;
+                    const listDiv = document.createElement('div');
+                    listDiv.className = 'comments-list';
+                    const allComments = commentsProduct.comments || [];
+                    if (allComments.length === 0) listDiv.innerHTML =
+                        '<p style="color:#9ca3af;text-align:center;padding:20px;">لا توجد تعليقات</p>';
+                    else allComments.forEach(c => { const b = document.createElement('div');
+                        b.className = 'comment-bubble';
+                        b.textContent = c;
+                        listDiv.appendChild(b); });
+                    panel.appendChild(listDiv);
+                    const inputRow = document.createElement('div');
+                    inputRow.className = 'comment-input-row';
+                    inputRow.innerHTML =
+                        `<input type="text" placeholder="اكتب تعليقك..." id="commentInputField"><button class="send-comment-btn" onclick="if(window.submitComment)window.submitComment()"><i class="fas fa-paper-plane"></i></button>`;
+                    panel.appendChild(inputRow);
+                    overlay.appendChild(panel);
+                    setTimeout(() => { const inp = document.getElementById('commentInputField'); if (inp) inp.focus(); },
+                        300);
+                    return overlay;
+                }
+
+                function buildChatFullscreenPage() {
+                    const container = document.createElement('div');
+                    container.className = 'chat-fullscreen';
+                    const headerBar = document.createElement('div');
+                    headerBar.className = 'chat-header-bar';
+                    headerBar.innerHTML = `
+            <span>🤖 VICKS AI - المساعد الذكي</span>
+            <button onclick="if(window.closeChatFullscreen)window.closeChatFullscreen()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">✕</button>
+          `;
+                    container.appendChild(headerBar);
+                    const messagesArea = document.createElement('div');
+                    messagesArea.className = 'chat-messages-area';
+                    messagesArea.id = 'fullChatMessages';
+                    state.chatMessages.forEach(m => { const div = document.createElement('div');
+                        div.className = m.role === 'user' ? 'msg-user' : 'msg-bot';
+                        div.textContent = m.text;
+                        messagesArea.appendChild(div); });
+                    container.appendChild(messagesArea);
+                    const inputBar = document.createElement('div');
+                    inputBar.className = 'chat-input-bar';
+                    inputBar.innerHTML = `
+            <input type="text" id="fullChatInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter' && window.sendFullChat)window.sendFullChat()">
+            <button style="background:#ff6600;color:white;border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;flex-shrink:0;" onclick="if(window.sendFullChat)window.sendFullChat()"><i class="fas fa-paper-plane"></i></button>
+          `;
+                    container.appendChild(inputBar);
+                    setTimeout(() => {
+                        const inp = document.getElementById('fullChatInput');
+                        if (inp) inp.focus();
+                        const msgArea = document.getElementById('fullChatMessages');
+                        if (msgArea) msgArea.scrollTop = msgArea.scrollHeight;
+                    }, 200);
+                    return container;
+                }
+
+                function buildLoginPage() {
+                    const container = document.createElement('div');
+                    container.className = 'app-container';
+                    container.innerHTML = `
+            <div class="header">
+              <button class="icon-btn" onclick="if(window.navigate)window.navigate('home')"><i class="fas fa-arrow-right"></i></button>
+              <h1 style="font-weight:800;">تسجيل الدخول</h1>
+              <div></div>
+            </div>
+            <div class="content-scroll" style="padding:24px;">
+              <div id="loginError" style="background:#fef2f2;padding:12px;border-radius:12px;color:#dc2626;display:none;margin-bottom:12px;"></div>
+              <input id="loginEmail" placeholder="البريد الإلكتروني" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
+              <input type="password" id="loginPass" placeholder="كلمة المرور" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
+              <button class="btn-primary" style="margin-bottom:16px;" onclick="if(window.doLogin)window.doLogin()">دخول</button>
+              <div style="text-align:center;margin-bottom:16px;"><button style="background:none;border:none;color:var(--orange);cursor:pointer;font-size:0.85rem;" onclick="if(window.showToast)window.showToast('استعادة كلمة المرور قيد التطوير')">نسيت كلمة السر؟</button></div>
+              <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+                <button class="social-btn google" onclick="if(window.socialLogin)window.socialLogin('google')"><i class="fab fa-google"></i> الدخول عبر جوجل</button>
+                <button class="social-btn facebook" onclick="if(window.socialLogin)window.socialLogin('facebook')"><i class="fab fa-facebook-f"></i> الدخول عبر فيسبوك</button>
+              </div>
+              <button style="width:100%;padding:14px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;color:var(--text-main);cursor:pointer;font-size:0.9rem;" onclick="if(window.navigate)window.navigate('join')">انضم كتاجر أو عميل</button>
             </div>
           `;
-          container.appendChild(sd);
-        }
+                    return container;
+                }
 
-        const catBar = document.createElement('div'); catBar.style.cssText='display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:var(--card-bg);border-bottom:1px solid var(--border);flex-shrink:0;';
-        const cats = [{id:'all',label:'الكل',icon:'🌐'},{id:'electronics',label:'إلكترونيات',icon:'📱'},{id:'fashion',label:'موضة',icon:'👗'},{id:'home',label:'المنزل',icon:'🏠'},{id:'smart',label:'أدوات ذكية',icon:'🤖'},{id:'games',label:'ألعاب',icon:'🎮'},{id:'accessories',label:'إكسسوارات',icon:'💍'}];
-        cats.forEach(c=>{ const b=document.createElement('button'); b.className='category-btn'+(activeCategory===c.id?' active':''); b.textContent=c.icon+' '+c.label; b.onclick=()=>{activeCategory=c.id;render();}; catBar.appendChild(b); });
-        container.appendChild(catBar);
-
-        const toolbar = document.createElement('div'); toolbar.style.cssText='display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card-bg);border-bottom:1px solid var(--border);flex-shrink:0;';
-        toolbar.innerHTML = `
-          <button style="padding:7px 14px;border-radius:20px;background:#fff7ed;color:#ff6600;border:1px solid #fed7aa;cursor:pointer;font-size:0.75rem;font-weight:600;" onclick="window.navigate?.('offers')">🎁 عروض</button>
-          <button style="padding:7px 14px;border-radius:20px;background:#fefce8;color:#a16207;border:1px solid #fde68a;cursor:pointer;font-size:0.75rem;font-weight:600;" onclick="window.openVIP?.()">👑 VIP</button>
-          <div style="flex:1;"></div>
-          <button style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:${viewMode==='grid'?'var(--orange)':'var(--card-bg)'};color:${viewMode==='grid'?'white':'var(--text-sub)'};" onclick="window.setView?.('grid')"><i class="fas fa-th"></i></button>
-          <button style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:${viewMode==='list'?'var(--orange)':'var(--card-bg)'};color:${viewMode==='list'?'white':'var(--text-sub)'};" onclick="window.setView?.('list')"><i class="fas fa-list-ul"></i></button>
-        `;
-        container.appendChild(toolbar);
-
-        const content = document.createElement('div'); content.className='content-scroll';
-        const filtered = Object.values(state.products).filter(p=>{
-          if(activeCategory!=='all' && p.category!==activeCategory) return false;
-          if(searchQuery.trim()) return p.name.includes(searchQuery.trim());
-          return true;
-        });
-        if(filtered.length===0){
-          content.innerHTML='<div style="text-align:center;padding:60px 20px;color:#9ca3af;"><i class="fas fa-search" style="font-size:3.5rem;display:block;margin-bottom:14px;"></i><p>لا توجد منتجات</p></div>';
-        }else{
-          const grid=document.createElement('div'); grid.className=viewMode==='grid'?'product-grid':'product-list';
-          filtered.forEach(prod=>grid.appendChild(createProductCard(prod)));
-          content.appendChild(grid);
-        }
-        container.appendChild(content);
-
-        if(commentsProduct) container.appendChild(buildCommentsOverlay());
-        if(previewProduct){
-          const pv=document.createElement('div'); pv.className='image-preview-overlay'; pv.onclick=()=>{previewProduct=null;render();};
-          pv.innerHTML=`<span style="font-size:9rem;">${previewProduct.emoji}</span><p style="color:white;margin-top:18px;">${previewProduct.name}</p>`;
-          container.appendChild(pv);
-        }
-        return container;
-      }
-
-      function createProductCard(prod) {
-        const seller = state.sellers[prod.sellerId] || {};
-        const isLoggedIn = !!state.currentSellerId;
-        const liked = isLoggedIn ? prod.likedBy.includes(state.currentSellerId) : isGuestLiked(prod.id);
-        const shortName = (seller.storeName||'متجر').length>10 ? (seller.storeName||'متجر').slice(0,8)+'..' : (seller.storeName||'متجر');
-        const method = getContactMethod();
-        const iconCls = method==='telegram'?'fa-telegram-plane':'fa-whatsapp';
-        const bg = method==='telegram'?'#e0f4ff':'#dcfce7';
-        const clr = method==='telegram'?'#0088cc':'#16a34a';
-
-        const card = document.createElement('div'); card.className=`product-card ${viewMode==='list'?'list-view':'grid-card'}`;
-        const img = document.createElement('div'); img.className='product-image'; img.textContent=prod.emoji;
-        img.onclick=(e)=>{e.stopPropagation(); previewProduct=prod; render();};
-        card.appendChild(img);
-
-        const body = document.createElement('div'); body.className='card-body';
-        const nameEl = document.createElement('div'); nameEl.className='product-name'; nameEl.textContent=prod.name; body.appendChild(nameEl);
-        const meta = document.createElement('div'); meta.className='meta-row';
-        const sellerDiv = document.createElement('div'); sellerDiv.className='seller-info';
-        sellerDiv.innerHTML = `<span class="seller-avatar">${seller.avatar||'🏪'}</span><span class="seller-name-text">${shortName}</span>${seller.verificationBadge?'<i class="fas fa-check-circle" style="color:#3b82f6;font-size:9px;"></i>':''}`;
-        sellerDiv.onclick=(e)=>{e.stopPropagation(); showToast(`ملف التاجر: ${seller.storeName||'مستخدم'}`);};
-        meta.appendChild(sellerDiv);
-        const starsDiv = document.createElement('div'); starsDiv.className='stars';
-        for(let i=0;i<5;i++){ const s=document.createElement('i'); s.className=`fas fa-star ${i<prod.rating?'text-yellow-400':'text-gray-300'}`; s.onclick=(e)=>{e.stopPropagation(); prod.rating=i+1; saveState(state); render();}; starsDiv.appendChild(s); }
-        meta.appendChild(starsDiv); body.appendChild(meta);
-
-        const bottom = document.createElement('div'); bottom.className='bottom-row';
-        const priceEl = document.createElement('span'); priceEl.className='price'; priceEl.textContent=prod.price.toLocaleString()+' ج.م'; bottom.appendChild(priceEl);
-        const actions = document.createElement('div'); actions.className='action-btns';
-        const contactBtn = document.createElement('button'); contactBtn.className='action-btn'; contactBtn.style.cssText=`background:${bg};color:${clr};`; contactBtn.innerHTML=`<i class="fab ${iconCls}"></i>`;
-        contactBtn.onclick=(e)=>{e.stopPropagation(); const phone=seller.phone||'01113694362'; const msg=encodeURIComponent(`مرحباً، أنا مهتم بمنتج: ${prod.name}`); if(method==='telegram') window.open(`https://t.me/+2${phone}?text=${msg}`,'_blank'); else window.open(`https://wa.me/+2${phone}?text=${msg}`,'_blank');};
-        actions.appendChild(contactBtn);
-        const commBtn = document.createElement('button'); commBtn.className='action-btn'; commBtn.style.cssText='background:#dbeafe;color:#2563eb;'; commBtn.innerHTML='<i class="fas fa-comment"></i>'; commBtn.onclick=(e)=>{e.stopPropagation(); commentsProduct=prod; render();};
-        actions.appendChild(commBtn);
-        const likeBtn = document.createElement('button'); likeBtn.className='action-btn'; likeBtn.style.cssText=`background:${liked?'#ff6600':'#f3f4f6'};color:${liked?'white':'#6b7280'};`; likeBtn.innerHTML='<i class="fas fa-heart"></i>';
-        likeBtn.onclick=(e)=>{e.stopPropagation(); if(isLoggedIn){ const idx=prod.likedBy.indexOf(state.currentSellerId); if(idx>=0){ prod.likedBy.splice(idx,1); prod.likes=Math.max(0,prod.likes-1); }else{ prod.likedBy.push(state.currentSellerId); prod.likes++; } }else{ const now=toggleGuestLike(prod.id); if(now) prod.likes++; else prod.likes=Math.max(0,prod.likes-1); } saveState(state); render();};
-        actions.appendChild(likeBtn);
-        bottom.appendChild(actions); body.appendChild(bottom); card.appendChild(body);
-        return card;
-      }
-
-      function buildCommentsOverlay() {
-        const overlay = document.createElement('div'); overlay.className='comments-overlay'; overlay.onclick=(e)=>{if(e.target===overlay){commentsProduct=null;render();}};
-        const panel = document.createElement('div'); panel.className='comments-panel'; panel.onclick=(e)=>e.stopPropagation();
-        panel.innerHTML = `<div class="comments-header"><h3>💬 تعليقات ${commentsProduct.name}</h3><button onclick="window.closeComments?.()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-sub);"><i class="fas fa-times"></i></button></div>`;
-        const list = document.createElement('div'); list.className='comments-list';
-        const all = commentsProduct.comments||[];
-        if(all.length===0) list.innerHTML='<p style="color:#9ca3af;text-align:center;padding:20px;">لا توجد تعليقات</p>';
-        else all.forEach(c=>{ const b=document.createElement('div'); b.className='comment-bubble'; b.textContent=c; list.appendChild(b); });
-        panel.appendChild(list);
-        const inputRow = document.createElement('div'); inputRow.className='comment-input-row'; inputRow.innerHTML=`<input type="text" placeholder="اكتب تعليقك..." id="commentInputField"><button class="send-comment-btn" onclick="window.submitComment?.()"><i class="fas fa-paper-plane"></i></button>`;
-        panel.appendChild(inputRow); overlay.appendChild(panel);
-        setTimeout(()=>{ const inp=document.getElementById('commentInputField'); if(inp) inp.focus(); },300);
-        return overlay;
-      }
-
-      function buildChatFullscreenPage() {
-        const container = document.createElement('div'); container.className='chat-fullscreen';
-        const bar = document.createElement('div'); bar.className='chat-header-bar'; bar.innerHTML=`<span>🤖 VICKS AI - المساعد الذكي</span><button onclick="window.closeChatFullscreen?.()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">✕</button>`;
-        container.appendChild(bar);
-        const msgArea = document.createElement('div'); msgArea.className='chat-messages-area'; msgArea.id='fullChatMessages';
-        state.chatMessages.forEach(m=>{ const div=document.createElement('div'); div.className=m.role==='user'?'msg-user':'msg-bot'; div.textContent=m.text; msgArea.appendChild(div); });
-        container.appendChild(msgArea);
-        const inputBar = document.createElement('div'); inputBar.className='chat-input-bar'; inputBar.innerHTML=`<input type="text" id="fullChatInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter') window.sendFullChat?.()"><button style="background:#ff6600;color:white;border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;flex-shrink:0;" onclick="window.sendFullChat?.()"><i class="fas fa-paper-plane"></i></button>`;
-        container.appendChild(inputBar);
-        setTimeout(()=>{ const inp=document.getElementById('fullChatInput'); if(inp) inp.focus(); const ma=document.getElementById('fullChatMessages'); if(ma) ma.scrollTop=ma.scrollHeight; },200);
-        return container;
-      }
-
-      function buildProfilePage() {
-        const isLoggedIn = !!state.currentSellerId;
-        const user = isLoggedIn ? state.sellers[state.currentSellerId] : null;
-        const container = document.createElement('div'); container.className='app-container';
-        container.innerHTML = `
-          <div class="header">
-            <button class="icon-btn" onclick="window.navigate?.('home')"><i class="fas fa-arrow-right"></i></button>
-            <h1 style="font-weight:800;">الملف الشخصي</h1>
-            <div></div>
-          </div>
-          <div class="content-scroll" style="padding:24px;text-align:center;">
-            ${isLoggedIn ? `
-              <div style="font-size:4rem;margin-bottom:16px;">${user.avatar||'👤'}</div>
-              <h2 style="font-weight:700;font-size:1.3rem;margin-bottom:6px;">${user.ownerName||'مستخدم'}</h2>
-              <p style="color:var(--text-sub);margin-bottom:4px;">${user.email}</p>
-              <p style="color:var(--text-sub);margin-bottom:4px;">نوع الحساب: ${user.accountType==='seller'?'تاجر':'عميل'}</p>
-              ${user.storeName ? `<p style="color:var(--text-sub);margin-bottom:4px;">المتجر: ${user.storeName}</p>` : ''}
-              <p style="color:var(--text-sub);margin-bottom:12px;">رقم التعريف: <strong>${user.id}</strong></p>
-              <button class="btn-primary" style="background:#dc2626;margin-bottom:12px;" onclick="window.logout?.()">تسجيل الخروج</button>
-            ` : `
-              <div style="font-size:4rem;margin-bottom:16px;">🔒</div>
-              <p style="margin-bottom:16px;">يجب تسجيل الدخول لعرض الملف الشخصي</p>
-              <button class="btn-primary" onclick="window.navigate?.('login')">تسجيل الدخول</button>
-            `}
-          </div>
-        `;
-        return container;
-      }
-
-      function buildLoginPage() {
-        const container = document.createElement('div'); container.className='app-container';
-        container.innerHTML = `
-          <div class="header">
-            <button class="icon-btn" onclick="window.navigate?.('home')"><i class="fas fa-arrow-right"></i></button>
-            <h1 style="font-weight:800;">تسجيل الدخول</h1>
-            <div></div>
-          </div>
-          <div class="content-scroll" style="padding:24px;">
-            <div id="loginError" style="background:#fef2f2;padding:12px;border-radius:12px;color:#dc2626;display:none;margin-bottom:12px;"></div>
-            <input id="loginEmail" placeholder="البريد الإلكتروني" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
-            <input type="password" id="loginPass" placeholder="كلمة المرور" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
-            <button class="btn-primary" style="margin-bottom:16px;" onclick="window.doLogin?.()">دخول</button>
-            <div style="text-align:center;margin-bottom:16px;"><button style="background:none;border:none;color:var(--orange);cursor:pointer;font-size:0.85rem;" onclick="window.showToast?.('استعادة كلمة المرور قيد التطوير')">نسيت كلمة السر؟</button></div>
-            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
-              <button class="social-btn google" onclick="window.socialLogin?.('google')"><i class="fab fa-google"></i> الدخول عبر جوجل</button>
-              <button class="social-btn facebook" onclick="window.socialLogin?.('facebook')"><i class="fab fa-facebook-f"></i> الدخول عبر فيسبوك</button>
+                function buildJoinPage() {
+                    const container = document.createElement('div');
+                    container.className = 'app-container';
+                    container.innerHTML = `
+            <div class="header">
+              <button class="icon-btn" onclick="if(window.navigate)window.navigate('login')"><i class="fas fa-arrow-right"></i></button>
+              <h1 style="font-weight:800;">إنشاء حساب</h1>
+              <div></div>
             </div>
-            <button style="width:100%;padding:14px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;color:var(--text-main);cursor:pointer;font-size:0.9rem;" onclick="window.navigate?.('join')">انضم كتاجر أو عميل</button>
-          </div>
-        `;
-        return container;
-      }
+            <div class="content-scroll" style="padding:24px;">
+              <div id="joinError" style="background:#fef2f2;padding:12px;border-radius:12px;color:#dc2626;display:none;margin-bottom:12px;"></div>
+              <div style="background:var(--input-bg);padding:16px;border-radius:12px;margin-bottom:16px;border:1px solid var(--border);">
+                <p style="font-weight:700;margin-bottom:8px;">نوع الحساب:</p>
+                <label style="display:flex;gap:8px;padding:8px;cursor:pointer;"><input type="radio" name="accType" value="customer" checked onchange="if(window.toggleStoreField)window.toggleStoreField()"> 👤 عميل</label>
+                <label style="display:flex;gap:8px;padding:8px;cursor:pointer;"><input type="radio" name="accType" value="seller" onchange="if(window.toggleStoreField)window.toggleStoreField()"> 🛍️ تاجر</label>
+              </div>
+              <input id="joinOwner" placeholder="اسم المالك *" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
+              <input id="joinStore" placeholder="اسم المتجر (للتجار)" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;display:none;">
+              <input id="joinEmail" placeholder="البريد الإلكتروني *" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
+              <input type="password" id="joinPass" placeholder="كلمة المرور *" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
+              <input id="joinPhone" placeholder="رقم الهاتف" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
+              <div style="position:relative;margin-bottom:12px;">
+                <button id="countryBtn" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;text-align:right;cursor:pointer;font-size:0.9rem;color:var(--text-main);" onclick="if(window.toggleCountryList)window.toggleCountryList()">مصر <i class="fas fa-chevron-down" style="float:left;"></i></button>
+                <div id="countryList" class="country-dropdown" style="display:none;"></div>
+              </div>
+              <button class="btn-primary" onclick="if(window.doJoin)window.doJoin()">إنشاء حساب</button>
+            </div>
+          `;
+                    const countries = ['مصر', 'السعودية', 'الإمارات', 'الكويت', 'قطر', 'البحرين', 'عُمان', 'الأردن', 'لبنان',
+                        'العراق', 'سوريا', 'فلسطين', 'ليبيا', 'تونس', 'الجزائر', 'المغرب', 'السودان', 'اليمن'
+                    ];
+                    const countryList = container.querySelector('#countryList');
+                    countries.forEach(c => { const div = document.createElement('div');
+                        div.style.cssText =
+                            'padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border);';
+                        div.textContent = c;
+                        div.onclick = () => { document.getElementById('countryBtn').childNodes[0].textContent = c;
+                            countryList.style.display = 'none'; };
+                        countryList.appendChild(div); });
+                    return container;
+                }
 
-      function buildJoinPage() {
-        const container = document.createElement('div'); container.className='app-container';
-        container.innerHTML = `
-          <div class="header">
-            <button class="icon-btn" onclick="window.navigate?.('login')"><i class="fas fa-arrow-right"></i></button>
-            <h1 style="font-weight:800;">إنشاء حساب</h1>
-            <div></div>
-          </div>
-          <div class="content-scroll" style="padding:24px;">
-            <div id="joinError" style="background:#fef2f2;padding:12px;border-radius:12px;color:#dc2626;display:none;margin-bottom:12px;"></div>
-            <div style="background:var(--input-bg);padding:16px;border-radius:12px;margin-bottom:16px;border:1px solid var(--border);">
-              <p style="font-weight:700;margin-bottom:8px;">نوع الحساب:</p>
-              <label style="display:flex;gap:8px;padding:8px;cursor:pointer;"><input type="radio" name="accType" value="customer" checked onchange="window.toggleStoreField?.()"> 👤 عميل</label>
-              <label style="display:flex;gap:8px;padding:8px;cursor:pointer;"><input type="radio" name="accType" value="seller" onchange="window.toggleStoreField?.()"> 🛍️ تاجر</label>
+                function buildVIPPage() {
+                    const seller = state.sellers[state.currentSellerId];
+                    if (!seller || seller.accountType !== 'seller') { currentPage = 'home';
+                        render(); return document.createElement('div'); }
+                    const container = document.createElement('div');
+                    container.className = 'app-container';
+                    container.innerHTML = `
+            <div class="header">
+              <button class="icon-btn" onclick="if(window.navigate)window.navigate('home')"><i class="fas fa-arrow-right"></i></button>
+              <h1 style="font-weight:800;">👑 VIP</h1>
+              <div></div>
             </div>
-            <input id="joinOwner" placeholder="اسم المالك *" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
-            <input id="joinStore" placeholder="اسم المتجر (للتجار)" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;display:none;">
-            <input id="joinEmail" placeholder="البريد الإلكتروني *" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
-            <input type="password" id="joinPass" placeholder="كلمة المرور *" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
-            <input id="joinPhone" placeholder="رقم الهاتف" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;color:var(--text-main);font-size:0.9rem;">
-            <div style="position:relative;margin-bottom:12px;">
-              <button id="countryBtn" style="width:100%;padding:12px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;text-align:right;cursor:pointer;font-size:0.9rem;color:var(--text-main);" onclick="window.toggleCountryList?.()">مصر <i class="fas fa-chevron-down" style="float:left;"></i></button>
-              <div id="countryList" class="country-dropdown" style="display:none;"></div>
+            <div class="content-scroll" style="padding:16px;">
+              <div style="display:flex;justify-content:space-between;background:var(--orange-light);padding:16px;border-radius:14px;margin-bottom:16px;align-items:center;">
+                <div><span>💰 النقاط</span><button style="width:28px;height:28px;border-radius:50%;background:var(--orange);color:white;border:none;cursor:pointer;margin-right:6px;" onclick="if(window.showAddPoints)window.showAddPoints()">+</button></div>
+                <span style="font-size:1.5rem;font-weight:800;color:var(--orange);">${seller.points} نقطة</span>
+              </div>
+              <div id="addPointsForm" style="display:none;background:var(--input-bg);padding:16px;border-radius:14px;margin-bottom:16px;">
+                <input type="number" id="pointsAmount" value="50" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;background:var(--card-bg);color:var(--text-main);">
+                <button style="width:100%;padding:10px;background:#22c55e;color:white;border:none;border-radius:8px;cursor:pointer;" onclick="if(window.addPoints)window.addPoints()">تأكيد</button>
+              </div>
+              <h3 style="margin-bottom:10px;">🎯 متجر الخدمات</h3>
+              <div id="servicesList"></div>
             </div>
-            <button class="btn-primary" onclick="window.doJoin?.()">إنشاء حساب</button>
-          </div>
-        `;
-        const countries = ['مصر','السعودية','الإمارات','الكويت','قطر','البحرين','عُمان','الأردن','لبنان','العراق','سوريا','فلسطين','ليبيا','تونس','الجزائر','المغرب','السودان','اليمن'];
-        const list = container.querySelector('#countryList');
-        countries.forEach(c=>{ const d=document.createElement('div'); d.style.cssText='padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border);'; d.textContent=c; d.onclick=()=>{ document.getElementById('countryBtn').childNodes[0].textContent=c; list.style.display='none'; }; list.appendChild(d); });
-        return container;
-      }
+          `;
+                    const servicesDiv = container.querySelector('#servicesList');
+                    const services = [
+                        { title: '✅ توثيق الحساب', cost: 70, key: 'verify', disabled: seller.verificationBadge || seller
+                                .points < 70, active: seller.verificationBadge },
+                        { title: '📦 باقة 100 منتج', cost: 50, key: 'max100', disabled: seller.maxProducts >= 100 || seller
+                                .points < 50, active: seller.maxProducts >= 100 },
+                        { title: '🌟 اشتراك VIP', cost: 50, key: 'vip', disabled: seller.subscription === 'vip' || seller
+                                .points < 50, active: seller.subscription === 'vip' }
+                    ];
+                    services.forEach(svc => { const row = document.createElement('div');
+                        row.style.cssText =
+                            'border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;';
+                        row.innerHTML =
+                            `<div><p style="font-weight:600;">${svc.title}</p><p style="font-size:0.7rem;color:var(--text-sub);">${svc.cost} نقطة</p></div>`;
+                        const btn = document.createElement('button');
+                        btn.textContent = svc.active ? 'مفعل' : 'شراء';
+                        btn.disabled = svc.disabled;
+                        btn.style.cssText =
+                            `padding:8px 16px;border-radius:8px;border:none;cursor:pointer;background:${svc.active||svc.disabled?'#e5e7eb':'#3b82f6'};color:${svc.active||svc.disabled?'#9ca3af':'white'};font-weight:600;`;
+                        btn.onclick = () => { if (!svc.disabled) purchaseService(svc.key); };
+                        row.appendChild(btn);
+                        servicesDiv.appendChild(row); });
+                    return container;
+                }
 
-      function buildVIPPage() {
-        const seller = state.sellers[state.currentSellerId];
-        if(!seller || seller.accountType!=='seller') { currentPage='home'; render(); return document.createElement('div'); }
-        const container = document.createElement('div'); container.className='app-container';
-        container.innerHTML = `
-          <div class="header">
-            <button class="icon-btn" onclick="window.navigate?.('home')"><i class="fas fa-arrow-right"></i></button>
-            <h1 style="font-weight:800;">👑 VIP</h1>
-            <div></div>
-          </div>
-          <div class="content-scroll" style="padding:16px;">
-            <div style="display:flex;justify-content:space-between;background:var(--orange-light);padding:16px;border-radius:14px;margin-bottom:16px;align-items:center;">
-              <div><span>💰 النقاط</span><button style="width:28px;height:28px;border-radius:50%;background:var(--orange);color:white;border:none;cursor:pointer;margin-right:6px;" onclick="window.showAddPoints?.()">+</button></div>
-              <span style="font-size:1.5rem;font-weight:800;color:var(--orange);">${seller.points} نقطة</span>
+                function buildOffersPage() {
+                    const container = document.createElement('div');
+                    container.className = 'app-container';
+                    container.innerHTML = `
+            <div class="header">
+              <button class="icon-btn" onclick="if(window.navigate)window.navigate('home')"><i class="fas fa-arrow-right"></i></button>
+              <h1 style="font-weight:800;">🎁 العروض</h1>
+              <div></div>
             </div>
-            <div id="addPointsForm" style="display:none;background:var(--input-bg);padding:16px;border-radius:14px;margin-bottom:16px;">
-              <input type="number" id="pointsAmount" value="50" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;background:var(--card-bg);color:var(--text-main);">
-              <button style="width:100%;padding:10px;background:#22c55e;color:white;border:none;border-radius:8px;cursor:pointer;" onclick="window.addPoints?.()">تأكيد</button>
-            </div>
-            <h3 style="margin-bottom:10px;">🎯 متجر الخدمات</h3>
-            <div id="servicesList"></div>
-          </div>
-        `;
-        const servicesDiv = container.querySelector('#servicesList');
-        const services = [
-          {title:'✅ توثيق الحساب',cost:70,key:'verify',disabled:seller.verificationBadge||seller.points<70,active:seller.verificationBadge},
-          {title:'📦 باقة 100 منتج',cost:50,key:'max100',disabled:seller.maxProducts>=100||seller.points<50,active:seller.maxProducts>=100},
-          {title:'🌟 اشتراك VIP',cost:50,key:'vip',disabled:seller.subscription==='vip'||seller.points<50,active:seller.subscription==='vip'}
-        ];
-        services.forEach(svc=>{ const row=document.createElement('div'); row.style.cssText='border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'; row.innerHTML=`<div><p style="font-weight:600;">${svc.title}</p><p style="font-size:0.7rem;color:var(--text-sub);">${svc.cost} نقطة</p></div>`; const btn=document.createElement('button'); btn.textContent=svc.active?'مفعل':'شراء'; btn.disabled=svc.disabled; btn.style.cssText=`padding:8px 16px;border-radius:8px;border:none;cursor:pointer;background:${svc.active||svc.disabled?'#e5e7eb':'#3b82f6'};color:${svc.active||svc.disabled?'#9ca3af':'white'};font-weight:600;`; btn.onclick=()=>{if(!svc.disabled)purchaseService(svc.key);}; row.appendChild(btn); servicesDiv.appendChild(row); });
-        return container;
-      }
-
-      function buildOffersPage() {
-        const container = document.createElement('div'); container.className='app-container';
-        container.innerHTML = `
-          <div class="header"><button class="icon-btn" onclick="window.navigate?.('home')"><i class="fas fa-arrow-right"></i></button><h1 style="font-weight:800;">🎁 العروض</h1><div></div></div>
-          <div class="content-scroll" style="padding:24px;text-align:center;">
-            <div style="padding:40px 20px;">
-              <i class="fas fa-gift" style="font-size:5rem;color:var(--orange);display:block;margin-bottom:16px;"></i>
-              <h2 style="font-weight:800;margin-bottom:8px;">قسم العروض والتخفيضات</h2>
-              <p style="color:var(--text-sub);margin-bottom:20px;">سيتم إطلاق العروض قريباً - تابعونا!</p>
-              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:400px;margin:0 auto;">
-                <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;"><span style="font-size:2rem;">🏷️</span><p style="font-weight:600;font-size:0.8rem;">خصم 20%</p><p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p></div>
-                <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;"><span style="font-size:2rem;">🚚</span><p style="font-weight:600;font-size:0.8rem;">توصيل مجاني</p><p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p></div>
-                <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;"><span style="font-size:2rem;">🎁</span><p style="font-weight:600;font-size:0.8rem;">اشتري 2 واحصل على 1</p><p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p></div>
-                <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;"><span style="font-size:2rem;">⭐</span><p style="font-weight:600;font-size:0.8rem;">نقاط مضاعفة</p><p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p></div>
+            <div class="content-scroll" style="padding:24px;text-align:center;">
+              <div style="padding:40px 20px;">
+                <i class="fas fa-gift" style="font-size:5rem;color:var(--orange);display:block;margin-bottom:16px;"></i>
+                <h2 style="font-weight:800;margin-bottom:8px;">قسم العروض والتخفيضات</h2>
+                <p style="color:var(--text-sub);margin-bottom:20px;">سيتم إطلاق العروض قريباً - تابعونا!</p>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:400px;margin:0 auto;">
+                  <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;">
+                    <span style="font-size:2rem;">🏷️</span>
+                    <p style="font-weight:600;font-size:0.8rem;">خصم 20%</p>
+                    <p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p>
+                  </div>
+                  <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;">
+                    <span style="font-size:2rem;">🚚</span>
+                    <p style="font-weight:600;font-size:0.8rem;">توصيل مجاني</p>
+                    <p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p>
+                  </div>
+                  <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;">
+                    <span style="font-size:2rem;">🎁</span>
+                    <p style="font-weight:600;font-size:0.8rem;">اشتري 2 واحصل على 1</p>
+                    <p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p>
+                  </div>
+                  <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;">
+                    <span style="font-size:2rem;">⭐</span>
+                    <p style="font-weight:600;font-size:0.8rem;">نقاط مضاعفة</p>
+                    <p style="font-size:0.7rem;color:var(--text-sub);">قريباً</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        `;
-        return container;
-      }
+          `;
+                    return container;
+                }
 
-      function purchaseService(key) {
-        const seller = state.sellers[state.currentSellerId];
-        if(key==='verify'){seller.points-=70;seller.verificationBadge=true;}
-        else if(key==='max100'){seller.points-=50;seller.maxProducts=100;}
-        else if(key==='vip'){seller.points-=50;seller.subscription='vip';}
-        saveState(state); render(); showToast('✅ تم الشراء بنجاح');
-      }
+                function buildProfilePage() {
+                    const isLoggedIn = !!state.currentSellerId;
+                    const seller = isLoggedIn ? state.sellers[state.currentSellerId] : null;
+                    const container = document.createElement('div');
+                    container.className = 'app-container';
+                    const contactMethod = getContactMethod();
+                    const contactIconClass = contactMethod === 'telegram' ? 'fa-telegram-plane' : 'fa-whatsapp';
+                    const contactColor = contactMethod === 'telegram' ? '#0088cc' : '#25D366';
 
-      function navigate(page){ currentPage=page; render(); }
-      function openProfile(){ currentPage='profile'; render(); }
-      function toggleSearch(){ showSearch=!showSearch; if(!showSearch) searchQuery=''; render(); if(showSearch) setTimeout(()=>document.getElementById('searchInput')?.focus(),200); }
-      function updateSearch(val){ searchQuery=val; render(); }
-      function closeSearch(){ showSearch=false; searchQuery=''; render(); }
-      function toggleTheme(){ document.body.classList.toggle('dark'); localStorage.setItem(THEME_KEY, document.body.classList.contains('dark')?'dark':'light'); render(); }
-      function setView(mode){ viewMode=mode; render(); }
-      function openVIP(){ if(!state.currentSellerId) return showToast('سجل الدخول أولاً'); if(state.sellers[state.currentSellerId]?.accountType!=='seller') return showToast('VIP للتجار فقط'); currentPage='vip'; render(); }
-      function logout(){ state.currentSellerId=null; saveState(state); currentPage='home'; render(); showToast('👋 تم تسجيل الخروج'); }
-      function closeComments(){ commentsProduct=null; render(); }
-      function submitComment(){ const input=document.getElementById('commentInputField'); if(!input||!input.value.trim()) return; const isLoggedIn=!!state.currentSellerId; const author=isLoggedIn?(state.sellers[state.currentSellerId]?.ownerName||'مستخدم'):'ضيف'; const text=`${author}: ${input.value.trim()}`; if(!commentsProduct.comments) commentsProduct.comments=[]; commentsProduct.comments.push(text); saveState(state); input.value=''; render(); showToast('✅ تم الإضافة'); }
-      function doLogin(){ const email=document.getElementById('loginEmail')?.value.trim(); const pass=document.getElementById('loginPass')?.value.trim(); const found=Object.values(state.sellers).find(s=>s.email===email&&s.password===pass); if(found){ state.currentSellerId=found.id; saveState(state); currentPage='home'; render(); showToast('✅ تم الدخول بنجاح'); }else{ const err=document.getElementById('loginError'); if(err){ err.style.display='block'; err.textContent='بيانات غير صحيحة'; } } }
-      function socialLogin(provider){ showToast(`🔐 ${provider==='google'?'جوجل':'فيسبوك'} - جاري التطوير...`); setTimeout(()=>{ state.currentSellerId='cust1'; saveState(state); currentPage='home'; render(); showToast('✅ تم الدخول كعميل تجريبي'); },1500); }
-      function doJoin(){ const accType=document.querySelector('input[name="accType"]:checked')?.value||'customer'; const owner=document.getElementById('joinOwner')?.value.trim()||''; const store=document.getElementById('joinStore')?.value.trim()||''; const email=document.getElementById('joinEmail')?.value.trim()||''; const pass=document.getElementById('joinPass')?.value.trim()||''; const phone=document.getElementById('joinPhone')?.value.trim()||'01'; const countryBtn=document.getElementById('countryBtn'); const country=countryBtn?countryBtn.childNodes[0].textContent.trim():'مصر'; const errEl=document.getElementById('joinError'); if(!email||!pass||!owner){ if(errEl){ errEl.style.display='block'; errEl.textContent='املأ الحقول المطلوبة'; } return; } if(accType==='seller'&&!store){ if(errEl){ errEl.style.display='block'; errEl.textContent='اسم المتجر مطلوب للتجار'; } return; } const newId='s_'+Date.now(); state.sellers[newId]={id:newId,email,password:pass,storeName:accType==='seller'?store:'',ownerName:owner,phone,country,accountType:accType,avatar:accType==='customer'?'👤':'🛍️',points:0,verified:false,subscription:'free',products:[],verificationBadge:false,maxProducts:10,subscriptionExpiry:null}; state.currentSellerId=newId; saveState(state); currentPage='home'; render(); showToast('✅ تم إنشاء الحساب'); }
-      function toggleStoreField(){ const storeInput=document.getElementById('joinStore'); const acc=document.querySelector('input[name="accType"]:checked'); if(storeInput&&acc) storeInput.style.display=acc.value==='seller'?'block':'none'; }
-      function toggleCountryList(){ const list=document.getElementById('countryList'); if(list) list.style.display=list.style.display==='none'?'block':'none'; }
-      function showAddPoints(){ const form=document.getElementById('addPointsForm'); if(form) form.style.display='block'; }
-      function addPoints(){ const amtInput=document.getElementById('pointsAmount'); const amt=parseInt(amtInput?.value)||0; if(amt>0&&state.currentSellerId&&state.sellers[state.curre
+                    if (!isLoggedIn || !seller) {
+                        container.innerHTML = `
+              <div class="header">
+                <button class="icon-btn" onclick="if(window.navigate)window.navigate('home')"><i class="fas fa-arrow-right"></i></button>
+                <h1 style="font-weight:800;">👤 الملف الشخصي</h1>
+                <div></div>
+              </div>
+              <div class="content-scroll" style="padding:40px 20px;text-align:center;">
+                <i class="fas fa-user-lock" style="font-size:5rem;color:#9ca3af;display:block;margin-bottom:16px;"></i>
+                <p style="color:var(--text-sub);margin-bottom:20px;font-size:1rem;">يجب تسجيل الدخول لعرض الملف الشخصي</p>
+                <button class="btn-primary" style="max-width:280px;" onclick="if(window.navigate)window.navigate('login')">تسجيل الدخول</button>
+              </div>
+            `;
+                        return container;
+                    }
+
+                    const accountTypeLabel = seller.accountType === 'seller' ? 'تاجر 🛍️' : 'عميل 👤';
+                    const subscriptionLabel = seller.subscription === 'platinum' ? 'بلاتينيوم 💎' : seller.subscription ===
+                        'vip' ? 'VIP ⭐' : seller.subscription === 'silver' ? 'فضي 🥈' : 'مجاني 🆓';
+                    const verifiedLabel = seller.verificationBadge ?
+                        '<span style="color:#3b82f6;font-weight:700;">✅ موثق</span>' :
+                        '<span style="color:#9ca3af;">❌ غير موثق</span>';
+
+                    container.innerHTML = `
+            <div class="header">
+              <button class="icon-btn" onclick="if(window.navigate)window.navigate('home')"><i class="fas fa-arrow-right"></i></button>
+              <h1 style="font-weight:800;">👤 الملف الشخصي</h1>
+              <button class="icon-btn" style="background:#fef2f2;color:#dc2626;" onclick="if(window.logout)window.logout()" title="تسجيل الخروج"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+            <div class="content-scroll" style="padding:20px;">
+              <div style="text-align:center;margin-bottom:20px;">
+                <div class="profile-avatar-large">${seller.avatar || '👤'}</div>
+                <h2 style="font-weight:800;font-size:1.2rem;color:var(--text-main);">${seller.ownerName || 'مستخدم'}</h2>
+                ${seller.storeName ? `<p style="color:var(--text-sub);font-size:0.85rem;">🏪 ${seller.storeName}</p>` : ''}
+                <div style="margin-top:6px;">${verifiedLabel}</div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                <div class="info-content">
+                  <div class="info-label">البريد الإلكتروني</div>
+                  <div class="info-value">${seller.email}</div>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="info-icon"><i class="fas fa-fingerprint"></i></div>
+                <div class="info-content">
+                  <div class="info-label">رقم ID الفريد</div>
+                  <div class="info-value" style="font-family:monospace;letter-spacing:1px;">${seller.id}</div>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="info-icon"><i class="fas fa-phone"></i></div>
+                <div class="info-content">
+                  <div class="info-label">رقم الهاتف</div>
+                  <div class="info-value">${seller.phone || 'غير محدد'}</div>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="info-icon"><i class="fas fa-globe"></i></div>
+                <div class="info-content">
+                  <div class="info-label">الدولة</div>
+                  <div class="info-value">${seller.country || 'مصر'}</div>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="info-icon"><i class="fas fa-user-tag"></i></div>
+                <div class="info-content">
+                  <div class="info-label">نوع الحساب</div>
+                  <div class="info-value">${accountTypeLabel} · ${subscriptionLabel}</div>
+                </div>
+              </div>
+
+              ${seller.accountType === 'seller' ? `
+              <div class="profile-info-row">
+                <div class="info-icon"><i class="fas fa-coins"></i></div>
+                <div class="info-content">
+                  <div class="info-label">النقاط</div>
+                  <div class="info-value" style="color:var(--orange);">${seller.points.toLocaleString()} نقطة</div>
+                </div>
+              </div>
+              ` : ''}
+
+              <div class="profile-info-row" style="cursor:pointer;" onclick="if(window.toggleContactMethodProfile)window.toggleContactMethodProfile()">
+                <div class="info-icon"><i class="fab ${contactIconClass}" style="color:${contactColor};"></i></div>
+                <div class="info-content">
+                  <div class="info-label">وسيلة التواصل الافتراضية</div>
+                  <div class="info-value">${contactMethod === 'telegram' ? 'تليجرام' : 'واتساب'} <span style="font-size:0.7rem;color:var(--text-sub);">(اضغط للتغيير)</span></div>
+                </div>
+              </div>
+
+              <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+                ${seller.accountType === 'seller' ? `<button class="btn-primary" style="background:#f59e0b;" onclick="if(window.navigate)window.navigate('vip')">👑 الذهاب إلى VIP</button>` : ''}
+                <button style="width:100%;padding:12px;background:var(--card-bg);border:1px solid var(--border);border-radius:14px;color:var(--text-main);cursor:pointer;font-size:0.85rem;" onclick="if(window.navigate)window.navigate('home')">🏠 العودة للرئيسية</button>
+              </div>
+            </div>
+          `;
+                    return container;
+                }
+
+                function toggleContactMethodProfile() {
+                    const next = getContactMethod() === 'whatsapp' ? 'telegram' : 'whatsapp';
+                    setContactMethod(next);
+                    render();
+                    showToast(`📱 تم التبديل إلى ${next==='telegram'?'تليجرام':'واتساب'}`);
+                }
+
+                function purchaseService(key) {
+                    const seller = state.sellers[state.currentSellerId];
+                    if (key === 'verify') { seller.points -= 70;
+                        seller.verificationBadge = true; } else if (key === 'max100') { seller.points -= 50;
+                        seller.maxProducts = 100; } else if (key === 'vip') { seller.points -= 50;
+                        seller.subscription = 'vip'; }
+                    saveState(state);
+                    render();
+                    showToast('✅ تم الشراء بنجاح');
+                }
+
+                function navigate(page) { currentPage = page;
+                    render(); }
+
+                function toggleSearch() { showSearch = !showSearch; if (!showSearch) searchQuery = '';
+                    render(); if (showSearch) setTimeout(() => { const inp = document.getElementById('searchInput'); if (inp) inp.focus(); }, 200); }
+
+                function updateSearch(val) { searchQuery = val;
+                    render(); }
+
+                function closeSearch() { showSearch = false;
+                    searchQuery = '';
+                    render(); }
+
+                function toggleTheme() { document.body.classList.toggle('dark');
+                    localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light');
+                    render(); }
+
+                function setView(mode) { viewMode = mode;
+                    render(); }
+
+                function openVIP() {
+                    if (!state.currentSellerId) return showToast('سجل الدخول أولاً');
+                    if (state.sellers[state.currentSellerId]?.accountType !== 'seller') return showToast(
+                    'VIP للتجار فقط');
+                    currentPage = 'vip';
+                    render();
+                }
+
+                function logout() { state.currentSellerId = null;
+                    saveState(state);
+                    currentPage = 'home';
+                    render();
+                    showToast('👋 تم تسجيل الخروج'); }
+
+                function closeComments() { commentsProduct = null;
+                    render(); }
+
+                function submitComment() {
+                    const input = document.getElementById('commentInputField');
+                    if (!input || !input.value.trim()) return;
+                    const isLoggedIn = !!state.currentSellerId;
+                    const author = isLoggedIn ? (state.sellers[state.currentSellerId]?.ownerName || 'مستخدم') : 'ضيف';
+                    const text = `${author}: ${input.value.trim()}`;
+                    if (!commentsProduct.comments) commentsProduct.comments = [];
+                    commentsProduct.comments.push(text);
+                    saveState(state);
+                    input.value = '';
+                    render();
+                    showToast('✅ تم الإضافة');
+                }
+
+                function doLogin() {
+                    const email = document.getElementById('loginEmail')?.value.trim();
+                    const pass = document.getElementById('loginPass')?.value.trim();
+                    const found = Object.values(state.sellers).find(s => s.email === email && s.password === pass);
+                    if (found) { state.currentSellerId = found.id;
+                        saveState(state);
+                        currentPage = 'home';
+                        render();
+                        showToast('✅ تم الدخول بنجاح'); } else { const err = document.getElementById('loginError'); if (
+                            err) { err.style.display = 'block';
+                            err.textContent = 'بيانات غير صحيحة - تأكد من البريد وكلمة المرور'; } }
+                }
+
+                function socialLogin(provider) {
+                    showToast(
+                        `🔐 ${provider==='google'?'تسجيل الدخول عبر جوجل':'تسجيل الدخول عبر فيسبوك'} - جاري التطوير...`);
+                    setTimeout(() => {
+                        const demoId = 'cust1';
+                        state.currentSellerId = demoId;
+                        saveState(state);
+                        currentPage = 'home';
+                        render();
+                        showToast('✅ تم الدخول كعميل تجريبي');
+                    }, 1500);
+                }
+
+                function doJoin() {
+                    const accTypeEl = document.querySelector('input[name="accType"]:checked');
+                    const accType = accTypeEl ? accTypeEl.value : 'customer';
+                    const owner = document.getElementById('joinOwner')?.value.trim() || '';
+                    const store = document.getElementById('joinStore')?.value.trim() || '';
+                    const email = document.getElementById('joinEmail')?.value.trim() || '';
+                    const pass = document.getElementById('joinPass')?.value.trim() || '';
+                    const phone = document.getElementById('joinPhone')?.value.trim() || '01';
+                    const countryBtn = document.getElementById('countryBtn');
+                    const country = countryBtn ? countryBtn.childNodes[0].textContent.trim() : 'مصر';
+                    const errEl = document.getElementById('joinError');
+                    if (!email || !pass || !owner) { if (errEl) { errEl.style.display = 'block';
+                            errEl.textContent = 'املأ الحقول المطلوبة (البريد، كلمة المرور، اسم المالك)'; } return; }
+                    if (accType === 'seller' && !store) { if (errEl) { errEl.style.display = 'block';
+                            errEl.textContent = 'اسم المتجر مطلوب للتجار'; } return; }
+                    const newId = 's_' + Date.now();
+                    state.sellers[newId] = {
+                        id: newId,
+                        email,
+                        password: pass,
+                        storeName: accType === 'seller' ? store : '',
+                        ownerName: owner,
+                        phone,
+                        country,
+                        accountType: accType,
+                        avatar: accType === 'customer' ? '👤' : '🛍️',
+                        points: 0,
+                        verified: false,
+                        subscription: 'free',
+                        products: [],
+                        verificationBadge: false,
+                        maxProducts: 10,
+                        subscriptionExpiry: null
+                    };
+                    state.currentSellerId = newId;
+                    saveState(state);
+                    currentPage = 'home';
+                    render();
+                    showToast('✅ تم إنشاء الحساب بنجاح');
+                }
+
+                function toggleStoreField() {
+                    const storeInput = document.getElementById('joinStore');
+                    const accTypeEl = document.querySelector('input[name="accType"]:checked');
+                    if (storeInput && accTypeEl) storeInput.style.display = accTypeEl.value === 'seller' ? 'block' :
+                        'none';
+                }
+
+                function toggleCountryList() {
+                    const list = document.getElementById('countryList');
+                    if (list) list.style.display = list.style.display === 'none' ? 'block' : 'none';
+                }
+
+                function showAddPoints() {
+                    const form = document.getElementById('addPointsForm');
+                    if (form) form.style.display = 'block';
+                }
+
+                function addPoints() {
+                    const amtInput = document.getElementById('pointsAmount');
+                    const amt = parseInt(amtInput?.value) || 0;
+                    if (amt > 0 && state.currentSellerId && state.sellers[state.currentSellerId]) {
+                        state.sellers[state.currentSellerId].points += amt;
+                        saveState(state);
+                        render();
+                        showToast(`✅ تمت إضافة ${amt} نقطة`);
+                    }
+                }
+
+                function openChatFullscreen() { showChatFullscreen = true;
+                    render(); }
+
+                function closeChatFullscreen() { showChatFullscreen = false;
+                    render(); }
+
+                function sendFullChat() {
+                    const input = document.getElementById('fullChatInput');
+                    if (!input || !input.value.trim()) return;
+                    state.chatMessages.push({ id: Date.now().toString(), role: 'user', text: input.value.trim() });
+                    const txt = input.value.toLowerCase();
+                    let reply = 'شكراً لتواصلك مع VICKS MARKET! كيف أقدر أساعدك؟';
+                    if (txt.includes('سعر') || txt.includes('الاسعار')) reply =
+                        'الأسعار تظهر مع كل منتج في الصفحة الرئيسية. يمكنك تصفح المنتجات والضغط على أيقونة الواتساب أو التليجرام للتواصل مع البائع.';
+                    else if (txt.includes('بائع') || txt.includes('تاجر') || txt.includes('انضم'))
+                        reply =
+                        'للانضمام كبائع: اضغط أيقونة المستخدم ثم اختر "انضم كتاجر أو عميل". بعد التسجيل يمكنك الوصول إلى لوحة VIP.';
+                    else if (txt.includes('توصيل') || txt.includes('شحن')) reply =
+                        'يتم التوصيل لجميع المحافظات. مدة التوصيل من 2-5 أيام عمل حسب موقعك.';
+                    else if (txt.includes('دفع') || txt.includes('الدفع')) reply =
+                        'نقبل الدفع عند الاستلام والتحويل البنكي. قريباً سنضيف خيارات دفع إلكتروني.';
+                    state.chatMessages.push({ id: (Date.now() + 1).toString(), role: 'bot', text: reply });
+                    saveState(state);
+                    input.value = '';
+                    render();
+                }
+
+                function openCamera() { document.getElementById('cameraInput')?.click(); }
+
+                function openGallery() { document.getElementById('galleryInput')?.click(); }
+
+                function handleImage(file) {
+                    if (!file) return;
+                    searchQuery = file.name.replace(/\.[^/.]+$/, "");
+                    showSearch = true;
+                    render();
+                    setTimeout(() => { const inp = document.getElementById('searchInput'); if (inp) { inp.value =
+                                searchQuery;
+                            inp.focus(); } }, 200);
+                }
+                document.getElementById('cameraInput')?.addEventListener('change', (e) => { handleImage(e.target.files[
+                    0]);
+                    e.target.value = ''; });
+                document.getElementById('galleryInput')?.addEventListener('change', (e) => { handleImage(e.target.files[
+                    0]);
+                    e.target.value = ''; });
+                window.navigate = navigate;
+                window.toggleSearch = toggleSearch;
+                window.updateSearch = updateSearch;
+                window.closeSearch = closeSearch;
+                window.toggleTheme = toggleTheme;
+                window.setView = setView;
+                window.openVIP = openVIP;
+                window.logout = logout;
+                window.closeComments = closeComments;
+                window.submitComment = submitComment;
+                window.toggleContactMethodProfile = toggleContactMethodProfile;
+                window.doLogin = doLogin;
+                window.socialLogin = socialLogin;
+                window.doJoin = doJoin;
+                window.toggleStoreField = toggleStoreField;
+                window.toggleCountryList = toggleCountryList;
+                window.showAddPoints = showAddPoints;
+                window.addPoints = addPoints;
+                window.openChatFullscreen = openChatFullscreen;
+                window.closeChatFullscreen = closeChatFullscreen;
+                window.sendFullChat = sendFullChat;
+                window.openCamera = openCamera;
+                window.openGallery = openGallery;
+                window.showToast = showToast;
+                if (localStorage.getItem(THEME_KEY) === 'dark') document.body.classList.add('dark');
+                render();
+            } catch (e) {
+                document.getElementById('app').innerHTML =
+                    `<div style="padding:40px;text-align:center;"><h2>⚠️ خطأ في التطبيق</h2><p>${e.message}</p><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#ff6600;color:white;border:none;border-radius:8px;cursor:pointer;">إعادة تحميل</button></div>`;
+                console.error(e);
+            }
+        })();
+    </script>
+</body>
+  </html>
