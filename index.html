@@ -1273,3 +1273,509 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Vicks Market - تسجيل الدخول</title>
+  <!-- استخدام نفس نظام الألوان والخطوط: Cairo Font من Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #121212;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      padding: 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* الصفحة الرئيسية (الجزء السابق) - ستكون مخفية عند عرض تسجيل الدخول */
+    .page {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+    }
+
+    /* تأثيرات ناعمة عند الانتقال */
+    #homePage {
+      opacity: 1;
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    #homePage.hidden {
+      opacity: 0;
+      transform: translateX(30px);
+      visibility: hidden;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    #loginPage {
+      opacity: 0;
+      transform: translateX(-30px);
+      visibility: hidden;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    #loginPage.visible {
+      opacity: 1;
+      transform: translateX(0);
+      visibility: visible;
+      position: relative;
+      pointer-events: auto;
+    }
+
+    /* تصميم الصفحة الرئيسية (لأغراض الربط) */
+    .home-container {
+      background-color: #1e1e1e;
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+    }
+
+    .app-logo {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #d4af37;
+      margin-bottom: 0.5rem;
+      letter-spacing: -1px;
+    }
+
+    .welcome-text {
+      color: #b0b0b0;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    .btn {
+      background-color: #2a2a2a;
+      border: none;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.9rem 1.8rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      margin: 0.5rem 0;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .btn-primary {
+      background-color: #d4af37;
+      color: #121212;
+      font-weight: 700;
+      border: none;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #4a4a4a;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* تصميم صفحة تسجيل الدخول المطابقة للصورة */
+    .login-container {
+      background-color: #1e1e1e;
+      border-radius: 28px;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      width: 100%;
+    }
+
+    .back-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 1.8rem;
+      color: #b0b0b0;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      font-family: 'Cairo', sans-serif;
+      gap: 6px;
+    }
+
+    .back-arrow svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+    }
+
+    .back-arrow:hover {
+      color: #ffffff;
+    }
+
+    .login-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .input-field {
+      width: 100%;
+      background-color: #2c2c2c;
+      border: 1px solid #3a3a3a;
+      border-radius: 12px;
+      padding: 0.9rem 1.2rem;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.95rem;
+      color: #ffffff;
+      margin-bottom: 1.2rem;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    .input-field::placeholder {
+      color: #7a7a7a;
+      font-weight: 400;
+    }
+
+    .input-field:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    .login-btn {
+      background-color: #d4af37;
+      color: #121212;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 30px;
+      width: 100%;
+      margin: 0.8rem 0 1rem;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .login-btn:hover {
+      background-color: #e0bb4a;
+    }
+
+    .forgot-password {
+      display: block;
+      text-align: center;
+      color: #d4af37;
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 1.8rem;
+      font-weight: 500;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #6a6a6a;
+      font-size: 0.8rem;
+      margin: 1.2rem 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: #3a3a3a;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background-color: #2c2c2c;
+      border: 1px solid #3a3a3a;
+      border-radius: 30px;
+      padding: 0.8rem;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: white;
+      width: 100%;
+      margin-bottom: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .social-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .google-btn:hover {
+      background-color: #3a3a3a;
+      border-color: #d4af37;
+    }
+
+    .facebook-btn:hover {
+      background-color: #3a3a3a;
+      border-color: #1877f2;
+    }
+
+    .signup-prompt {
+      text-align: center;
+      margin-top: 1.8rem;
+      color: #b0b0b0;
+      font-size: 0.9rem;
+    }
+
+    .signup-link {
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      font-size: 0.8rem;
+      margin-top: -0.6rem;
+      margin-bottom: 0.8rem;
+      display: none;
+    }
+
+    /* تحسينات للأجهزة الصغيرة */
+    @media (max-width: 400px) {
+      .login-container {
+        padding: 1.5rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- الصفحة الرئيسية (تحتوي على أزرار الربط) -->
+  <div id="homePage" class="page">
+    <div class="home-container">
+      <div class="app-logo">⚡ Vicks</div>
+      <div class="welcome-text">أهلاً بك في سوق العطور المميز</div>
+      <button class="btn btn-primary" id="showLoginBtn">تسجيل الدخول</button>
+      <button class="btn btn-outline" id="mockSignupBtn">انضم الآن</button>
+      <p style="margin-top: 1.5rem; color: #7a7a7a; font-size: 0.85rem;">لديك حساب؟ استخدم زر الدخول أعلاه</p>
+    </div>
+  </div>
+
+  <!-- صفحة تسجيل الدخول (مخفية في البداية) -->
+  <div id="loginPage" class="page">
+    <div class="login-container">
+      <!-- سهم العودة للرئيسية -->
+      <button class="back-arrow" id="backToHomeBtn">
+        <svg viewBox="0 0 24 24">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        العودة للرئيسية
+      </button>
+
+      <h1 class="login-title">تسجيل الدخول</h1>
+
+      <!-- حقل البريد الإلكتروني -->
+      <input type="email" id="emailInput" class="input-field" placeholder="البريد الإلكتروني" dir="rtl">
+      <div id="emailError" class="error-message">يرجى إدخال البريد الإلكتروني</div>
+
+      <!-- حقل كلمة المرور -->
+      <input type="password" id="passwordInput" class="input-field" placeholder="كلمة المرور" dir="rtl">
+      <div id="passwordError" class="error-message">يرجى إدخال كلمة المرور</div>
+
+      <!-- زر دخول -->
+      <button class="login-btn" id="loginSubmitBtn">دخول</button>
+
+      <!-- نسيت كلمة السر -->
+      <a href="#" class="forgot-password" id="forgotPasswordLink">نسيت كلمة السر؟</a>
+
+      <!-- الفاصل -->
+      <div class="divider">أو المتابعة عبر</div>
+
+      <!-- أزرار التواصل الاجتماعي -->
+      <button class="social-btn google-btn" id="googleLoginBtn">
+        <svg viewBox="0 0 24 24" width="22" height="22">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Google متابعة عبر
+      </button>
+
+      <button class="social-btn facebook-btn" id="facebookLoginBtn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#1877f2">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        Facebook متابعة عبر
+      </button>
+
+      <!-- ليس لديك حساب؟ انضم الآن -->
+      <div class="signup-prompt">
+        ليس لديك حساب؟
+        <a href="#" class="signup-link" id="signupLink">انضم الآن</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ---------- عناصر الصفحة ----------
+      const homePage = document.getElementById('homePage');
+      const loginPage = document.getElementById('loginPage');
+
+      const showLoginBtn = document.getElementById('showLoginBtn');
+      const backToHomeBtn = document.getElementById('backToHomeBtn');
+      
+      // حقول الإدخال وأزرار صفحة تسجيل الدخول
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+
+      // أزرار اجتماعية وروابط (سلوك افتراضي)
+      const googleBtn = document.getElementById('googleLoginBtn');
+      const facebookBtn = document.getElementById('facebookLoginBtn');
+      const forgotLink = document.getElementById('forgotPasswordLink');
+      const signupLink = document.getElementById('signupLink');
+      const mockSignupBtn = document.getElementById('mockSignupBtn');
+
+      // ---------- دوال الانتقال بين الصفحات ----------
+      function showLoginPage() {
+        homePage.classList.add('hidden');
+        loginPage.classList.add('visible');
+        // تركيز على حقل البريد الإلكتروني تلقائياً لسهولة الاستخدام
+        setTimeout(() => {
+          emailInput.focus();
+        }, 200);
+      }
+
+      function showHomePage() {
+        loginPage.classList.remove('visible');
+        homePage.classList.remove('hidden');
+        // إعادة تعيين حقول الإدخال والرسائل الخطأ
+        emailInput.value = '';
+        passwordInput.value = '';
+        emailError.style.display = 'none';
+        passwordError.style.display = 'none';
+      }
+
+      // ---------- ربط الأحداث ----------
+      showLoginBtn.addEventListener('click', showLoginPage);
+      backToHomeBtn.addEventListener('click', showHomePage);
+
+      // زر "انضم الآن" في الصفحة الرئيسية (يمكن توجيهه لصفحة التسجيل لاحقاً)
+      mockSignupBtn.addEventListener('click', function() {
+        alert('سيتم توجيهك إلى صفحة إنشاء حساب جديد (قيد التطوير)');
+      });
+
+      // التحقق من البيانات قبل الدخول
+      function validateLoginForm() {
+        let isValid = true;
+        // إخفاء الرسائل السابقة
+        emailError.style.display = 'none';
+        passwordError.style.display = 'none';
+
+        const emailValue = emailInput.value.trim();
+        const passwordValue = passwordInput.value.trim();
+
+        if (emailValue === '') {
+          emailError.textContent = 'يرجى إدخال البريد الإلكتروني';
+          emailError.style.display = 'block';
+          isValid = false;
+        } else if (!emailValue.includes('@') || !emailValue.includes('.')) {
+          emailError.textContent = 'يرجى إدخال بريد إلكتروني صالح';
+          emailError.style.display = 'block';
+          isValid = false;
+        }
+
+        if (passwordValue === '') {
+          passwordError.textContent = 'يرجى إدخال كلمة المرور';
+          passwordError.style.display = 'block';
+          isValid = false;
+        } else if (passwordValue.length < 4) {
+          passwordError.textContent = 'كلمة المرور يجب أن تكون 4 أحرف على الأقل';
+          passwordError.style.display = 'block';
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      loginSubmitBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (validateLoginForm()) {
+          // محاكاة نجاح تسجيل الدخول - في الواقع يتم توجيهه أو إظهار رسالة
+          alert(`أهلاً بك، ${emailInput.value}! تم تسجيل الدخول بنجاح (محاكاة).`);
+          // هنا يمكنك دمج الكود السابق لتوجيه المستخدم إلى لوحة التحكم أو تحديث الواجهة
+          // مثلاً: showHomePage(); أو استدعاء دالة من الكود السابق
+        }
+      });
+
+      // إمكانية الضغط على Enter لتسجيل الدخول
+      passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          loginSubmitBtn.click();
+        }
+      });
+      emailInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          passwordInput.focus();
+        }
+      });
+
+      // معالجة الأزرار الاجتماعية وروابط أخرى (تمنع الإرسال الافتراضي)
+      googleBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('محاكاة تسجيل الدخول عبر Google');
+      });
+      facebookBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('محاكاة تسجيل الدخول عبر Facebook');
+      });
+      forgotLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('سيتم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني');
+      });
+      signupLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('توجيه إلى صفحة إنشاء حساب جديد');
+      });
+
+      // للتأكد من أن صفحة تسجيل الدخول مخفية في البداية (حالة افتراضية)
+      // نضمن إزالة أي كلاسات قديمة (الأمان)
+      loginPage.classList.remove('visible');
+      homePage.classList.remove('hidden');
+    })();
+  </script>
+</body>
+</html>
