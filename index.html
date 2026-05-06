@@ -1,751 +1,204 @@
-  .cat-tabs::-webkit-scrollbar { display:none; }
-  .cat-tab { white-space:nowrap; padding:7px 16px; border-radius:20px; border:1.5px solid var(--gray-200); background:var(--white); font-family:'Cairo',sans-serif; font-size:13px; cursor:pointer; transition:all 0.2s; color:var(--gray-600); }
-  .cat-tab.active,.cat-tab:hover { background:var(--orange); color:white; border-color:var(--orange); }
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VICKS MARKET V2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* 1. نظام الألوان المتطور (Variables) */
+    :root {
+      --orange: #FF7A00;
+      --orange-dark: #E66E00;
+      --bg-main: #e8e8e8;
+      --bg-phone: #ffffff;
+      --text-main: #1F2937;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --white: #ffffff;
+      --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
 
-  /* FILTER */
-  .filter-bar { display:flex; align-items:center; gap:8px; padding:8px 16px; background:var(--white); border-bottom:1px solid var(--gray-100); }
-  .filter-bar .view-btns { display:flex; gap:4px; margin-left:auto; }
-  .view-btn { width:34px; height:34px; border-radius:var(--radius-sm); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:15px; background:var(--gray-100); color:var(--gray-600); transition:all 0.2s; }
-  .view-btn.active { background:var(--orange); color:white; }
-  .tag-btn { padding:6px 14px; border-radius:20px; border:1.5px solid var(--gray-200); background:var(--white); font-family:'Cairo',sans-serif; font-size:13px; cursor:pointer; color:var(--gray-600); transition:all 0.2s; }
-  .tag-btn:hover { border-color:var(--orange); color:var(--orange); }
+    /* ألوان الوضع الليلي */
+    .dark-mode {
+      --bg-main: #0f172a;
+      --bg-phone: #1e293b;
+      --text-main: #f8fafc;
+      --gray-100: #334155;
+      --gray-200: #475569;
+      --white: #1e293b;
+      --shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
 
-  /* PRODUCTS */
-  .products-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:14px; flex:1; overflow-y:auto; }
-  .product-card { background:var(--white); border-radius:var(--radius); border:1px solid var(--gray-100); overflow:hidden; box-shadow:var(--shadow); cursor:pointer; transition:transform 0.2s; }
-  .product-card:hover { transform:translateY(-2px); }
-  .product-img { width:100%; height:130px; display:flex; align-items:center; justify-content:center; background:var(--gray-50); font-size:56px; padding:12px; }
-  .product-info { padding:10px; }
-  .product-name { font-size:13px; font-weight:700; color:var(--gray-800); margin-bottom:4px; text-align:right; }
-  .product-price { font-size:15px; font-weight:900; color:var(--orange); text-align:right; margin-bottom:8px; }
-  .product-actions { display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap; }
-  .action-btn { width:30px; height:30px; border-radius:50%; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; transition:transform 0.2s; }
-  .action-btn:hover { transform:scale(1.1); }
-  .action-btn.heart { background:var(--gray-800); color:white; }
-  .action-btn.msg { background:var(--gray-400); color:white; }
-  .action-btn.telegram { background:var(--teal); color:white; }
-  .action-btn.whatsapp { background:var(--green); color:white; }
-  .product-meta { display:flex; align-items:center; gap:6px; margin-top:8px; }
-  .stars { color:#F59E0B; font-size:11px; }
-  .shop-badge { background:var(--orange); color:white; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; margin-right:auto; }
-  .shop-name { font-size:10px; color:var(--gray-400); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Cairo', sans-serif; background: var(--bg-main); color: var(--text-main); transition: 0.3s; }
 
-  /* FAB */
-  .fab-robot { position:fixed; bottom:20px; left:20px; width:52px; height:52px; background:var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; cursor:pointer; box-shadow:var(--shadow-lg); animation:pulse 2s infinite; z-index:100; border:none; }
-  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(249,115,22,0.4)} 50%{box-shadow:0 0 0 10px rgba(249,115,22,0)} }
+    .phone-wrapper { 
+      width: 100%; max-width: 420px; height: 100vh; margin: 0 auto; 
+      background: var(--bg-phone); position: relative; display: flex; flex-direction: column; overflow: hidden; 
+    }
 
-  /* BOTTOM NAV */
-  .bottom-nav { display:flex; justify-content:space-around; align-items:center; padding:12px 0; background:var(--white); border-top:1px solid var(--gray-200); position:sticky; bottom:0; }
-  .nav-btn { display:flex; flex-direction:column; align-items:center; gap:3px; border:none; background:none; cursor:pointer; color:var(--gray-400); transition:color 0.2s; font-family:'Cairo',sans-serif; position:relative; }
-  .nav-btn.active { color:var(--orange); }
-  .nav-btn .nav-icon { font-size:22px; }
+    /* 2. أيقونة الروبوت على اليمين (كما طلبت في الفيديو) */
+    .fab-robot { 
+      position: fixed; bottom: 25px; right: 20px; /* تم النقل لليمين */
+      width: 56px; height: 56px; background: var(--orange); 
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+      font-size: 24px; color: white; cursor: pointer; z-index: 1000; border: 2px solid white;
+      animation: pulse 2s infinite; box-shadow: var(--shadow);
+    }
 
-  /* AUTH */
-  .auth-page { padding:30px 24px; display:flex; flex-direction:column; min-height:100vh; }
-  .auth-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:40px; }
-  .auth-title { font-size:26px; font-weight:900; }
-  .auth-logo { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:900; }
-  .auth-logo .logo-icon { font-size:32px; }
-  .form-group { margin-bottom:16px; }
-  .form-label { display:block; text-align:right; font-size:14px; color:var(--gray-600); margin-bottom:8px; }
-  .form-input { width:100%; padding:14px 16px; border-radius:var(--radius-sm); border:1.5px solid var(--orange); background:var(--gray-50); font-family:'Cairo',sans-serif; font-size:15px; outline:none; transition:border-color 0.2s; text-align:right; direction:rtl; }
-  .form-input:focus { border-color:var(--orange-dark); }
-  .btn-primary { width:100%; padding:16px; border-radius:var(--radius-sm); background:var(--orange); color:white; border:none; font-family:'Cairo',sans-serif; font-size:18px; font-weight:700; cursor:pointer; transition:background 0.2s; margin:8px 0; }
-  .btn-primary:hover { background:var(--orange-dark); }
-  .btn-social { width:100%; padding:14px; border-radius:var(--radius-sm); border:1.5px solid var(--orange); background:white; font-family:'Cairo',sans-serif; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin:6px 0; transition:background 0.2s; }
-  .btn-social:hover { background:var(--gray-50); }
-  .btn-social.facebook { border-color:#1877F2; color:#1877F2; }
-  .btn-social.google { border-color:#EA4335; color:#EA4335; }
-  .btn-social.email { border-color:var(--orange); color:var(--orange); }
-  .forgot-link { text-align:center; color:var(--gray-400); font-size:14px; cursor:pointer; margin:8px 0; text-decoration:underline; }
-  .signup-link { text-align:center; font-size:14px; color:var(--gray-600); margin-top:16px; }
-  .signup-link span { color:var(--orange); font-weight:700; cursor:pointer; }
-  .account-type-btns { display:flex; gap:10px; margin-bottom:20px; }
-  .account-type-btn { flex:1; padding:12px; border-radius:var(--radius-sm); border:1.5px solid var(--gray-200); background:var(--gray-100); font-family:'Cairo',sans-serif; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; }
-  .account-type-btn.active { background:var(--orange-light); border-color:var(--orange); color:var(--orange); font-weight:700; }
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 122, 0, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 122, 0, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 122, 0, 0); }
+    }
 
-  /* PROFILE */
-  .profile-body { padding:24px 20px; text-align:center; }
-  .profile-avatar { width:90px; height:90px; border-radius:50%; background:var(--gray-200); margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:50px; position:relative; overflow:visible; }
-  /* Verification badges — checkmark circles NOT medals */
-  .verified-badge { position:absolute; bottom:0; right:0; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:900; border:2px solid white; color:white; }
-  .verified-badge.blue   { background:#3B82F6; }
-  .verified-badge.silver { background:#94A3B8; }
-  .verified-badge.gold   { background:#D97706; }
-  .crown-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:28px; }
-  .profile-name { font-size:20px; font-weight:900; margin-bottom:6px; }
-  .profile-id { font-size:13px; color:var(--gray-400); margin-bottom:4px; }
-  .profile-contact { font-size:13px; color:var(--gray-600); margin-bottom:4px; display:flex; align-items:center; justify-content:center; gap:6px; }
-  .profile-tabs { display:flex; gap:0; margin:16px 0; border:1.5px solid var(--gray-200); border-radius:var(--radius-sm); overflow:hidden; }
-  .profile-tab { flex:1; padding:10px; text-align:center; cursor:pointer; font-family:'Cairo',sans-serif; font-size:12px; font-weight:600; background:var(--gray-50); border:none; color:var(--gray-600); transition:all 0.2s; }
-  .profile-tab.active { background:var(--orange); color:white; }
+    /* باقي التنسيقات الأساسية */
+    .page { display: none; height: 100%; flex-direction: column; }
+    .page.active { display: flex; }
+    .topbar { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gray-200); }
+    .logo { font-weight: 900; color: var(--orange); }
 
-  /* VIP */
-  .vip-section { padding:16px 18px; border-bottom:1px solid var(--gray-100); }
-  .vip-section-title { font-size:16px; font-weight:900; margin-bottom:14px; text-align:right; }
-  .option-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
-  .option-label { font-size:14px; color:var(--gray-600); }
-  .badge-selector { display:flex; gap:10px; }
-  /* Badge choice = circle with checkmark, color only — no medal emoji */
-  .badge-choice { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; color:white; cursor:pointer; border:3px solid transparent; transition:all 0.2s; }
-  .badge-choice::after { content:'✓'; }
-  .badge-choice.gold-b   { background:#D97706; }
-  .badge-choice.silver-b { background:#94A3B8; }
-  .badge-choice.blue-b   { background:#3B82F6; }
-  .badge-choice.selected { border-color:var(--orange-dark); box-shadow:0 0 0 3px var(--orange-light); }
-  .duration-btns { display:flex; gap:6px; flex-wrap:wrap; }
-  .dur-btn { padding:6px 12px; border-radius:8px; border:1.5px solid var(--gray-200); background:var(--gray-50); font-family:'Cairo',sans-serif; font-size:12px; cursor:pointer; transition:all 0.2s; }
-  .dur-btn.active { background:var(--green); color:white; border-color:var(--green); }
-  .dur-btn.dark-act { background:var(--gray-800); color:white; border-color:var(--gray-800); }
-  .vip-packages { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .vip-pkg { background:var(--gray-50); border-radius:var(--radius-sm); padding:12px; text-align:center; border:1.5px solid var(--gray-200); cursor:pointer; transition:all 0.2s; }
-  .vip-pkg:hover { border-color:var(--orange); }
-  .vip-pkg .pkg-icon { font-size:28px; margin-bottom:6px; }
-  .vip-pkg .pkg-name { font-size:11px; font-weight:700; margin-bottom:4px; }
-  .vip-pkg .pkg-desc { font-size:10px; color:var(--gray-400); margin-bottom:8px; }
-  .pkg-points { background:#D97706; color:white; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:700; display:inline-block; }
-  .custom-points { display:flex; gap:10px; margin-top:14px; }
-  .points-input { flex:1; padding:10px 14px; border:1.5px solid var(--gray-200); border-radius:var(--radius-sm); font-family:'Cairo',sans-serif; font-size:14px; text-align:right; direction:rtl; outline:none; }
-  .btn-buy { background:var(--green); color:white; border:none; padding:10px 24px; border-radius:var(--radius-sm); font-family:'Cairo',sans-serif; font-size:15px; font-weight:700; cursor:pointer; }
+    .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; overflow-y: auto; }
+    .product-card { background: var(--white); border-radius: 12px; padding: 10px; border: 1px solid var(--gray-200); box-shadow: var(--shadow); }
+    .action-btn { width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; margin: 2px; color: white; }
 
-  /* CHAT */
-  .chat-header { display:flex; align-items:center; gap:12px; padding:14px 18px; background:var(--white); border-bottom:1px solid var(--gray-100); }
-  .chat-avatar { width:40px; height:40px; background:var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; }
-  .chat-title { font-size:16px; font-weight:700; flex:1; }
-  .chat-body { flex:1; padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:var(--gray-50); }
-  .msg { max-width:75%; }
-  .msg.bot { align-self:flex-end; }
-  .msg.user { align-self:flex-start; }
-  .msg-bubble { padding:12px 16px; border-radius:18px; font-size:14px; line-height:1.5; }
-  .msg.bot .msg-bubble { background:var(--white); border-radius:18px 18px 4px 18px; box-shadow:var(--shadow); }
-  .msg.user .msg-bubble { background:var(--orange); color:white; border-radius:18px 18px 18px 4px; }
-  .chat-input-bar { display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--white); border-top:1px solid var(--gray-200); }
-  .chat-input { flex:1; padding:10px 14px; border:1.5px solid var(--gray-200); border-radius:24px; font-family:'Cairo',sans-serif; font-size:14px; outline:none; text-align:right; direction:rtl; }
-  .chat-send-btn { width:42px; height:42px; background:var(--orange); border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; color:white; }
-  .chat-attach { font-size:20px; color:var(--gray-400); cursor:pointer; border:none; background:none; }
+    /* شريط المحادثة مع زر الكاميرا */
+    .chat-input-bar { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--white); border-top: 1px solid var(--gray-200); }
+    .chat-input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid var(--gray-200); background: var(--gray-100); color: var(--text-main); }
 
-  /* ADMIN */
-  .admin-section { padding:16px 18px; border-bottom:1px solid var(--gray-100); }
-  .admin-section-title { font-size:15px; font-weight:900; margin-bottom:14px; text-align:right; }
-  .admin-card { background:var(--gray-50); border-radius:var(--radius-sm); padding:14px; border:1px solid var(--gray-200); margin-bottom:12px; }
-  .admin-row { display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
-  .admin-label { font-size:12px; color:var(--gray-400); text-align:right; margin-bottom:4px; }
-  .admin-input { flex:1; padding:10px 12px; border:1.5px solid var(--gray-200); border-radius:var(--radius-sm); font-family:'Cairo',sans-serif; font-size:13px; text-align:right; direction:rtl; outline:none; background:white; min-width:80px; }
-  .btn-ban { background:var(--orange); color:white; border:none; padding:10px 18px; border-radius:var(--radius-sm); font-family:'Cairo',sans-serif; font-size:14px; font-weight:700; cursor:pointer; }
-  .btn-send { background:var(--orange); color:white; border:none; padding:10px 14px; border-radius:var(--radius-sm); font-family:'Cairo',sans-serif; font-size:13px; font-weight:700; cursor:pointer; }
-  .coin-btns { display:flex; gap:8px; }
-  .btn-plus { background:var(--green); color:white; border:none; padding:8px 16px; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; }
-  .btn-minus { background:#EF4444; color:white; border:none; padding:8px 16px; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; }
-  .id-swap-btn { width:36px; height:36px; background:var(--gray-800); color:white; border:none; border-radius:50%; font-size:16px; cursor:pointer; }
-
-  /* ADMIN NOTIFICATIONS */
-  .admin-notif-list { display:flex; flex-direction:column; gap:10px; max-height:280px; overflow-y:auto; }
-  .admin-notif-item { background:white; border-radius:var(--radius-sm); padding:12px; border-right:4px solid var(--orange); box-shadow:var(--shadow); }
-  .admin-notif-item.new-notif { background:#FFF7ED; border-right-color:#D97706; }
-  .notif-title { font-size:13px; font-weight:700; margin-bottom:2px; }
-  .notif-desc { font-size:12px; color:var(--gray-600); margin-bottom:4px; }
-  .notif-time { font-size:11px; color:var(--gray-400); }
-
-  /* FLAGS */
-  .header-flags { display:flex; align-items:center; gap:6px; }
-  .flag-btn { display:flex; align-items:center; gap:4px; padding:4px 10px; border:1.5px solid var(--gray-200); border-radius:20px; background:var(--white); cursor:pointer; font-size:12px; font-weight:600; }
-
-  .scroll-content { flex:1; overflow-y:auto; }
-  select { padding:10px 14px; border:1.5px solid var(--gray-200); border-radius:var(--radius-sm); font-family:'Cairo',sans-serif; font-size:13px; background:white; text-align:right; direction:rtl; outline:none; cursor:pointer; }
-  input[type=range] { width:100%; accent-color:var(--orange); }
-
-  /* TOAST */
-  .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); background:var(--gray-800); color:white; padding:12px 24px; border-radius:24px; font-size:14px; z-index:9999; opacity:0; transition:opacity 0.3s; white-space:nowrap; font-family:'Cairo',sans-serif; }
-  .toast.show { opacity:1; }
-
-  @media(max-width:420px){ .phone-wrapper{width:100%;} }
-</style>
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; display: none; z-index: 2000; }
+  </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
 
 <div class="phone-wrapper">
+  <div class="page active" id="page-home">
+    <div class="topbar">
+      <button onclick="toggleTheme()" id="dark-toggle" style="background:none; border:none; font-size:20px; cursor:pointer;">🌙</button>
+      <div class="logo">VICKS MARKET 🛍️</div>
+      <button onclick="showPage('login')" style="background:none; border:none; font-size:20px;">👤</button>
+    </div>
+    <div class="products-grid" id="main-grid"></div>
+    <button class="fab-robot" onclick="showPage('chat')">🤖</button>
+  </div>
 
-<!-- ======== HOME ======== -->
-<div class="page active" id="page-home">
-  <div class="topbar">
-    <div class="topbar-icons">
-      <button class="icon-btn" onclick="showPage('login')">👤</button>
-      <button class="icon-btn" id="dark-toggle" onclick="toggleTheme()">🌙</button>
-      <button class="icon-btn">🔍</button>
+  <div class="page" id="page-chat">
+    <div class="topbar">
+      <button onclick="showPage('home')" style="border:none; background:none; font-size:20px;">➡️</button>
+      <div style="font-weight:bold;">VICKS AI</div>
+      <div>🤖</div>
     </div>
-    <div style="display:flex;align-items:center;gap:6px">
-      <span class="logo">VICKS MARKET</span>
-      <span class="logo-bag">🛍️</span>
+    <div id="chat-body" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px;"></div>
+    <div class="chat-input-bar">
+      <button class="chat-attach" onclick="sendChat()" style="background:var(--orange); color:white; border:none; border-radius:50%; width:40px; height:40px;">➤</button>
+      <input type="text" id="chat-input" class="chat-input" placeholder="اكتب رسالتك...">
+      <button class="chat-attach" onclick="openCamera()" style="border:none; background:none; font-size:20px; cursor:pointer;">📷</button>
     </div>
   </div>
-  <div class="cat-tabs">
-    <button class="cat-tab active" onclick="filterCat(this,'all')">الكل</button>
-    <button class="cat-tab" onclick="filterCat(this,'used')">🏷️ مستعمل</button>
-    <button class="cat-tab" onclick="filterCat(this,'super')">🏪 سوبر ماركت</button>
-    <button class="cat-tab" onclick="filterCat(this,'beauty')">🌿 جمال وعناية</button>
-  </div>
-  <div class="filter-bar">
-    <div class="view-btns">
-      <button class="view-btn" onclick="setView('list',this)">☰</button>
-      <button class="view-btn active" onclick="setView('grid',this)">⊞</button>
-    </div>
-    <button class="tag-btn" onclick="showPage('vip')">🏅 VIP</button>
-    <button class="tag-btn">🏷️ عروض</button>
-  </div>
-  <div class="products-grid" id="products-grid"></div>
-  <button class="fab-robot" onclick="showPage('chat')">🤖</button>
-</div>
 
-<!-- ======== LOGIN ======== -->
-<div class="page" id="page-login">
-  <div class="auth-page">
-    <div class="auth-header">
-      <div class="auth-logo"><span class="logo-icon">🛍️</span><span>VICKDMARKET</span></div>
-      <div class="auth-title">تسجيل الدخول</div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">البريد الإلكتروني</label>
-      <input type="email" class="form-input" id="login-email">
-    </div>
-    <div class="form-group">
-      <label class="form-label">كلمة المرور</label>
-      <input type="password" class="form-input" id="login-pass">
-    </div>
-    <button class="btn-primary" onclick="doLogin()">دخول</button>
-    <div class="forgot-link">نسيت كلمة السر؟</div>
-    <button class="btn-social google" onclick="showToast('تسجيل عبر Google')"><span style="font-weight:900">G</span> متابعة عبر Google</button>
-    <button class="btn-social facebook" onclick="showToast('تسجيل عبر Facebook')"><span style="font-weight:900">f</span> متابعة عبر Facebook</button>
-    <div class="signup-link">ليس لديك حساب؟ <span onclick="showPage('register')">انضم الآن</span></div>
+  <div class="page" id="page-login" style="padding:40px 20px;">
+    <h2 style="text-align:center; margin-bottom:20px;">تسجيل الدخول</h2>
+    <input type="email" id="login-email" class="chat-input" style="width:100%; margin-bottom:10px;" placeholder="البريد الإلكتروني">
+    <input type="password" id="login-pass" class="chat-input" style="width:100%; margin-bottom:20px;" placeholder="كلمة المرور">
+    <button onclick="doLogin()" style="width:100%; padding:15px; background:var(--orange); color:white; border:none; border-radius:10px; font-weight:bold;">دخول</button>
+    <p onclick="showPage('home')" style="text-align:center; margin-top:20px; cursor:pointer; color:var(--orange);">العودة للرئيسية</p>
   </div>
 </div>
-
-<!-- ======== REGISTER ======== -->
-<div class="page" id="page-register">
-  <div class="auth-page">
-    <div class="auth-header">
-      <div class="auth-logo"><span class="logo-icon">🛍️</span><span>VICKDMARKET</span></div>
-      <div class="auth-title">إنشاء حساب جديد</div>
-    </div>
-    <div style="margin-bottom:16px">
-      <div style="text-align:center;font-size:14px;color:var(--gray-600);margin-bottom:10px">اختر نوع الحساب:</div>
-      <div class="account-type-btns">
-        <button class="account-type-btn" id="type-seller" onclick="selectType('seller')">🏪 تاجر</button>
-        <button class="account-type-btn active" id="type-buyer" onclick="selectType('buyer')">👤 زبون</button>
-      </div>
-    </div>
-    <div class="form-group"><label class="form-label">الاسم الكامل</label><input type="text" class="form-input" id="reg-name"></div>
-    <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input type="email" class="form-input" id="reg-email"></div>
-    <div class="form-group"><label class="form-label">تأكيد الكود المرسل (سيتم إرسال كود التفعيل عبر البريد)</label><input type="text" class="form-input" id="reg-code"></div>
-    <div class="form-group"><label class="form-label">رقم الهاتف</label><input type="tel" class="form-input" id="reg-phone"></div>
-    <button class="btn-primary" onclick="doRegister()">إنشاء حساب</button>
-    <div style="text-align:center;font-size:13px;color:var(--gray-400);margin:12px 0">أو التسجيل عبر:</div>
-    <button class="btn-social google"   onclick="showToast('تسجيل عبر Google')"><span style="font-weight:900">G</span> متابعة عبر Google</button>
-    <button class="btn-social facebook" onclick="showToast('تسجيل عبر Facebook')"><span style="font-weight:900">f</span> متابعة عبر Facebook</button>
-    <button class="btn-social email"    onclick="showToast('تسجيل عبر البريد')">✉️ التسجيل عبر البريد الإلكتروني</button>
-    <div class="signup-link">لديك حساب بالفعل؟ <span onclick="showPage('login')">تسجيل دخول</span></div>
-  </div>
-</div>
-
-<!-- ======== SELLER ======== -->
-<div class="page" id="page-seller">
-  <div class="topbar">
-    <div class="header-flags">
-      <button class="back-arrow" onclick="showPage('home')">←</button>
-      <button class="flag-btn">💰 EGP</button>
-      <button class="flag-btn">🇪🇬</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px">
-      <span class="logo">VICKS MARKET</span><span class="logo-bag">🛍️</span>
-    </div>
-  </div>
-  <div class="scroll-content">
-    <div class="profile-body">
-      <div class="profile-avatar">
-        👤
-        <div class="verified-badge blue">✓</div>
-      </div>
-      <div class="profile-name">التاجر: محمد (موثق)</div>
-      <div class="profile-id">🪪 ID: 0000000000</div>
-      <div class="profile-contact">📞 <span dir="ltr">+20 123 456 789</span></div>
-      <div class="profile-contact">✉️ mohamed.market@email.com</div>
-      <div class="profile-tabs">
-        <button class="profile-tab" onclick="sellerTab(this)">الفئات</button>
-        <button class="profile-tab active" onclick="sellerTab(this)">العروض</button>
-        <button class="profile-tab" onclick="sellerTab(this)">المنتجات</button>
-      </div>
-    </div>
-    <div class="products-grid" id="seller-products"></div>
-  </div>
-  <button class="fab-robot" onclick="showPage('chat')">🤖</button>
-</div>
-
-<!-- ======== BUYER ======== -->
-<div class="page" id="page-buyer">
-  <div class="topbar">
-    <div class="header-flags">
-      <button class="back-arrow" onclick="showPage('home')">←</button>
-      <button class="flag-btn">💰 EGP</button>
-      <button class="flag-btn">🇪🇬</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px">
-      <span class="logo">VICKS MARKET</span><span class="logo-bag">🛍️</span>
-    </div>
-  </div>
-  <div class="scroll-content">
-    <div class="profile-body">
-      <div class="profile-avatar">👤</div>
-      <div class="profile-name">الزبون: محمد</div>
-      <div class="profile-contact">📞 <span dir="ltr">+20 123 456 789</span></div>
-      <div class="profile-contact">✉️ mohamed.market@email.com</div>
-      <div class="profile-tabs">
-        <button class="profile-tab" onclick="buyerTab(this)">الذي وضعت له لايك</button>
-        <button class="profile-tab active" onclick="buyerTab(this)">الذي بحثت عنه</button>
-        <button class="profile-tab" onclick="buyerTab(this)">ما تبحث عنه</button>
-      </div>
-    </div>
-    <div class="products-grid" id="buyer-products"></div>
-  </div>
-  <button class="fab-robot" onclick="showPage('chat')">🤖</button>
-</div>
-
-<!-- ======== VIP ======== -->
-<div class="page" id="page-vip">
-  <!-- Back arrow instead of globe icon -->
-  <div class="topbar">
-    <button class="back-arrow" onclick="showPage('home')">←</button>
-    <div style="display:flex;align-items:center;gap:6px">
-      <span class="logo">VICKS MARKET</span><span class="logo-bag">🛍️</span>
-    </div>
-  </div>
-  <div class="scroll-content">
-    <!-- Hero -->
-    <div style="text-align:center;padding:20px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:white">
-      <div style="font-size:28px;font-weight:900;letter-spacing:2px">VICKS VIP</div>
-      <div style="margin:14px auto;width:80px;height:80px;background:#D97706;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;position:relative">
-        👨‍💼
-        <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#D97706;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:white;border:2px solid #1a1a2e">✓</div>
-      </div>
-      <div style="background:#D97706;display:inline-block;padding:4px 20px;border-radius:20px;font-weight:700">VIP</div>
-    </div>
-
-    <!-- Verification -->
-    <div class="vip-section">
-      <div class="vip-section-title">خدمات التوثيق والظهور <span style="color:var(--orange);font-size:13px">علامات التوثيق ومده الأولوية</span></div>
-
-      <!-- Badge selector: colored checkmark circles ONLY, no medals -->
-      <div class="option-row">
-        <div class="badge-selector" id="badge-sel">
-          <div class="badge-choice gold-b selected" onclick="selectBadge(this,'ذهبية')"  title="ذهبي"></div>
-          <div class="badge-choice silver-b"        onclick="selectBadge(this,'فضية')"  title="فضي"></div>
-          <div class="badge-choice blue-b"          onclick="selectBadge(this,'زرقاء')" title="أزرق موثق"></div>
-        </div>
-        <div class="option-label">اختيار علامة التوثيق</div>
-      </div>
-
-      <div class="option-row">
-        <div class="duration-btns" id="ver-dur">
-          <button class="dur-btn active" onclick="durPick(this,'ver-dur',false)">1 شهر</button>
-          <button class="dur-btn"        onclick="durPick(this,'ver-dur',false)">3 شهور</button>
-          <button class="dur-btn"        onclick="durPick(this,'ver-dur',false)">6 شهور</button>
-          <button class="dur-btn"        onclick="durPick(this,'ver-dur',false)">1 سنة</button>
-        </div>
-        <div class="option-label">مدة علامة التوثيق</div>
-      </div>
-
-      <div class="option-row">
-        <div class="duration-btns" id="app-dur">
-          <button class="dur-btn dark-act" onclick="durPick(this,'app-dur',true)">يوم كامل</button>
-          <button class="dur-btn"          onclick="durPick(this,'app-dur',true)">3 أيام</button>
-          <button class="dur-btn"          onclick="durPick(this,'app-dur',true)">أسبوع</button>
-          <button class="dur-btn"          onclick="durPick(this,'app-dur',true)">شهر</button>
-        </div>
-        <div class="option-label">مدة أولوية الظهور</div>
-      </div>
-    </div>
-
-    <!-- Offers -->
-    <div class="vip-section">
-      <div class="vip-section-title">إدارة العروض والخصومات</div>
-      <div style="font-size:14px;font-weight:700;color:var(--gray-600);text-align:right;margin-bottom:10px">اختيارات العرض والخصم</div>
-      <div class="option-row">
-        <select><option>عرض الجمعة البيضاء - خصم 50%</option><option>عرض رمضان</option><option>عرض الأعياد</option></select>
-        <div class="option-label">اختيار العرض</div>
-      </div>
-      <div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--gray-400);margin-bottom:4px"><span>100%</span><span>0%</span></div>
-        <input type="range" min="0" max="100" value="50" oninput="document.getElementById('disc-val').textContent=this.value+'%'">
-        <div style="display:flex;justify-content:space-between">
-          <div id="disc-val" style="color:var(--orange);font-weight:700">50%</div>
-          <div style="font-size:13px;color:var(--gray-600)">نسبة الخصم</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Packages -->
-    <div class="vip-section">
-      <div class="vip-section-title">حزم النقاط والاشتراكات</div>
-      <div style="font-size:14px;font-weight:700;color:var(--gray-600);text-align:right;margin-bottom:12px">اشتراكات في فيكس في آي بي</div>
-      <div class="vip-packages">
-        <div class="vip-pkg" onclick="buyPkg('باقة الاشتراك الأساسية','1000')">
-          <div class="pkg-icon">👑</div>
-          <div class="pkg-name">باقة الاشتراك الأساسية</div>
-          <div class="pkg-desc">شهر، ثلاثة أشهر، عشرة أشهر، سنة</div>
-          <div class="pkg-points">🪙 1000 Points</div>
-        </div>
-        <div class="vip-pkg" onclick="buyPkg('باقة توثيق الحساب','2500')">
-          <div class="pkg-icon">👑</div>
-          <div class="pkg-name">باقة توثيق الحساب</div>
-          <div class="pkg-desc">توثيق سنة كاملة + علامة من اختيارك</div>
-          <div class="pkg-points">🪙 2500 Points</div>
-        </div>
-        <div class="vip-pkg" onclick="buyPkg('باقة إدارة العروض','2500')">
-          <div class="pkg-icon">🎯</div>
-          <div class="pkg-name">باقة إدارة العروض</div>
-          <div class="pkg-desc">عروض غير محدودة + ميزة رلوية</div>
-          <div class="pkg-points">🪙 2500 Points</div>
-        </div>
-        <div class="vip-pkg" onclick="buyPkg('باقة ظهور الأولوية','7500')">
-          <div class="pkg-icon">📈</div>
-          <div class="pkg-name">باقة ظهور الأولوية</div>
-          <div class="pkg-desc">أولوية قصوى للظهور لمدة سنة</div>
-          <div class="pkg-points">🪙 7500 Points</div>
-        </div>
-      </div>
-      <div style="margin-top:16px">
-        <div class="vip-section-title" style="font-size:14px">طلب نقاط مخصصة</div>
-        <div class="custom-points">
-          <select><option>السعر التقديري</option><option>1000 نقطة</option><option>5000 نقطة</option></select>
-          <input type="number" class="points-input" placeholder="أدخل عدد النقاط" id="custom-pts">
-        </div>
-        <div style="text-align:right;font-size:13px;color:var(--gray-400);margin:8px 0">التكلفة بالنقاط</div>
-        <button class="btn-buy" onclick="buyCustomPts()">طلب شراء</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="bottom-nav">
-    <button class="nav-btn" onclick="showPage('home')"><span class="nav-icon">👤</span></button>
-    <button class="nav-btn"><span class="nav-icon">💬</span></button>
-    <button class="nav-btn"><span class="nav-icon">🔔</span></button>
-    <button class="nav-btn active"><span class="nav-icon">🔍</span></button>
-  </div>
-</div>
-
-<!-- ======== CHAT ======== -->
-<div class="page" id="page-chat" style="height:100vh">
-  <div class="chat-header">
-    <button style="font-size:20px;border:none;background:none;cursor:pointer">⋯</button>
-    <div class="chat-title">VICKS AI</div>
-    <div class="chat-avatar">🛍️</div>
-    <button class="back-arrow" onclick="showPage('home')">←</button>
-  </div>
-  <div class="chat-body" id="chat-body">
-    <div class="msg bot"><div class="msg-bubble">أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟</div></div>
-    <div style="text-align:center;padding:30px 0;opacity:0.06"><div style="font-size:34px;font-weight:900">VICKS AI 🛍️</div></div>
-  </div>
-  <div class="chat-input-bar">
-    <button class="chat-send-btn" onclick="sendChat()">➤</button>
-    <input type="text" class="chat-input" placeholder="اكتب رسالتك..." id="chat-input" onkeydown="if(event.key==='Enter')sendChat()">
-    <button class="chat-attach">+</button>
-    <button class="chat-attach">📷</button>
-  </div>
-</div>
-
-<!-- ======== ADMIN ======== -->
-<div class="page" id="page-admin">
-  <div class="topbar">
-    <div class="header-flags">
-      <button class="back-arrow" onclick="showPage('home')">←</button>
-      <button class="flag-btn">💰 EGP</button>
-      <button class="flag-btn">🇪🇬</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px">
-      <span class="logo">VICKS MARKET</span><span class="logo-bag">🛍️</span>
-    </div>
-  </div>
-  <div class="scroll-content">
-    <div class="profile-body">
-      <div class="profile-avatar">
-        <div class="crown-badge">👑</div>
-        👤
-        <div class="verified-badge gold">✓</div>
-      </div>
-      <div class="profile-name">المالك</div>
-      <div class="profile-id">🪪 ID: 0000000000</div>
-      <div class="profile-contact">📞 <span dir="ltr">+20 123 456 789</span></div>
-      <div class="profile-contact">✉️ mohamed.market@email.com</div>
-    </div>
-
-    <!-- LIVE NOTIFICATIONS -->
-    <div class="admin-section">
-      <div class="admin-section-title" style="display:flex;align-items:center;justify-content:space-between">
-        <span id="notif-badge" style="background:#EF4444;color:white;border-radius:20px;padding:2px 12px;font-size:12px">0 جديد</span>
-        <span>🔔 إشعارات الاشتراكات</span>
-      </div>
-      <div class="admin-notif-list" id="admin-notifs">
-        <div style="text-align:center;color:var(--gray-400);font-size:13px;padding:20px">لا توجد إشعارات بعد</div>
-      </div>
-    </div>
-
-    <!-- Tools -->
-    <div class="admin-section">
-      <div class="admin-section-title">أدوات المالك</div>
-      <div class="admin-card">
-        <div style="font-size:13px;font-weight:700;text-align:right;margin-bottom:8px">حظر الحساب</div>
-        <div class="admin-row">
-          <button class="btn-ban" onclick="doAdmin('حظر')">حظر</button>
-          <input type="text" class="admin-input" placeholder="5 أيام 📅">
-          <input type="text" class="admin-input" placeholder="رقم ال ID">
-        </div>
-        <div class="admin-label">يحظر هذا الحساب</div>
-      </div>
-
-      <div class="admin-card">
-        <div style="font-size:14px;font-weight:700;text-align:right;margin-bottom:10px">إدارة العملات</div>
-        <div class="admin-row">
-          <button class="btn-send" onclick="doAdmin('إرسال عملة')">إرسال</button>
-          <input type="text" class="admin-input" placeholder="رقم ال ID">
-        </div>
-        <div class="admin-row">
-          <div class="coin-btns">
-            <button class="btn-minus" onclick="showToast('تم خصم 10 نقاط')">-10</button>
-            <button class="btn-plus"  onclick="showToast('تمت إضافة 10 نقاط')">+10</button>
-          </div>
-          <select><option>اختر الآي دي</option></select>
-          <input type="text" class="admin-input" placeholder="رقم ال ID">
-        </div>
-        <div class="admin-row">
-          <input type="text" class="admin-input" placeholder="آي دي جديد">
-          <button class="id-swap-btn">⇄</button>
-          <input type="text" class="admin-input" placeholder="آي دي جديد">
-        </div>
-      </div>
-
-      <div class="admin-card">
-        <div style="font-size:14px;font-weight:700;text-align:right;margin-bottom:10px">وضع الأولوية للظهور</div>
-        <div class="admin-row">
-          <button style="background:var(--gray-800);color:white;border:none;padding:10px 18px;border-radius:var(--radius-sm);font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer" onclick="doAdmin('تفعيل الأولوية')">التفعيل</button>
-          <select><option>اختر المدة</option><option>يوم</option><option>أسبوع</option><option>شهر</option></select>
-          <input type="text" class="admin-input" placeholder="الآي دي">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="bottom-nav">
-    <button class="nav-btn active"><span class="nav-icon">👤</span></button>
-    <button class="nav-btn"><span class="nav-icon">💬</span></button>
-    <button class="nav-btn" style="position:relative">
-      <span class="nav-icon">🔔</span>
-      <span id="nav-dot" style="display:none;position:absolute;top:2px;right:6px;width:9px;height:9px;background:#EF4444;border-radius:50%"></span>
-    </button>
-    <button class="nav-btn"><span class="nav-icon">🔍</span></button>
-  </div>
-</div>
-
-</div><!-- phone-wrapper -->
 
 <script>
-// DATA
-const products = [
-  {id:1,name:'ايفون 14 Pro مستعمل',price:'18,000 ج.م',emoji:'📱',cat:'used',rating:4},
-  {id:2,name:'شاشة سامسونج 55 بوصة 4K',price:'4,500 ج.م',emoji:'📺',cat:'used',rating:4},
-  {id:3,name:'صابون سائل طبيعي',price:'120 ج.م',emoji:'🧴',cat:'beauty',rating:5},
-  {id:4,name:'زيت زيتون أصلي',price:'85 ج.م',emoji:'🫒',cat:'super',rating:5},
-  {id:5,name:'لابتوب ديل مستعمل',price:'12,000 ج.م',emoji:'💻',cat:'used',rating:3},
-  {id:6,name:'سماعة Sony WH-1000',price:'3,200 ج.م',emoji:'🎧',cat:'used',rating:5},
-  {id:7,name:'كاميرا Canon EOS',price:'25,000 ج.م',emoji:'📷',cat:'used',rating:4},
-  {id:8,name:'حقيبة جلد فاخرة',price:'2,800 ج.م',emoji:'👜',cat:'beauty',rating:3},
-  {id:9,name:'حذاء Nike Jordan',price:'1,500 ج.م',emoji:'👟',cat:'used',rating:4},
-  {id:10,name:'جرامافون كلاسيكي',price:'4,000 ج.م',emoji:'🎵',cat:'used',rating:4},
-  {id:11,name:'ساعة Apple Watch',price:'8,500 ج.م',emoji:'⌚',cat:'used',rating:2},
-  {id:12,name:'شوكولاتة فاخرة',price:'450 ج.م',emoji:'🍫',cat:'super',rating:2},
-];
-const sellerProds=[
-  {id:1,name:'ساعة ذكية',price:'209 EGP',emoji:'⌚',rating:2},
-  {id:2,name:'شوكولاتة فاخرة',price:'150 EGP',emoji:'🍫',rating:2},
-  {id:3,name:'حلويات مشكلة',price:'209 EGP',emoji:'🍬',rating:2},
-  {id:4,name:'سماعات لاسلكية',price:'350 EGP',emoji:'🎧',rating:2},
-];
-const buyerProds=[
-  {id:1,name:'كاميرا Canon',price:'209 EGP',emoji:'📷',rating:2},
-  {id:2,name:'حقيبة فاخرة',price:'500 EGP',emoji:'👜',rating:2},
-  {id:3,name:'حذاء رياضي',price:'209 EGP',emoji:'👟',rating:2},
-  {id:4,name:'جرامافون',price:'400 EGP',emoji:'🎵',rating:2},
-];
-
-// RENDER
-function renderProduct(p){
-  const s='⭐'.repeat(p.rating)+'☆'.repeat(5-p.rating);
-  return `<div class="product-card" onclick="showToast('${p.name}')">
-    <div class="product-img">${p.emoji}</div>
-    <div class="product-info">
-      <div class="product-name">${p.name}</div>
-      <div class="product-price">${p.price}</div>
-      <div class="product-actions">
-        <button class="action-btn whatsapp" onclick="event.stopPropagation();showToast('فتح WhatsApp')">💬</button>
-        <button class="action-btn telegram" onclick="event.stopPropagation();showToast('فتح Telegram')">✈️</button>
-        <button class="action-btn msg"      onclick="event.stopPropagation();showToast('فتح الرسائل')">💭</button>
-        <button class="action-btn heart"    onclick="event.stopPropagation();showToast('تم الإعجاب ❤️')">❤️</button>
-      </div>
-      <div class="product-meta"><span class="stars">${s}</span><span class="shop-name">متجر النور</span><div class="shop-badge">م</div></div>
-    </div></div>`;
-}
-function renderProducts(list,id){
-  const g=document.getElementById(id);
-  if(g) g.innerHTML=list.map(renderProduct).join('');
-}
-
-// NAVIGATION
-function showPage(name){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pg=document.getElementById('page-'+name);
-  if(pg) pg.classList.add('active');
-  if(name==='admin'){
-    // Mark all as read
-    adminNotifs.forEach(n=>n.isNew=false);
-    newCount=0;
-    updateNotifBadge();
-    renderAdminNotifs();
+  // 3. تشغيل الكاميرا الفعلي
+  function openCamera() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        showToast("جاري معالجة الصورة...");
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const body = document.getElementById('chat-body');
+          body.innerHTML += `<div style="align-self:flex-start; background:var(--orange); color:white; padding:10px; border-radius:10px; max-width:80%"><img src="${event.target.result}" style="width:100%; border-radius:5px;"></div>`;
+          body.scrollTop = body.scrollHeight;
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
   }
-}
 
-// ADMIN NOTIFICATIONS
-let adminNotifs=[];
-let newCount=0;
-function addNotif(title,desc){
-  const now=new Date();
-  const time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
-  adminNotifs.unshift({title,desc,time,isNew:true});
-  newCount++;
-  updateNotifBadge();
-  renderAdminNotifs();
-}
-function updateNotifBadge(){
-  document.getElementById('notif-badge').textContent=newCount+' جديد';
-  document.getElementById('notif-badge').style.background=newCount>0?'#EF4444':'#94A3B8';
-  document.getElementById('nav-dot').style.display=newCount>0?'block':'none';
-}
-function renderAdminNotifs(){
-  const c=document.getElementById('admin-notifs');
-  if(!adminNotifs.length){ c.innerHTML='<div style="text-align:center;color:var(--gray-400);font-size:13px;padding:20px">لا توجد إشعارات بعد</div>'; return; }
-  c.innerHTML=adminNotifs.map(n=>`
-    <div class="admin-notif-item ${n.isNew?'new-notif':''}">
-      <div class="notif-title">${n.title}</div>
-      <div class="notif-desc">${n.desc}</div>
-      <div class="notif-time">🕐 ${n.time}</div>
-    </div>`).join('');
-}
+  // 4. تفعيل أزرار التواصل (WhatsApp & Telegram)
+  function contactSeller(platform, pName) {
+    const phone = "20123456789"; // مثال لرقم التاجر
+    const msg = encodeURIComponent("مرحباً، أنا مهتم بمنتج: " + pName);
+    const url = platform === 'wa' ? `https://wa.me/${phone}?text=${msg}` : `https://t.me/YourBotName`;
+    window.open(url, '_blank');
+  }
 
-// FILTER / VIEW
-function filterCat(btn,cat){
-  document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const f=cat==='all'?products:products.filter(p=>p.cat===cat);
-  renderProducts(f,'products-grid');
-}
-function setView(type,btn){
-  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('products-grid').style.gridTemplateColumns=type==='list'?'1fr':'1fr 1fr';
-}
+  // 5. تحسين الأمان في الدخول
+  function doLogin() {
+    const e = document.getElementById('login-email').value;
+    const p = document.getElementById('login-pass').value;
+    if (!e.includes('@') || p.length < 6) {
+      showToast("⚠️ بيانات الدخول غير صحيحة");
+      return;
+    }
+    showToast("✅ تم الدخول بنجاح");
+    setTimeout(() => showPage('home'), 1000);
+  }
 
-// AUTH
-function doLogin(){
-  const e=document.getElementById('login-email').value;
-  const p=document.getElementById('login-pass').value;
-  if(!e||!p){showToast('⚠️ يرجى ملء جميع الحقول');return;}
-  showToast('✅ تم تسجيل الدخول بنجاح!');
-  setTimeout(()=>showPage('home'),1200);
-}
-function doRegister(){
-  const n=document.getElementById('reg-name').value;
-  const e=document.getElementById('reg-email').value;
-  if(!n||!e){showToast('⚠️ يرجى ملء جميع الحقول');return;}
-  const type=document.getElementById('type-seller').classList.contains('active')?'تاجر':'زبون';
-  showToast('⏳ جاري إنشاء حسابك...');
-  setTimeout(()=>{
-    showToast('✅ سيتم تشغيل اشتراكك وإرسال نقاطك قريباً');
-    addNotif('🆕 حساب جديد — '+type,'المستخدم '+n+' انضم كـ'+type);
-  },1200);
-  setTimeout(()=>showPage('login'),2500);
-}
-function selectType(t){
-  document.getElementById('type-seller').classList.remove('active');
-  document.getElementById('type-buyer').classList.remove('active');
-  document.getElementById('type-'+t).classList.add('active');
-}
+  // تبديل الصفحات والوضع الليلي
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+  }
 
-// VIP
-function buyPkg(name,pts){
-  showToast('⏳ سيتم تشغيل اشتراكك قريباً...');
-  setTimeout(()=>showToast('✅ سيتم إرسال نقاطك وتفعيل '+name),1400);
-  addNotif('💰 طلب اشتراك جديد','تاجر طلب '+name+' مقابل '+pts+' نقطة');
-}
-function buyCustomPts(){
-  const pts=document.getElementById('custom-pts').value;
-  if(!pts){showToast('⚠️ أدخل عدد النقاط');return;}
-  showToast('⏳ سيتم إرسال نقاطك...');
-  setTimeout(()=>showToast('✅ سيتم إرسال '+pts+' نقطة قريباً'),1400);
-  addNotif('🪙 طلب نقاط مخصصة','المستخدم طلب '+pts+' نقطة');
-}
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    document.getElementById('dark-toggle').textContent = isDark ? '☀️' : '🌙';
+  }
 
-// BADGE / DURATION
-function selectBadge(el,label){
-  document.querySelectorAll('.badge-choice').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected');
-  showToast('تم اختيار العلامة '+label);
-}
-function durPick(btn,gid,dark){
-  document.querySelectorAll('#'+gid+' .dur-btn').forEach(b=>b.classList.remove('active','dark-act'));
-  btn.classList.add(dark?'dark-act':'active');
-}
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2500);
+  }
 
-// TABS
-function sellerTab(btn){document.querySelectorAll('#page-seller .profile-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function buyerTab(btn){document.querySelectorAll('#page-buyer .profile-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+  // شات بسيط
+  function sendChat() {
+    const inp = document.getElementById('chat-input');
+    const body = document.getElementById('chat-body');
+    if (!inp.value) return;
+    body.innerHTML += `<div style="align-self:flex-start; background:var(--orange); color:white; padding:10px; border-radius:10px; max-width:80%">${inp.value}</div>`;
+    inp.value = '';
+    setTimeout(() => {
+      body.innerHTML += `<div style="align-self:flex-end; background:var(--gray-200); color:var(--text-main); padding:10px; border-radius:10px; max-width:80%">أنا بوت VICKS، كيف أساعدك؟</div>`;
+      body.scrollTop = body.scrollHeight;
+    }, 800);
+  }
 
-// CHAT
-const chatR=['يمكنني مساعدتك في البحث عن منتجات أو أي استفسار آخر.','شكراً لتواصلك! كيف يمكنني خدمتك؟','يسعدني مساعدتك. هل تبحث عن منتج معين؟','يمكنك التواصل مع البائعين عبر WhatsApp أو Telegram.','للتسجيل كتاجر اذهب إلى إنشاء حساب واختر تاجر.'];
-function sendChat(){
-  const inp=document.getElementById('chat-input');
-  const body=document.getElementById('chat-body');
-  const t=inp.value.trim();
-  if(!t)return;
-  body.innerHTML+=`<div class="msg user"><div class="msg-bubble">${t}</div></div>`;
-  inp.value='';
-  setTimeout(()=>{
-    body.innerHTML+=`<div class="msg bot"><div class="msg-bubble">${chatR[Math.floor(Math.random()*chatR.length)]}</div></div>`;
-    body.scrollTop=body.scrollHeight;
-  },800);
-  body.scrollTop=body.scrollHeight;
-}
-
-// ADMIN
-function doAdmin(a){showToast('✅ تم: '+a);}
-
-// THEME
-let dark=false;
-function toggleTheme(){
-  dark=!dark;
-  document.body.style.background=dark?'#1a1a2e':'#e8e8e8';
-  document.querySelector('.phone-wrapper').style.background=dark?'#16213e':'#fff';
-  document.getElementById('dark-toggle').textContent=dark?'☀️':'🌙';
-}
-
-// TOAST
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
-}
-
-// INIT
-renderProducts(products,'products-grid');
-renderProducts(sellerProds,'seller-products');
-renderProducts(buyerProds,'buyer-products');
+  // رندر المنتجات (أمثلة)
+  const items = [
+    {name: 'آيفون 14 Pro', price: '25,000 ج.م', emoji: '📱'},
+    {name: 'ساعة ذكية', price: '1,200 ج.م', emoji: '⌚'}
+  ];
+  document.getElementById('main-grid').innerHTML = items.map(p => `
+    <div class="product-card">
+      <div style="font-size:40px; text-align:center;">${p.emoji}</div>
+      <div style="font-weight:bold; margin-top:5px;">${p.name}</div>
+      <div style="color:var(--orange); font-weight:900;">${p.price}</div>
+      <div style="margin-top:10px; display:flex; justify-content:center;">
+        <button class="action-btn" style="background:#25D366;" onclick="contactSeller('wa', '${p.name}')">💬</button>
+        <button class="action-btn" style="background:#0088cc;" onclick="contactSeller('tg', '${p.name}')">✈️</button>
+      </div>
+    </div>
+  `).join('');
 </script>
+
 </body>
-  </html>
+</html>
