@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VICKS MARKET</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
 :root{
   --bg:#e0e0e0;--phone-bg:#fff;--topbar-bg:#fff;
   --card-bg:#fff;--card-border:#F3F4F6;
@@ -23,7 +31,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--topbar-bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;transition:background .3s;}
 .topbar-right{display:flex;align-items:center;gap:6px;}
 .topbar-right .logo{font-size:16px;font-weight:900;color:var(--text);}
-.topbar-right img.logo-img{width:28px;height:28px;object-fit:contain;}
 .topbar-left{display:flex;align-items:center;gap:6px;}
 .icon-btn{width:33px;height:33px;border-radius:50%;background:var(--gray-bar);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text);transition:background .2s;}
 .icon-btn:hover{background:var(--orange-light);}
@@ -67,14 +74,12 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .action-btn.heart{background:var(--text);color:#fff;font-size:11px;}
 .action-btn.heart.liked{background:#EF4444;}
 .action-btn.msg{background:var(--text3);color:#fff;font-size:11px;}
-.action-btn svg{width:15px;height:15px;}
 .product-meta{display:flex;align-items:center;justify-content:space-between;margin-top:5px;}
 .meta-right{display:flex;align-items:center;gap:3px;}
 .shop-badge{background:var(--orange);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
 .shop-name{font-size:9px;color:var(--text3);}
 .stars{color:#F59E0B;font-size:9px;}
-.fab-robot{position:fixed;bottom:18px;right:18px;width:50px;height:50px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-lg);animation:pulse 2s infinite;z-index:100;border:none;}
-.fab-robot svg{width:30px;height:30px;}
+.fab-robot{position:fixed;bottom:18px;right:18px;width:50px;height:50px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-lg);animation:pulse 2s infinite;z-index:100;border:none;font-size:24px;}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(249,115,22,.4)}50%{box-shadow:0 0 0 10px rgba(249,115,22,0)}}
 .bottom-nav{display:flex;justify-content:space-around;align-items:center;padding:9px 0;background:var(--topbar-bg);border-top:1px solid var(--border);position:sticky;bottom:0;z-index:40;}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;cursor:pointer;color:var(--text3);transition:color .2s;position:relative;}
@@ -84,8 +89,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .auth-back{margin-bottom:14px;display:flex;align-items:center;}
 .auth-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;}
 .auth-title{font-size:22px;font-weight:900;color:var(--text);}
-.auth-logo{display:flex;align-items:center;gap:7px;font-size:17px;font-weight:900;color:var(--text);}
-.auth-logo img{width:32px;height:32px;object-fit:contain;}
+.auth-logo{font-size:17px;font-weight:900;color:var(--orange);}
 .form-group{margin-bottom:12px;}
 .form-label{display:block;text-align:right;font-size:13px;color:var(--text2);margin-bottom:6px;}
 .form-input{width:100%;padding:12px 14px;border-radius:var(--rsm);border:1.5px solid var(--orange);background:var(--input-bg);font-family:'Cairo',sans-serif;font-size:13px;outline:none;text-align:right;direction:rtl;color:var(--text);}
@@ -93,7 +97,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .btn-social{width:100%;padding:11px;border-radius:var(--rsm);background:var(--card-bg);font-family:'Cairo',sans-serif;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin:4px 0;color:var(--text);}
 .btn-social.facebook{border:1.5px solid #1877F2;color:#1877F2;}
 .btn-social.google{border:1.5px solid #EA4335;color:#EA4335;}
-.btn-social.email{border:1.5px solid var(--orange);color:var(--orange);}
 .forgot-link{text-align:center;color:var(--text3);font-size:12px;cursor:pointer;margin:6px 0;text-decoration:underline;}
 .signup-link{text-align:center;font-size:12px;color:var(--text2);margin-top:12px;}
 .signup-link span{color:var(--orange);font-weight:700;cursor:pointer;}
@@ -104,7 +107,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .profile-avatar{width:80px;height:80px;border-radius:50%;background:var(--gray-bar);margin:0 auto 9px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;overflow:visible;}
 .verified-badge{position:absolute;bottom:0;right:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;border:2px solid var(--phone-bg);color:#fff;}
 .verified-badge.blue{background:#3B82F6;}
-.verified-badge.silver{background:#94A3B8;}
 .verified-badge.gold{background:#D97706;}
 .crown-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:22px;}
 .profile-name{font-size:17px;font-weight:900;margin-bottom:4px;color:var(--text);}
@@ -139,14 +141,12 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .btn-add-id{background:var(--blue);color:#fff;border:none;padding:8px 12px;border-radius:var(--rsm);font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
 .chat-page{display:flex;flex-direction:column;height:100vh;}
 .chat-header{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--topbar-bg);border-bottom:1px solid var(--border);}
-.chat-avatar{width:36px;height:36px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.chat-avatar svg,.chat-avatar img{width:26px;height:26px;object-fit:contain;}
+.chat-avatar{width:36px;height:36px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;}
 .chat-title-wrap{flex:1;text-align:center;}
 .chat-title{font-size:14px;font-weight:700;color:var(--text);}
 .chat-subtitle{font-size:10px;color:var(--text3);}
 .chat-body{flex:1;padding:13px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--tab-bg);}
-.chat-watermark{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 0;opacity:.07;}
-.chat-watermark img{width:60px;height:60px;object-fit:contain;margin-bottom:6px;}
+.chat-watermark{display:flex;flex-direction:column;align-items:center;padding:24px 0;opacity:.07;}
 .chat-watermark .wm-text{font-size:24px;font-weight:900;color:var(--text);}
 .msg{max-width:75%;}
 .msg.bot{align-self:flex-end;}
@@ -169,8 +169,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .comment-text{font-size:12px;color:var(--text2);margin-bottom:5px;}
 .comment-actions{display:flex;gap:7px;align-items:center;}
 .c-like-btn,.c-dislike-btn{background:none;border:none;cursor:pointer;font-size:13px;color:var(--text3);}
-.c-like-btn:hover{color:var(--green);}
-.c-dislike-btn:hover{color:#EF4444;}
 .c-count{font-size:10px;color:var(--text3);}
 .add-comment-bar{display:flex;gap:7px;padding:9px 13px;background:var(--topbar-bg);border-top:1px solid var(--border);}
 .add-comment-input{flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:19px;font-family:'Cairo',sans-serif;font-size:12px;outline:none;text-align:right;direction:rtl;background:var(--input-bg);color:var(--text);}
@@ -212,3 +210,330 @@ input[type=range]{width:100%;accent-color:var(--orange);}
 .toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--phone-bg);padding:9px 19px;border-radius:19px;font-size:12px;z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:'Cairo',sans-serif;}
 .toast.show{opacity:1;}
 @media(max-width:420px){.phone{width:100%;}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="product-overlay" id="prod-overlay" onclick="closeOverlayBG(event)">
+  <div class="product-overlay-inner">
+    <button class="overlay-close" onclick="closeOverlay()">✕</button>
+    <div class="overlay-emoji" id="ov-emoji">📱</div>
+    <div class="overlay-name" id="ov-name"></div>
+    <div class="overlay-price" id="ov-price"></div>
+    <div class="overlay-actions">
+      <button class="overlay-btn wa" onclick="showToast('WhatsApp')">💬 WhatsApp</button>
+      <button class="overlay-btn tg" onclick="showToast('Telegram')">✈️ Telegram</button>
+      <button class="overlay-btn cmnt" onclick="closeOverlay();showPage('comments')">💬 تعليقات</button>
+    </div>
+    <div class="overlay-star" id="ov-stars"></div>
+  </div>
+</div>
+
+<div class="phone">
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="topbar">
+    <div class="topbar-right"><span style="font-size:20px">🛒</span><span class="logo">VICKS MARKET</span></div>
+    <div class="topbar-left">
+      <button class="icon-btn" onclick="showPage('login')">👤</button>
+      <button class="icon-btn" id="dark-toggle" onclick="toggleTheme()">🌙</button>
+      <button class="icon-btn" onclick="toggleSearch()">🔍</button>
+    </div>
+  </div>
+  <div class="search-bar" id="search-bar">
+    <input type="text" class="search-input" placeholder="ابحث عن منتج...">
+    <button class="search-cam-btn" onclick="openCamera()">📷</button>
+    <button class="search-up-btn" onclick="triggerUpload()">📎</button>
+    <input type="file" id="file-up" accept="image/*" style="display:none" onchange="handleUpload(event)">
+  </div>
+  <div class="cat-tabs">
+    <button class="cat-tab active" onclick="filterCat(this,'all')">الكل</button>
+    <button class="cat-tab" onclick="filterCat(this,'used')">🏷️ مستعمل</button>
+    <button class="cat-tab" onclick="filterCat(this,'super')">🏪 سوبر ماركت</button>
+    <button class="cat-tab" onclick="filterCat(this,'beauty')">🌿 جمال وعناية</button>
+    <button class="cat-tab" onclick="showPage('offers')">🔥 عروض</button>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-right">
+      <button class="tag-btn" onclick="showPage('vip')">🏅 VIP</button>
+      <button class="tag-btn" onclick="showPage('offers')">🔥 عروض</button>
+    </div>
+    <div class="filter-left">
+      <button class="view-btn" onclick="setView('list',this)">☰</button>
+      <button class="view-btn active" onclick="setView('grid',this)">⊞</button>
+      <button class="view-btn" onclick="setView('strip',this)">↔</button>
+    </div>
+  </div>
+  <div id="home-strip" style="display:none"><div class="products-strip" id="products-strip"></div></div>
+  <div class="products-grid" id="products-grid"></div>
+  <button class="fab-robot" onclick="showPage('chat')">🤖</button>
+</div>
+
+<!-- OFFERS -->
+<div class="page" id="page-offers">
+  <div class="topbar">
+    <div class="topbar-right"><span style="font-size:20px">🛒</span><span class="logo">VICKS MARKET</span></div>
+    <div class="topbar-left"><button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+  </div>
+  <div class="cat-tabs">
+    <button class="cat-tab active">كل العروض</button>
+    <button class="cat-tab">خصم 70%+</button>
+    <button class="cat-tab">خصم 50%+</button>
+    <button class="cat-tab">خصم 30%+</button>
+  </div>
+  <div style="padding:9px 12px;font-size:13px;font-weight:700;color:var(--text)">🔥 عروض اليوم</div>
+  <div class="products-strip" id="offers-strip"></div>
+  <div style="padding:9px 12px;font-size:13px;font-weight:700;color:var(--text)">جميع العروض</div>
+  <div class="products-grid" id="offers-grid" style="flex:1"></div>
+  <button class="fab-robot" onclick="showPage('chat')">🤖</button>
+</div>
+
+<!-- LOGIN -->
+<div class="page" id="page-login">
+  <div class="auth-page">
+    <div class="auth-back"><button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+    <div class="auth-header">
+      <div class="auth-logo">🛒 VICKS MARKET</div>
+      <div class="auth-title">تسجيل الدخول</div>
+    </div>
+    <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input type="email" class="form-input" id="login-email" placeholder="example@email.com"></div>
+    <div class="form-group"><label class="form-label">كلمة المرور</label><input type="password" class="form-input" id="login-pass" placeholder="••••••••"></div>
+    <button class="btn-primary" onclick="doLogin()">دخول</button>
+    <div class="forgot-link">نسيت كلمة السر؟</div>
+    <button class="btn-social google" onclick="showToast('Google')"><b>G</b> متابعة عبر Google</button>
+    <button class="btn-social facebook" onclick="showToast('Facebook')"><b>f</b> متابعة عبر Facebook</button>
+    <div class="signup-link">ليس لديك حساب؟ <span onclick="showPage('register')">انضم الآن</span></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="page" id="page-register">
+  <div class="auth-page">
+    <div class="auth-back"><button class="back-arrow" onclick="showPage('login')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+    <div class="auth-header">
+      <div class="auth-logo">🛒 VICKS MARKET</div>
+      <div class="auth-title">إنشاء حساب</div>
+    </div>
+    <div class="account-type-btns">
+      <button class="account-type-btn" id="type-seller" onclick="selectType('seller')">🏪 تاجر</button>
+      <button class="account-type-btn active" id="type-buyer" onclick="selectType('buyer')">👤 زبون</button>
+    </div>
+    <div class="form-group"><label class="form-label">الاسم الكامل</label><input type="text" class="form-input" id="reg-name" placeholder="الاسم الكامل"></div>
+    <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input type="email" class="form-input" id="reg-email" placeholder="example@email.com"></div>
+    <div class="form-group"><label class="form-label">رقم الهاتف</label><input type="tel" class="form-input" id="reg-phone" placeholder="+20 xxx xxx xxxx"></div>
+    <button class="btn-primary" onclick="doRegister()">إنشاء حساب</button>
+    <button class="btn-social google" onclick="showToast('Google')"><b>G</b> متابعة عبر Google</button>
+    <button class="btn-social facebook" onclick="showToast('Facebook')"><b>f</b> متابعة عبر Facebook</button>
+    <div class="signup-link">لديك حساب؟ <span onclick="showPage('login')">تسجيل دخول</span></div>
+  </div>
+</div>
+
+<!-- SELLER -->
+<div class="page" id="page-seller">
+  <div class="topbar">
+    <div class="topbar-right"><span class="logo">VICKS MARKET</span></div>
+    <div class="topbar-left">
+      <button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="flag-btn">💰 EGP</button><button class="flag-btn">🇪🇬</button>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div class="profile-body">
+      <div class="profile-avatar">👤<div class="verified-badge blue">✓</div></div>
+      <div class="profile-name">التاجر: محمد (موثق)</div>
+      <div class="profile-id">🪪 ID: 0000000000</div>
+      <div class="profile-contact">📞 <span dir="ltr">+20 123 456 789</span></div>
+      <div class="profile-contact">✉️ mohamed.market@email.com</div>
+      <div class="profile-tabs">
+        <button class="profile-tab" onclick="profileTab(this,'page-seller')">الفئات</button>
+        <button class="profile-tab active" onclick="profileTab(this,'page-seller')">العروض</button>
+        <button class="profile-tab" onclick="profileTab(this,'page-seller')">المنتجات</button>
+      </div>
+    </div>
+    <div class="products-grid" id="seller-products"></div>
+  </div>
+  <button class="fab-robot" onclick="showPage('chat')">🤖</button>
+</div>
+
+<!-- BUYER -->
+<div class="page" id="page-buyer">
+  <div class="topbar">
+    <div class="topbar-right"><span class="logo">VICKS MARKET</span></div>
+    <div class="topbar-left">
+      <button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="flag-btn">💰 EGP</button><button class="flag-btn">🇪🇬</button>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div class="profile-body">
+      <div class="profile-avatar">👤</div>
+      <div class="profile-name">الزبون: محمد</div>
+      <div class="profile-contact">📞 <span dir="ltr">+20 123 456 789</span></div>
+      <div class="profile-contact">✉️ mohamed.market@email.com</div>
+      <div class="profile-tabs">
+        <button class="profile-tab" onclick="profileTab(this,'page-buyer')">لايك</button>
+        <button class="profile-tab active" onclick="profileTab(this,'page-buyer')">بحثت عنه</button>
+        <button class="profile-tab" onclick="profileTab(this,'page-buyer')">المفضلة</button>
+      </div>
+    </div>
+    <div class="products-grid" id="buyer-products"></div>
+  </div>
+  <button class="fab-robot" onclick="showPage('chat')">🤖</button>
+</div>
+
+<!-- VIP -->
+<div class="page" id="page-vip">
+  <div class="topbar">
+    <div class="topbar-right"><span class="logo">VICKS VIP</span></div>
+    <div class="topbar-left"><button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+  </div>
+  <div class="scroll-content">
+    <div style="text-align:center;padding:18px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff">
+      <div style="font-size:24px;font-weight:900;letter-spacing:2px">VICKS VIP</div>
+      <div style="margin:11px auto;width:70px;height:70px;background:#D97706;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px">👑</div>
+      <div style="background:#D97706;display:inline-block;padding:3px 15px;border-radius:15px;font-weight:700">VIP</div>
+    </div>
+    <div class="vip-section">
+      <div class="vip-section-title">خدمات التوثيق</div>
+      <div class="option-row">
+        <div class="badge-selector" id="badge-sel">
+          <div class="badge-choice selected" onclick="selectBadge(this,'ذهبية')" style="background:#D97706;font-size:16px">✓</div>
+          <div class="badge-choice" onclick="selectBadge(this,'فضية')" style="background:#94A3B8;font-size:16px">✓</div>
+          <div class="badge-choice" onclick="selectBadge(this,'زرقاء')" style="background:#3B82F6;font-size:16px">✓</div>
+        </div>
+        <div class="option-label">اختيار علامة التوثيق</div>
+      </div>
+      <div class="option-row">
+        <div class="duration-btns" id="ver-dur">
+          <button class="dur-btn active" onclick="durPick(this,'ver-dur',false)">1 شهر</button>
+          <button class="dur-btn" onclick="durPick(this,'ver-dur',false)">3 شهور</button>
+          <button class="dur-btn" onclick="durPick(this,'ver-dur',false)">6 شهور</button>
+          <button class="dur-btn" onclick="durPick(this,'ver-dur',false)">1 سنة</button>
+        </div>
+        <div class="option-label">مدة التوثيق</div>
+      </div>
+      <div class="option-row">
+        <div class="duration-btns" id="app-dur">
+          <button class="dur-btn dark-act" onclick="durPick(this,'app-dur',true)">يوم كامل</button>
+          <button class="dur-btn" onclick="durPick(this,'app-dur',true)">3 أيام</button>
+          <button class="dur-btn" onclick="durPick(this,'app-dur',true)">أسبوع</button>
+          <button class="dur-btn" onclick="durPick(this,'app-dur',true)">شهر</button>
+        </div>
+        <div class="option-label">مدة الأولوية</div>
+      </div>
+      <div class="option-label" style="margin-bottom:6px">إضافة ID</div>
+      <div class="add-id-row">
+        <button class="btn-add-id" onclick="addVipId()">إضافة ID</button>
+        <input type="text" class="add-id-input" id="vip-id-input" placeholder="أدخل الـ ID هنا">
+      </div>
+    </div>
+    <div class="vip-section">
+      <div class="vip-section-title">إدارة العروض والخصومات</div>
+      <div class="option-row">
+        <select><option>عرض الجمعة البيضاء - خصم 50%</option><option>عرض رمضان</option><option>عرض الأعياد</option></select>
+        <div class="option-label">اختيار العرض</div>
+      </div>
+      <input type="range" min="0" max="100" value="50" oninput="document.getElementById('disc-val').textContent=this.value+'%'">
+      <div style="display:flex;justify-content:space-between"><div id="disc-val" style="color:var(--orange);font-weight:700">50%</div><div style="font-size:11px;color:var(--text2)">نسبة الخصم</div></div>
+    </div>
+    <div class="vip-section">
+      <div class="vip-section-title">حزم النقاط والاشتراكات</div>
+      <div class="vip-packages">
+        <div class="vip-pkg" onclick="buyPkg('باقة الاشتراك الأساسية','1000')"><div class="pkg-icon">👑</div><div class="pkg-name">باقة الاشتراك الأساسية</div><div class="pkg-desc">شهر، ثلاثة أشهر، سنة</div><div class="pkg-points">🪙 1000 Points</div></div>
+        <div class="vip-pkg" onclick="buyPkg('باقة توثيق الحساب','2500')"><div class="pkg-icon">👑</div><div class="pkg-name">باقة توثيق الحساب</div><div class="pkg-desc">توثيق سنة + علامة</div><div class="pkg-points">🪙 2500 Points</div></div>
+        <div class="vip-pkg" onclick="buyPkg('باقة إدارة العروض','2500')"><div class="pkg-icon">🎯</div><div class="pkg-name">باقة إدارة العروض</div><div class="pkg-desc">عروض غير محدودة</div><div class="pkg-points">🪙 2500 Points</div></div>
+        <div class="vip-pkg" onclick="buyPkg('باقة ظهور الأولوية','7500')"><div class="pkg-icon">📈</div><div class="pkg-name">باقة ظهور الأولوية</div><div class="pkg-desc">أولوية قصوى لمدة سنة</div><div class="pkg-points">🪙 7500 Points</div></div>
+      </div>
+      <div style="margin-top:11px">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">طلب نقاط مخصصة</div>
+        <div class="custom-points"><input type="number" class="points-input" placeholder="عدد النقاط" id="custom-pts"></div>
+        <button class="btn-buy" style="margin-top:8px" onclick="buyCustomPts()">طلب شراء</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="page chat-page" id="page-chat">
+  <div class="chat-header">
+    <div class="chat-title-wrap"><div class="chat-title">VICKS AI</div><div class="chat-subtitle">مساعدك الذكي</div></div>
+    <div class="chat-avatar">🤖</div>
+    <button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
+  <div class="chat-body" id="chat-body">
+    <div class="msg bot"><div class="msg-bubble">أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟</div></div>
+    <div class="chat-watermark"><div class="wm-text">VICKS AI</div></div>
+  </div>
+  <div class="chat-input-bar">
+    <button class="chat-send-btn" onclick="sendChat()">➤</button>
+    <input type="text" class="chat-input" placeholder="اكتب رسالتك..." id="chat-input" onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="chat-attach" onclick="triggerChatUpload()">📎</button>
+    <button class="chat-attach" onclick="openCamera()">📷</button>
+    <input type="file" id="chat-file-in" accept="image/*" style="display:none" onchange="handleChatUp(event)">
+  </div>
+</div>
+
+<!-- COMMENTS -->
+<div class="page" id="page-comments" style="height:100vh;display:none;flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-right"><span class="logo">التعليقات</span></div>
+    <button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
+  <div class="scroll-content" id="comments-list"></div>
+  <div class="add-comment-bar">
+    <button class="add-comment-send" onclick="addComment()">➤</button>
+    <input type="text" class="add-comment-input" id="comment-input" placeholder="اكتب تعليقك..." onkeydown="if(event.key==='Enter')addComment()">
+  </div>
+</div>
+
+<!-- ADMIN لوحة الملك -->
+<div class="page" id="page-admin">
+  <div class="topbar">
+    <div class="topbar-right"><span class="logo">👑 لوحة الملك</span></div>
+    <div class="topbar-left">
+      <button class="back-arrow" onclick="showPage('home')"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="flag-btn">💰 EGP</button><button class="flag-btn">🇪🇬</button>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div class="profile-body">
+      <div class="profile-avatar"><div class="crown-badge">👑</div>👤<div class="verified-badge gold">✓</div></div>
+      <div class="profile-name" id="owner-profile-name">👑 الملك</div>
+      <div class="profile-id" id="owner-profile-id">🪪 ID: 1000000000</div>
+      <div class="profile-contact" id="owner-profile-email">✉️ mom1113694362@gmail.com</div>
+    </div>
+    <div class="admin-section" id="owner-vip-section">
+      <div class="admin-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span id="vip-req-badge" style="background:#94A3B8;color:#fff;border-radius:15px;padding:2px 10px;font-size:11px">0 طلب</span>
+        <span>🏅 طلبات VIP — بانتظار موافقتك</span>
+      </div>
+      <div class="admin-notif-list" id="vip-requests-list">
+        <div style="text-align:center;color:var(--text3);font-size:12px;padding:14px">لا توجد طلبات VIP بعد</div>
+      </div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span id="notif-badge" style="background:#94A3B8;color:#fff;border-radius:15px;padding:2px 10px;font-size:11px">0 جديد</span>
+        <span>🔔 إشعارات الاشتراكات</span>
+      </div>
+      <div class="admin-notif-list" id="admin-notifs"><div style="text-align:center;color:var(--text3);font-size:12px;padding:14px">لا توجد إشعارات بعد</div></div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">أدوات المالك</div>
+      <div class="admin-card">
+        <div style="font-size:12px;font-weight:700;text-align:right;margin-bottom:6px;color:var(--text)">حظر الحساب</div>
+        <div class="admin-row">
+          <button class="btn-ban" onclick="doAdmin('حظر')">حظر</button>
+          <input type="text" class="admin-input" placeholder="5 أيام 📅">
+          <input type="text" class="admin-input" placeholder="رقم ال ID">
+        </div>
+      </div>
+      <div class="admin-card">
+        <div style="font-size:12px;font-weight:700;text-align:right;margin-bottom:7px;color:var(--text)">إدارة العملات</div>
+        <div class="admin-row">
+          <button class="btn-send" onclick="doAdmin('إرسال')">إرسال</button>
+          <input type="text" class="admin-input" placeholder="رقم ا **...**
+
+_This response is too long to display in full._
