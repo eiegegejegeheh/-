@@ -1,1781 +1,296 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق Orange - إنشاء حساب</title>
+    <title>VICKS MARKET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
     <style>
-        :root {
-            --bg: #f5f5f5;
-            --surface: #ffffff;
-            --surface-alt: #f0f0f0;
-            --text: #1a1a1a;
-            --text-secondary: #555;
-            --orange: #ff6d00;
-            --orange-light: #fff0e5;
-            --orange-dark: #e65100;
-            --border: #e0e0e0;
-            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            --header-bg: #1a1a1a;
-            --header-text: #ffffff;
-            --nav-bg: #ffffff;
-            --nav-text: #888;
-            --nav-active: #ff6d00;
-            --card-bg: #ffffff;
-            --input-bg: #f9f9f9;
-            --input-border: #ddd;
-            --divider: #eee;
-            --robot-bg: #ff6d00;
-            --robot-shadow: 0 6px 20px rgba(255, 109, 0, 0.4);
-        }
-
-        body.dark-mode {
-            --bg: #121212;
-            --surface: #1e1e1e;
-            --surface-alt: #2a2a2a;
-            --text: #e0e0e0;
-            --text-secondary: #aaa;
-            --border: #333;
-            --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-            --header-bg: #0d0d0d;
-            --header-text: #ffffff;
-            --nav-bg: #1a1a1a;
-            --nav-text: #777;
-            --nav-active: #ff8f3f;
-            --card-bg: #1e1e1e;
-            --input-bg: #252525;
-            --input-border: #444;
-            --divider: #2a2a2a;
-            --orange-light: #3d2a14;
-            --robot-bg: #ff8f3f;
-            --robot-shadow: 0 6px 20px rgba(255, 143, 63, 0.5);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'Tajawal', 'Cairo', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.4s, color 0.4s;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        /* Mobile Container */
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            background-color: var(--bg);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
-            border-radius: 0;
-        }
-
-        @media (min-width: 500px) {
-            .app-container {
-                margin: 20px auto;
-                border-radius: 24px;
-                min-height: 90vh;
-                max-height: 95vh;
-            }
-            body {
-                background: #1a1a1a;
-            }
-            body.dark-mode {
-                background: #000;
-            }
-        }
-
-        /* Header */
-        .header {
-            background: var(--header-bg);
-            color: var(--header-text);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transition: background 0.4s;
-        }
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        .header-logo .dot {
-            width: 10px;
-            height: 10px;
-            background: var(--orange);
+        * { font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif; }
+        body { margin: 0; padding: 0; }
+       .floating-bot {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 56px;
+            height: 56px;
+            background: #ff6600;
             border-radius: 50%;
-            animation: logoPulse 1.5s infinite;
-        }
-        @keyframes logoPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 109, 0, 0.7);
-            }
-            50% {
-                box-shadow: 0 0 0 10px rgba(255, 109, 0, 0);
-            }
-        }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-size: 1.1rem;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            position: relative;
-        }
-        .btn-icon:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .btn-icon:active {
-            transform: scale(0.9);
-        }
-        .dark-mode .header {
-            background: #0d0d0d;
-        }
-        .dark-mode .btn-icon {
-            background: rgba(255, 255, 255, 0.07);
-            color: #ddd;
-        }
-
-        /* Moon icon glow in dark mode */
-        .dark-mode .btn-icon.moon-btn {
-            background: rgba(255, 200, 50, 0.2);
-            color: #ffc832;
-            box-shadow: 0 0 12px rgba(255, 200, 50, 0.3);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 16px 100px 16px;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-        .page {
-            display: none;
-            animation: fadeSlide 0.35s ease;
-        }
-        .page.active {
-            display: block;
-        }
-        @keyframes fadeSlide {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ---- Registration Form Styles (from image) ---- */
-        .form-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 24px 20px;
-            box-shadow: var(--shadow);
-            transition: all 0.4s;
-        }
-        .form-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text);
-        }
-        .form-subtitle {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        /* Account type selector */
-        .account-type-label {
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-            color: var(--text);
-        }
-        .type-cards {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .type-card {
-            flex: 1;
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 12px;
-            text-align: center;
+            box-shadow: 0 4px 12px rgba(255,102,0,0.4);
+            z-index: 999;
             cursor: pointer;
             transition: all 0.3s;
-            background: var(--surface-alt);
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-secondary);
-            position: relative;
         }
-        .type-card i {
-            display: block;
-            font-size: 1.6rem;
-            margin-bottom: 6px;
-            color: #888;
-            transition: color 0.3s;
-        }
-        .type-card.selected {
-            border-color: var(--orange);
-            background: var(--orange-light);
-            color: var(--orange);
-            box-shadow: 0 0 0 4px rgba(255, 109, 0, 0.12);
-        }
-        .type-card.selected i {
-            color: var(--orange);
-        }
-        .type-card .check-mark {
-            position: absolute;
-            top: 8px;
-            left: 10px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--orange);
-            color: #fff;
-            font-size: 0.7rem;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        .type-card.selected .check-mark {
-            display: flex;
-        }
-
-        /* Input fields */
-        .input-group {
-            margin-bottom: 16px;
-        }
-        .input-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-            color: var(--text);
-        }
-        .input-group .input-wrapper {
-            display: flex;
-            align-items: center;
-            background: var(--input-bg);
-            border: 1.5px solid var(--input-border);
-            border-radius: 12px;
-            padding: 0 14px;
-            transition: all 0.3s;
-            gap: 10px;
-        }
-        .input-group .input-wrapper:focus-within {
-            border-color: var(--orange);
-            box-shadow: 0 0 0 4px rgba(255, 109, 0, 0.08);
-        }
-        .input-group .input-wrapper i {
-            color: #999;
-            font-size: 1rem;
-            flex-shrink: 0;
-            transition: color 0.3s;
-        }
-        .input-group .input-wrapper:focus-within i {
-            color: var(--orange);
-        }
-        .input-group input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 14px 0;
-            font-size: 1rem;
-            color: var(--text);
-            outline: none;
-            font-family: inherit;
-        }
-        .input-group input::placeholder {
-            color: #aaa;
-        }
-        .code-row {
-            display: flex;
-            gap: 10px;
-        }
-        .code-row .input-wrapper {
-            flex: 1;
-        }
-        .btn-send-code {
-            background: var(--orange);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0 18px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-        .btn-send-code:hover {
-            background: var(--orange-dark);
-        }
-        .btn-send-code:active {
-            transform: scale(0.95);
-        }
-
-        /* Submit button */
-        .btn-submit {
-            width: 100%;
-            background: var(--orange);
-            color: #fff;
-            border: none;
-            border-radius: 14px;
-            padding: 16px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: all 0.3s;
-            font-family: inherit;
-            letter-spacing: 0.5px;
-        }
-        .btn-submit:hover {
-            background: var(--orange-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(255, 109, 0, 0.35);
-        }
-        .btn-submit:active {
-            transform: scale(0.97);
-        }
-
-        /* Divider */
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            gap: 10px;
-        }
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--divider);
-        }
-
-        /* Social buttons */
-        .social-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-        .btn-social {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1.5px solid var(--border);
-            background: var(--surface);
-            color: var(--text);
-            transition: all 0.3s;
-            font-family: inherit;
-            font-size: 0.95rem;
-        }
-        .btn-social:hover {
-            background: var(--surface-alt);
-            border-color: #ccc;
-        }
-        .btn-social.google i {
-            color: #db4437;
-            font-size: 1.2rem;
-        }
-        .btn-social.facebook i {
-            color: #1877f2;
-            font-size: 1.2rem;
-        }
-        .email-link {
-            text-align: center;
-            margin: 10px 0;
-        }
-        .email-link a {
-            color: var(--orange);
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .email-link a:hover {
-            text-decoration: underline;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        .login-link a {
-            color: var(--orange);
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* ---- Offers Page ---- */
-        .offers-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-        .offer-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            border: 2px solid transparent;
-        }
-        .offer-card:hover {
-            border-color: var(--orange);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-        .offer-card .offer-icon {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-        }
-        .offer-card .offer-title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-        .offer-card .offer-discount {
-            color: var(--orange);
-            font-weight: 700;
-            font-size: 1.3rem;
-        }
-        .offer-card .offer-ends {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .section-title {
-            font-weight: 700;
-            font-size: 1.3rem;
-            margin-bottom: 16px;
-            color: var(--text);
-        }
-        .banner-card {
-            background: linear-gradient(135deg, var(--orange), #ff9100);
-            color: #fff;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(255, 109, 0, 0.3);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .banner-card:hover {
-            transform: scale(1.02);
-        }
-        .banner-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 4px;
-        }
-        .banner-card p {
-            opacity: 0.9;
-            font-size: 0.9rem;
-        }
-
-        /* ---- Chat Page ---- */
-        .chat-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            height: 55vh;
-            overflow: hidden;
-        }
-        .chat-messages {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .msg {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            animation: msgIn 0.3s ease;
-        }
-        @keyframes msgIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .msg.bot {
-            align-self: flex-start;
-            background: var(--orange-light);
-            color: var(--text);
-            border-bottom-right-radius: 6px;
-        }
-        .msg.user {
-            align-self: flex-end;
-            background: var(--orange);
-            color: #fff;
-            border-bottom-left-radius: 6px;
-        }
-        .chat-input-row {
-            display: flex;
-            padding: 10px 14px;
-            border-top: 1px solid var(--border);
-            gap: 10px;
-            background: var(--surface-alt);
-        }
-        .chat-input-row input {
-            flex: 1;
-            border: 1.5px solid var(--input-border);
-            border-radius: 25px;
-            padding: 12px 16px;
-            font-size: 0.9rem;
-            outline: none;
-            background: var(--input-bg);
-            color: var(--text);
-            font-family: inherit;
-            transition: border 0.3s;
-        }
-        .chat-input-row input:focus {
-            border-color: var(--orange);
-        }
-        .chat-input-row button {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: none;
-            background: var(--orange);
-            color: #fff;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex-shrink: 0;
-        }
-        .chat-input-row button:active {
-            transform: scale(0.9);
-        }
-
-        /* ---- Bottom Navigation ---- */
-        .bottom-nav {
-            position: absolute;
+       .floating-bot:hover { transform: scale(1.1); }
+       .comments-modal {
+            position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--nav-bg);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 8px 18px 8px;
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
-            z-index: 101;
-            transition: background 0.4s;
-        }
-        .nav-item {
+            height: 30vh;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            color: var(--nav-text);
-            font-size: 0.7rem;
-            font-weight: 500;
-            transition: all 0.3s;
-            padding: 6px 14px;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+       .vicks-badge {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 6px 12px;
             border-radius: 20px;
-            position: relative;
-            border: none;
-            background: none;
-            font-family: inherit;
-        }
-        .nav-item i {
-            font-size: 1.3rem;
-            transition: all 0.3s;
-        }
-        .nav-item.active {
-            color: var(--nav-active);
-            font-weight: 700;
-        }
-        .nav-item.active i {
-            color: var(--nav-active);
-            transform: scale(1.15);
-        }
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            width: 6px;
-            height: 6px;
-            background: var(--nav-active);
-            border-radius: 50%;
-        }
-
-        /* ---- Floating Robot ---- */
-        .robot-fab {
-            position: absolute;
-            bottom: 90px;
-            right: 20px;
-            width: 58px;
-            height: 58px;
-            background: var(--robot-bg);
-            border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: #fff;
-            cursor: pointer;
-            z-index: 102;
-            box-shadow: var(--robot-shadow);
-            animation: robotPulse 2s infinite;
-            transition: transform 0.2s;
-            border: none;
-        }
-        .robot-fab:active {
-            transform: scale(0.9);
-            animation: none;
-        }
-        @keyframes robotPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 109, 0, 0.6);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 0 18px rgba(255, 109, 0, 0);
-                transform: scale(1.08);
-            }
-        }
-        .dark-mode .robot-fab {
-            animation-name: robotPulseDark;
-        }
-        @keyframes robotPulseDark {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 143, 63, 0.7);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 0 18px rgba(255, 143, 63, 0);
-                transform: scale(1.08);
-            }
-        }
-
-        /* Tooltip for robot */
-        .robot-tooltip {
-            position: absolute;
-            bottom: 75px;
-            right: 85px;
-            background: #333;
-            color: #fff;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateX(10px);
-            transition: all 0.3s;
-            z-index: 103;
-        }
-        .robot-fab:hover+.robot-tooltip {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            z-index: 200;
-            opacity: 0;
-            transition: all 0.4s;
-            pointer-events: none;
-            font-family: inherit;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        }
-        .toast.show {
-            opacity: 1;
-            top: 30px;
-        }
-        .dark-mode .toast {
-            background: #444;
-            color: #fff;
-        }
-
-        /* Scrollbar */
-        .main-content::-webkit-scrollbar {
-            width: 3px;
-        }
-        .main-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .main-content::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 3px;
-        }
-        .dark-mode .main-content::-webkit-scrollbar-thumb {
-            background: #444;
-        }
-
-        /* قبول - success overlay */
-        .success-overlay {
-            display: none;
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 150;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            border-radius: inherit;
-        }
-        .success-overlay.show {
-            display: flex;
-        }
-        .success-card {
-            background: #fff;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            animation: popIn 0.4s ease;
-            color: #1a1a1a;
-            max-width: 300px;
-        }
-        .success-card i {
-            font-size: 3rem;
-            color: #4caf50;
-            margin-bottom: 10px;
-        }
-        .success-card h3 {
-            margin-bottom: 6px;
-        }
-        .success-card button {
-            margin-top: 16px;
-            background: var(--orange);
-            color: #fff;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 25px;
-            cursor: pointer;
+            gap: 6px;
             font-weight: 600;
-            font-family: inherit;
-        }
-        @keyframes popIn {
-            from {
-                transform: scale(0.7);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <div class="app-container" id="appContainer">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-logo">
-                <span class="dot"></span>
-                <span>Orange</span>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+    const { useState, useEffect, useRef } = React;
+
+    const STORAGE_KEY = 'vicks_market_final_v12';
+    const ADMIN_EMAIL = 'mom1113694362@gmail.com';
+    const ADMIN_PASS = 'momMOM2023#';
+    const ADMIN_ID = '10000000000';
+
+    function genId() {
+        return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+
+    const categories = [
+        { id: 'all', label: 'الكل', icon: '' },
+        { id: 'electronics', label: 'إلكترونيات', icon: '📱' },
+        { id: 'fashion', label: 'موضة', icon: '👗' },
+        { id: 'home', label: 'المنزل', icon: '🏠' },
+        { id: 'smart', label: 'أدوات ذكية', icon: '🤖' },
+        { id: 'games', label: 'ألعاب', icon: '🎮' },
+        { id: 'accessories', label: 'إكسسوارات', icon: '💍' }
+    ];
+
+    const initialSellers = {
+        admin: {
+            id: ADMIN_ID, email: ADMIN_EMAIL, password: ADMIN_PASS,
+            storeName: 'VICKS MARKET', ownerName: 'محمد المالك', phone: '01113694362',
+            points: 50000, verified: true, subscription: 'platinum', products: [],
+            createdAt: Date.now(), country: 'مصر', isAdmin: true, avatar: '👑',
+            verificationBadge: true, accountType: 'seller', maxProducts: Infinity,
+            subscriptionExpiry: null, contactPreference: 'whatsapp'
+        },
+        s1: {
+            id: 's1', email: 'seller1@test.com', password: '123456',
+            storeName: 'متجر النور', ownerName: 'أحمد', phone: '01012345678',
+            points: 350, verified: true, subscription: 'silver', products: [],
+            country: 'مصر', isAdmin: false, avatar: '🌟', verificationBadge: true,
+            accountType: 'seller', maxProducts: Infinity, subscriptionExpiry: null,
+            contactPreference: 'whatsapp'
+        },
+        s2: {
+            id: 's2', email: 'seller2@test.com', password: '123456',
+            storeName: 'سوبر ماركت الفرح', ownerName: 'فاطمة', phone: '01198765432',
+            points: 120, verified: false, subscription: 'free', products: [],
+            country: 'السعودية', isAdmin: false, avatar: '🛒', verificationBadge: false,
+            accountType: 'seller', maxProducts: 10, subscriptionExpiry: null,
+            contactPreference: 'whatsapp'
+        }
+    };
+
+    const productNames = ['ايفون 14 Pro', 'زيت زيتون', 'شاشة سامسونج', 'بلاي ستيشن 5', 'لاب توب ديل', 'عطر فاخر', 'ساعة ذكية', 'سماعة لاسلكية', 'طقم مطبخ', 'لعبة فيفا', 'سوار ذهبي', 'كاميرا مراقبة'];
+    const emojis = ['📱', '🫒', '📺', '🎮', '💻', '🧴', '⌚', '🎧', '🍳', '⚽', '💎', '📷'];
+    const possibleCategories = ['electronics', 'fashion', 'home', 'smart', 'games', 'accessories'];
+
+    const initialProducts = {};
+    for (let i = 1; i <= 14; i++) {
+        const sellerId = i % 2 === 0? 's2' : 's1';
+        initialProducts[`p${i}`] = {
+            id: `p${i}`, name: productNames[(i-1)%productNames.length] + (i>10? ` ${i}` : ''),
+            price: 80 + i*50, category: possibleCategories[(i-1)%possibleCategories.length],
+            emoji: emojis[(i-1)%emojis.length], sellerId, sellerName: sellerId==='s1'?'متجر النور':'سوبر ماركت الفرح',
+            sellerCountry: sellerId==='s1'?'مصر':'السعودية', likes: (i*7)%19, likedBy: [],
+            description: `وصف المنتج ${i}`, createdAt: Date.now() - i*86400000,
+            vip: i%3===0, comments: [], rating: i%5
+        };
+    }
+    initialSellers.s1.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId==='s1');
+    initialSellers.s2.products = Object.keys(initialProducts).filter(id => initialProducts[id].sellerId==='s2');
+
+    function getInitialState() {
+        return {
+            sellers: JSON.parse(JSON.stringify(initialSellers)),
+            products: JSON.parse(JSON.stringify(initialProducts)),
+            currentSellerId: null,
+            chatMessages: [{ id: '1', role: 'bot', text: 'أهلاً بك في VICKS MARKET! كيف أستطيع مساعدتك اليوم؟', ts: Date.now() }],
+            theme: 'light'
+        };
+    }
+
+    function loadState() {
+        try {
+            const r = localStorage.getItem(STORAGE_KEY);
+            return r? (JSON.parse(r) || getInitialState()) : getInitialState();
+        } catch {
+            return getInitialState();
+        }
+    }
+
+    function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+
+    function CommentsModal({ product, onClose, onAddComment }) {
+        const [comment, setComment] = useState('');
+        const endRef = useRef(null);
+
+        useEffect(() => {
+            document.body.style.overflow = 'hidden';
+            return () => { document.body.style.overflow = ''; };
+        }, []);
+
+        useEffect(() => {
+            endRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, [product.comments]);
+
+        const handleAdd = () => {
+            if (comment.trim()) {
+                onAddComment(product.id, comment.trim());
+                setComment('');
+            }
+        };
+
+        return (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-[1001]" onClick={onClose}>
+                <div className="comments-modal" onClick={e => e.stopPropagation()}>
+                    <div className="flex items-center justify-between p-4 border-b">
+                        <h3 className="font-bold">التعليقات ({product.comments?.length || 0})</h3>
+                        <button onClick={onClose}><i className="fas fa-times"></i></button>
+                    </div>
+                    <div className="flex-1 overflow-auto p-4 space-y-2">
+                        {(!product.comments || product.comments.length === 0) && (
+                            <p className="text-center text-gray-400 py-8">لا توجد تعليقات بعد</p>
+                        )}
+                        {product.comments && product.comments.map((c, i) => (
+                            <div key={i} className="p-3 bg-gray-50 rounded-xl text-sm">{c}</div>
+                        ))}
+                        <div ref={endRef} />
+                    </div>
+                    <div className="p-3 bg-white border-t flex gap-2">
+                        <input type="text" className="flex-1 p-2.5 bg-gray-100 rounded-xl text-sm outline-none"
+                            placeholder="أضف تعليقاً..." value={comment}
+                            onChange={e => setComment(e.target.value)}
+                            onKeyDown={e => e.key==='Enter' && handleAdd()} />
+                        <button onClick={handleAdd} disabled={!comment.trim()}
+                            className="px-4 py-2 bg-orange-500 text-white rounded-xl text-sm disabled:opacity-50">
+                            <i className="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="header-actions">
-                <button class="btn-icon moon-btn" id="darkModeToggle" title="الوضع الليلي">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-                <button class="btn-icon" id="notificationBtn" title="الإشعارات">
-                    <i class="fa-solid fa-bell"></i>
-                </button>
+        );
+    }
+
+    function ChatPage({ messages, onSend, onBack }) {
+        const [input, setInput] = useState('');
+        const endRef = useRef(null);
+        const send = () => { if(input.trim()) { onSend(input.trim()); setInput(''); } };
+        useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+        return (
+            <div className="flex flex-col relative bg-gray-50" style={{height:'100vh',overflow:'hidden'}}>
+                <div className="flex items-center p-4 border-b bg-white z-10">
+                    <button onClick={onBack} className="ml-2"><i className="fas fa-arrow-right text-lg"></i></button>
+                    <div className="vicks-badge bg-orange-500">
+                        <i className="fas fa-store"></i> VICKS AI
+                    </div>
+                </div>
+                <div className="flex-1 overflow-auto p-4" style={{position:'relative',zIndex:5}}>
+                    {messages.map(m => (
+                        <div key={m.id} className={`flex ${m.role==='user'?'justify-end':'justify-start'} mb-3`}>
+                            <div className={`max-w-[75%] p-3 text-sm rounded-xl ${m.role==='user'?'bg-orange-500 text-white':'bg-white text-gray-700 border'}`}>{m.text}</div>
+                        </div>
+                    ))}
+                    <div ref={endRef} />
+                </div>
+                <div className="p-3 bg-white border-t flex items-center gap-2">
+                    <input type="text" className="flex-1 p-2.5 bg-gray-100 rounded-xl text-sm outline-none" placeholder="اكتب رسالتك..." value={input}
+                        onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send()} />
+                    <button onClick={send} className="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center"><i className="fas fa-paper-plane"></i></button>
+                </div>
             </div>
-        </header>
+        );
+    }
 
-        <!-- Main Content -->
-        <main class="main-content" id="mainContent">
-            <!-- Home Page - Registration Form -->
-            <div class="page active" id="page-home">
-                <div class="form-card">
-                    <h2 class="form-title">إنشاء حساب جديد</h2>
-                    <p class="form-subtitle">انضم إلينا واستمتع بأفضل العروض</p>
+    function ProductCard({ prod, liked, onLike, onWhats, onClick, onRate, sellerAvatar, sellerVerification, onSellerClick, isList, onCommentsClick, contactPreference }) {
+        const stars = Array(5).fill(0).map((_, i) =>
+            <i key={i} className={`fas fa-star ${i < prod.rating? 'text-yellow-400' : 'text-gray-300'}`}
+               style={{fontSize:'10px', cursor:'pointer'}} onClick={e => { e.stopPropagation(); onRate(i+1); }}></i>
+        );
+        const shortName = prod.sellerName.length > 10? prod.sellerName.slice(0,8)+'..' : prod.sellerName;
+        const isTelegram = contactPreference === 'telegram';
 
-                    <p class="account-type-label">اختر نوع الحساب:</p>
-                    <div class="type-cards" id="typeCards">
-                        <div class="type-card selected" data-type="merchant">
-                            <span class="check-mark"><i class="fa-solid fa-check"></i></span>
-                            <i class="fa-solid fa-store"></i>
-                            تاجر
-                        </div>
-                        <div class="type-card" data-type="customer">
-                            <span class="check-mark"><i class="fa-solid fa-check"></i></span>
-                            <i class="fa-solid fa-user"></i>
-                            زبون
-                        </div>
+        if (isList) {
+            return (
+                <div onClick={onClick} className="flex gap-3 p-3 bg-white rounded-xl border mb-2 cursor-pointer hover:shadow-md transition-shadow">
+                    <div className="w-24 h-24 bg-gray-50 rounded-xl flex items-center justify-center text-5xl flex-shrink-0">
+                        {prod.emoji}
                     </div>
-
-                    <div class="input-group">
-                        <label>الاسم الكامل:</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-user"></i>
-                            <input type="text" placeholder="أدخل اسمك الكامل" id="fullName">
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label>البريد الإلكتروني:</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-envelope"></i>
-                            <input type="email" placeholder="example@email.com" id="email">
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label>تأكيد الكود المرسل:</label>
-                        <div class="code-row">
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-key"></i>
-                                <input type="text" placeholder="أدخل كود التفعيل" id="codeInput" maxlength="6">
+                    <div className="flex-1 min-w-0 flex flex-col">
+                        <div className="flex justify-between items-center mb-1">
+                            <div className="flex gap-0.5">{stars}</div>
+                            <div className="flex items-center gap-1 cursor-pointer" onClick={e => { e.stopPropagation(); onSellerClick(); }}>
+                                {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
+                                <span className="text-[10px] text-gray-500 max-w-[60px] truncate">{shortName}</span>
+                                <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar || '🏪'}</span>
                             </div>
-                            <button class="btn-send-code" id="sendCodeBtn">إرسال الكود</button>
+                        </div>
+                        <div className="font-semibold text-sm truncate mb-1">{prod.name}</div>
+                        <div className="flex justify-between items-center mt-auto">
+                            <div className="flex items-center gap-2">
+                                <button onClick={e => { e.stopPropagation(); onWhats(); }} className={`p-1.5 rounded-lg text-xs ${isTelegram? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                                    <i className={`fab ${isTelegram? 'fa-telegram' : 'fa-whatsapp'}`}></i>
+                                </button>
+                                <button onClick={e => { e.stopPropagation(); onCommentsClick && onCommentsClick(prod); }} className="p-1.5 rounded-lg text-xs bg-blue-100 text-blue-600"><i className="fas fa-comment"></i></button>
+                                <button onClick={e => { e.stopPropagation(); onLike(); }} className={`p-1.5 rounded-lg text-xs ${liked? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-500'}`}><i className="fas fa-heart"></i></button>
+                            </div>
+                            <span className="text-sm font-bold text-orange-600">{prod.price.toLocaleString()} ج.م</span>
                         </div>
                     </div>
+                </div>
+            );
+        }
 
-                    <div class="input-group">
-                        <label>رقم الهاتف:</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-phone"></i>
-                            <input type="tel" placeholder="+20 1xx xxx xxxx" id="phone">
-                        </div>
+        return (
+            <div onClick={onClick} className="p-3 bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md w-[180px] flex-shrink-0 transition-shadow flex flex-col">
+                <div className="flex justify-between items-center px-1 mb-2">
+                    <div className="flex gap-0.5">{stars}</div>
+                    <div className="flex items-center gap-1 cursor-pointer" onClick={e => { e.stopPropagation(); onSellerClick(); }}>
+                        {sellerVerification && <i className="fas fa-check-circle text-blue-500 text-[9px]"></i>}
+                        <span className="text-[10px] text-gray-500 max-w-[50px] truncate">{shortName}</span>
+                        <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">{sellerAvatar || '🏪'}</span>
                     </div>
-
-                    <button class="btn-submit" id="submitBtn">إنشاء حساب</button>
-
-                    <div class="divider">أو التسجيل عبر</div>
-
-                    <div class="social-buttons">
-                        <button class="btn-social google" id="googleBtn">
-                            <i class="fa-brands fa-google"></i> Google
+                </div>
+                <div className="h-36 flex items-center justify-center bg-gray-50 rounded-xl text-7xl mb-2">
+                    {prod.emoji}
+                </div>
+                <h3 className="font-semibold text-xs truncate text-center mb-2">{prod.name}</h3>
+                <div className="flex justify-between items-center mt-auto px-1">
+                    <div className="flex items-center gap-1.5">
+                        <button onClick={e => { e.stopPropagation(); onWhats(); }} className={`p-1.5 rounded-lg text-xs ${isTelegram? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                            <i className={`fab ${isTelegram? 'fa-telegram' : 'fa-whatsapp'}`}></i>
                         </button>
-                        <button class="btn-social facebook" id="facebookBtn">
-                            <i class="fa-brands fa-facebook-f"></i> Facebook
-                        </button>
-                    </div>
-
-                    <div class="email-link">
-                        <a id="emailRegLink">التسجيل عبر البريد الإلكتروني</a>
-                    </div>
-                    <div class="login-link">
-                        لديك حساب بالفعل؟ <a id="loginLink">تسجيل دخول</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Offers Page -->
-            <div class="page" id="page-offers">
-                <h2 class="section-title">🔥 أقوى العروض</h2>
-                <div class="banner-card" id="bannerCard">
-                    <h3>🎉 عرض الجمعة السوداء</h3>
-                    <p>خصم يصل إلى 70% على جميع المنتجات! لفترة محدودة.</p>
-                </div>
-                <div class="offers-grid">
-                    <div class="offer-card">
-                        <div class="offer-icon">📱</div>
-                        <div class="offer-title">هواتف ذكية</div>
-                        <div class="offer-discount">40% خصم</div>
-                        <div class="offer-ends">ينتهي في 3 أيام</div>
-                    </div>
-                    <div class="offer-card">
-                        <div class="offer-icon">👕</div>
-                        <div class="offer-title">أزياء وملابس</div>
-                        <div class="offer-discount">50% خصم</div>
-                        <div class="offer-ends">ينتهي في يومين</div>
-                    </div>
-                    <div class="offer-card">
-                        <div class="offer-icon">🏠</div>
-                        <div class="offer-title">أجهزة منزلية</div>
-                        <div class="offer-discount">30% خصم</div>
-                        <div class="offer-ends">ينتهي في 5 أيام</div>
-                    </div>
-                    <div class="offer-card">
-                        <div class="offer-icon">💄</div>
-                        <div class="offer-title">مستحضرات تجميل</div>
-                        <div class="offer-discount">60% خصم</div>
-                        <div class="offer-ends">ينتهي في يوم</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Page -->
-            <div class="page" id="page-chat">
-                <h2 class="section-title">💬 الدعم الفوري</h2>
-                <div class="chat-container">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="msg bot">
-                            <strong>Orange Bot 🤖</strong><br>
-                            مرحباً! كيف يمكنني مساعدتك اليوم؟
-                        </div>
-                    </div>
-                    <div class="chat-input-row">
-                        <input type="text" placeholder="اكتب رسالتك هنا..." id="chatInput">
-                        <button id="chatSendBtn"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav" id="bottomNav">
-            <button class="nav-item active" data-page="home">
-                <i class="fa-solid fa-house"></i>
-                <span>الرئيسية</span>
-            </button>
-            <button class="nav-item" data-page="offers">
-                <i class="fa-solid fa-tag"></i>
-                <span>العروض</span>
-            </button>
-            <button class="nav-item" data-page="chat">
-                <i class="fa-solid fa-comments"></i>
-                <span>الشات</span>
-            </button>
-        </nav>
-
-        <!-- Floating Robot Button -->
-        <button class="robot-fab" id="robotFab" title="تحدث مع الروبوت">
-            <i class="fa-solid fa-robot"></i>
-        </button>
-        <span class="robot-tooltip">هل تحتاج مساعدة؟ 🤖</span>
-
-        <!-- Success Overlay -->
-        <div class="success-overlay" id="successOverlay">
-            <div class="success-card">
-                <i class="fa-solid fa-circle-check"></i>
-                <h3>تم إنشاء الحساب بنجاح!</h3>
-                <p>مرحباً بك في Orange 🎉</p>
-                <button id="closeSuccessBtn">حسناً</button>
-            </div>
-        </div>
-
-        <!-- Toast -->
-        <div class="toast" id="toast"></div>
-    </div>
-
-    <script>
-        (function() {
-            // DOM Elements
-            const appContainer = document.getElementById('appContainer');
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const body = document.body;
-            const pages = document.querySelectorAll('.page');
-            const navItems = document.querySelectorAll('.nav-item');
-            const robotFab = document.getElementById('robotFab');
-            const typeCards = document.querySelectorAll('.type-card');
-            const sendCodeBtn = document.getElementById('sendCodeBtn');
-            const submitBtn = document.getElementById('submitBtn');
-            const googleBtn = document.getElementById('googleBtn');
-            const facebookBtn = document.getElementById('facebookBtn');
-            const emailRegLink = document.getElementById('emailRegLink');
-            const loginLink = document.getElementById('loginLink');
-            const chatSendBtn = document.getElementById('chatSendBtn');
-            const chatInput = document.getElementById('chatInput');
-            const chatMessages = document.getElementById('chatMessages');
-            const successOverlay = document.getElementById('successOverlay');
-            const closeSuccessBtn = document.getElementById('closeSuccessBtn');
-            const toast = document.getElementById('toast');
-            const notificationBtn = document.getElementById('notificationBtn');
-            const bannerCard = document.getElementById('bannerCard');
-
-            let currentPage = 'home';
-            let selectedAccountType = 'merchant';
-            let toastTimer;
-
-            // Show toast message
-            function showToast(msg) {
-                clearTimeout(toastTimer);
-                toast.textContent = msg;
-                toast.classList.add('show');
-                toastTimer = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2200);
-            }
-
-            // Navigation function
-            function navigateTo(pageName) {
-                pages.forEach(p => p.classList.remove('active'));
-                const target = document.getElementById('page-' + pageName);
-                if (target) {
-                    target.classList.add('active');
-                }
-                navItems.forEach(n => n.classList.remove('active'));
-                const activeNav = document.querySelector(`.nav-item[data-page="${pageName}"]`);
-                if (activeNav) activeNav.classList.add('active');
-                currentPage = pageName;
-                document.getElementById('mainContent').scrollTop = 0;
-                // Re-trigger animation
-                if (target) {
-                    target.style.animation = 'none';
-                    target.offsetHeight;
-                    target.style.animation = 'fadeSlide 0.35s ease';
-                }
-            }
-
-            // Bottom nav clicks
-            navItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const page = item.getAttribute('data-page');
-                    navigateTo(page);
-                });
-            });
-
-            // Dark mode toggle
-            darkModeToggle.addEventListener('click', () => {
-                body.classList.toggle('dark-mode');
-                const isDark = body.classList.contains('dark-mode');
-                darkModeToggle.innerHTML = isDark ?
-                    '<i class="fa-solid fa-sun"></i>' :
-                    '<i class="fa-solid fa-moon"></i>';
-                showToast(isDark ? '🌙 الوضع الليلي مفعّل' : '☀️ الوضع النهاري مفعّل');
-                localStorage.setItem('darkMode', isDark ? '1' : '0');
-            });
-
-            // Load dark mode preference
-            if (localStorage.getItem('darkMode') === '1') {
-                body.classList.add('dark-mode');
-                darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-            }
-
-            // Account type selection
-            typeCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    typeCards.forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    selectedAccountType = card.getAttribute('data-type');
-                });
-            });
-
-            // Send code button
-            sendCodeBtn.addEventListener('click', () => {
-                const email = document.getElementById('email').value.trim();
-                if (!email) {
-                    showToast('⚠️ الرجاء إدخال البريد الإلكتروني أولاً');
-                    document.getElementById('email').focus();
-                    return;
-                }
-                if (!email.includes('@') || !email.includes('.')) {
-                    showToast('⚠️ بريد إلكتروني غير صالح');
-                    return;
-                }
-                sendCodeBtn.textContent = 'تم الإرسال ✓';
-                sendCodeBtn.style.background = '#4caf50';
-                sendCodeBtn.disabled = true;
-                showToast('📧 تم إرسال كود التفعيل إلى بريدك');
-                setTimeout(() => {
-                    sendCodeBtn.textContent = 'إرسال الكود';
-                    sendCodeBtn.style.background = 'var(--orange)';
-                    sendCodeBtn.disabled = false;
-                }, 3000);
-            });
-
-            // Submit form
-            submitBtn.addEventListener('click', () => {
-                const fullName = document.getElementById('fullName').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const code = document.getElementById('codeInput').value.trim();
-                const phone = document.getElementById('phone').value.trim();
-
-                if (!fullName) { showToast('⚠️ الرجاء إدخال الاسم الكامل'); return; }
-                if (!email) { showToast('⚠️ الرجاء إدخال البريد الإلكتروني'); return; }
-                if (!email.includes('@')) { showToast('⚠️ بريد إلكتروني غير صالح'); return; }
-                if (!code) { showToast('⚠️ الرجاء إدخال كود التفعيل'); return; }
-                if (!phone) { showToast('⚠️ الرجاء إدخال رقم الهاتف'); return; }
-
-                // Show success
-                successOverlay.classList.add('show');
-                document.getElementById('fullName').value = '';
-                document.getElementById('email').value = '';
-                document.getElementById('codeInput').value = '';
-                document.getElementById('phone').value = '';
-            });
-
-            closeSuccessBtn.addEventListener('click', () => {
-                successOverlay.classList.remove('show');
-                showToast('🎉 أهلاً بك في Orange!');
-            });
-
-            // Google signup
-            googleBtn.addEventListener('click', () => {
-                showToast('🔵 جاري التسجيل عبر Google...');
-            });
-
-            // Facebook signup
-            facebookBtn.addEventListener('click', () => {
-                showToast('🔵 جاري التسجيل عبر Facebook...');
-            });
-
-            // Email registration link
-            emailRegLink.addEventListener('click', () => {
-                document.getElementById('email').focus();
-                showToast('📧 أدخل بريدك الإلكتروني للمتابعة');
-            });
-
-            // Login link
-            loginLink.addEventListener('click', () => {
-                showToast('👋 سيتم توجيهك إلى صفحة تسجيل الدخول');
-            });
-
-            // Robot FAB click - navigate to chat
-            robotFab.addEventListener('click', () => {
-                navigateTo('chat');
-                showToast('🤖 تحدث مع روبوت المساعدة');
-                // Focus chat input
-                setTimeout(() => {
-                    document.getElementById('chatInput').focus();
-                }, 400);
-            });
-
-            // Chat send
-            function sendChatMessage() {
-                const msg = chatInput.value.trim();
-                if (!msg) return;
-                const userMsg = document.createElement('div');
-                userMsg.className = 'msg user';
-                userMsg.textContent = msg;
-                chatMessages.appendChild(userMsg);
-                chatInput.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                // Bot auto-reply
-                setTimeout(() => {
-                    const botMsg = document.createElement('div');
-                    botMsg.className = 'msg bot';
-                    const replies = [
-                        'شكراً لتواصلك! سأقوم بمساعدتك قريباً 😊',
-                        'يمكنك تصفح العروض الحالية من أيقونة العروض 🏷️',
-                        'فريق الدعم سيتواصل معك خلال دقائق ⏳',
-                        'هل تحتاج مساعدة في إنشاء حساب؟ املأ النموذج في الصفحة الرئيسية 📝',
-                        'نحن سعداء بوجودك معنا! 🧡',
-                    ];
-                    botMsg.innerHTML = '<strong>Orange Bot 🤖</strong><br>' +
-                        replies[Math.floor(Math.random() * replies.length)];
-                    chatMessages.appendChild(botMsg);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 600 + Math.random() * 800);
-            }
-
-            chatSendBtn.addEventListener('click', sendChatMessage);
-            chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') sendChatMessage();
-            });
-
-            // Notification button
-            notificationBtn.addEventListener('click', () => {
-                showToast('🔔 لا توجد إشعارات جديدة');
-            });
-
-            // Banner card click
-            bannerCard.addEventListener('click', () => {
-                showToast('🎉 عرض الجمعة السوداء - خصم 70%!');
-            });
-
-            // Offer cards click
-            document.querySelectorAll('.offer-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const title = card.querySelector('.offer-title').textContent;
-                    const discount = card.querySelector('.offer-discount').textContent;
-                    showToast(`🔥 ${title}: ${discount} - تسوق الآن!`);
-                });
-            });
-
-            // Initial setup - check if dark mode preferred by system
-            if (localStorage.getItem('darkMode') === null &&
-                window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                body.classList.add('dark-mode');
-                darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-                localStorage.setItem('darkMode', '1');
-            }
-
-            console.log('🚀 Orange App Ready | جميع الأنظمة تعمل');
-            console.log('📱 SPA Navigation | 🌙 Dark Mode | 🤖 Robot Chat | 🏷️ Offers');
-            console.log('💡 اضغط على أيقونة الروبوت للدردشة | اضغط على القمر للوضع الليلي');
-        })();
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html dir="rtl" lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Vicks Market - تسجيل الدخول</title>
-  <!-- استخدام نفس نظام الألوان والخطوط: Cairo Font من Google -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: #121212;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      padding: 1rem;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* الصفحة الرئيسية (الجزء السابق) - ستكون مخفية عند عرض تسجيل الدخول */
-    .page {
-      width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
-      transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
-    }
-
-    /* تأثيرات ناعمة عند الانتقال */
-    #homePage {
-      opacity: 1;
-      transform: translateX(0);
-      visibility: visible;
-    }
-
-    #homePage.hidden {
-      opacity: 0;
-      transform: translateX(30px);
-      visibility: hidden;
-      position: absolute;
-      pointer-events: none;
-    }
-
-    #loginPage {
-      opacity: 0;
-      transform: translateX(-30px);
-      visibility: hidden;
-      position: absolute;
-      pointer-events: none;
-    }
-
-    #loginPage.visible {
-      opacity: 1;
-      transform: translateX(0);
-      visibility: visible;
-      position: relative;
-      pointer-events: auto;
-    }
-
-    /* تصميم الصفحة الرئيسية (لأغراض الربط) */
-    .home-container {
-      background-color: #1e1e1e;
-      border-radius: 24px;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-    }
-
-    .app-logo {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #d4af37;
-      margin-bottom: 0.5rem;
-      letter-spacing: -1px;
-    }
-
-    .welcome-text {
-      color: #b0b0b0;
-      margin-bottom: 2rem;
-      font-size: 1.1rem;
-    }
-
-    .btn {
-      background-color: #2a2a2a;
-      border: none;
-      color: white;
-      font-family: 'Cairo', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 0.9rem 1.8rem;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      width: 100%;
-      margin: 0.5rem 0;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .btn-primary {
-      background-color: #d4af37;
-      color: #121212;
-      font-weight: 700;
-      border: none;
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #4a4a4a;
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    /* تصميم صفحة تسجيل الدخول المطابقة للصورة */
-    .login-container {
-      background-color: #1e1e1e;
-      border-radius: 28px;
-      padding: 2rem 1.8rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      width: 100%;
-    }
-
-    .back-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin-bottom: 1.8rem;
-      color: #b0b0b0;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-      background: none;
-      border: none;
-      font-family: 'Cairo', sans-serif;
-      gap: 6px;
-    }
-
-    .back-arrow svg {
-      width: 20px;
-      height: 20px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2.5;
-    }
-
-    .back-arrow:hover {
-      color: #ffffff;
-    }
-
-    .login-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 1.8rem;
-      text-align: center;
-      color: #ffffff;
-    }
-
-    .input-field {
-      width: 100%;
-      background-color: #2c2c2c;
-      border: 1px solid #3a3a3a;
-      border-radius: 12px;
-      padding: 0.9rem 1.2rem;
-      font-family: 'Cairo', sans-serif;
-      font-size: 0.95rem;
-      color: #ffffff;
-      margin-bottom: 1.2rem;
-      outline: none;
-      transition: border 0.2s, box-shadow 0.2s;
-    }
-
-    .input-field::placeholder {
-      color: #7a7a7a;
-      font-weight: 400;
-    }
-
-    .input-field:focus {
-      border-color: #d4af37;
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-    }
-
-    .login-btn {
-      background-color: #d4af37;
-      color: #121212;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.9rem;
-      border: none;
-      border-radius: 30px;
-      width: 100%;
-      margin: 0.8rem 0 1rem;
-      cursor: pointer;
-      font-family: 'Cairo', sans-serif;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .login-btn:hover {
-      background-color: #e0bb4a;
-    }
-
-    .forgot-password {
-      display: block;
-      text-align: center;
-      color: #d4af37;
-      text-decoration: none;
-      font-size: 0.9rem;
-      margin-bottom: 1.8rem;
-      font-weight: 500;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #6a6a6a;
-      font-size: 0.8rem;
-      margin: 1.2rem 0;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background-color: #3a3a3a;
-    }
-
-    .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      background-color: #2c2c2c;
-      border: 1px solid #3a3a3a;
-      border-radius: 30px;
-      padding: 0.8rem;
-      font-family: 'Cairo', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: white;
-      width: 100%;
-      margin-bottom: 0.8rem;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .social-btn svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    .google-btn:hover {
-      background-color: #3a3a3a;
-      border-color: #d4af37;
-    }
-
-    .facebook-btn:hover {
-      background-color: #3a3a3a;
-      border-color: #1877f2;
-    }
-
-    .signup-prompt {
-      text-align: center;
-      margin-top: 1.8rem;
-      color: #b0b0b0;
-      font-size: 0.9rem;
-    }
-
-    .signup-link {
-      color: #d4af37;
-      text-decoration: none;
-      font-weight: 600;
-      margin-right: 6px;
-    }
-
-    .error-message {
-      color: #ff6b6b;
-      font-size: 0.8rem;
-      margin-top: -0.6rem;
-      margin-bottom: 0.8rem;
-      display: none;
-    }
-
-    /* تحسينات للأجهزة الصغيرة */
-    @media (max-width: 400px) {
-      .login-container {
-        padding: 1.5rem 1.2rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <!-- الصفحة الرئيسية (تحتوي على أزرار الربط) -->
-  <div id="homePage" class="page">
-    <div class="home-container">
-      <div class="app-logo">⚡ Vicks</div>
-      <div class="welcome-text">أهلاً بك في سوق العطور المميز</div>
-      <button class="btn btn-primary" id="showLoginBtn">تسجيل الدخول</button>
-      <button class="btn btn-outline" id="mockSignupBtn">انضم الآن</button>
-      <p style="margin-top: 1.5rem; color: #7a7a7a; font-size: 0.85rem;">لديك حساب؟ استخدم زر الدخول أعلاه</p>
-    </div>
-  </div>
-
-  <!-- صفحة تسجيل الدخول (مخفية في البداية) -->
-  <div id="loginPage" class="page">
-    <div class="login-container">
-      <!-- سهم العودة للرئيسية -->
-      <button class="back-arrow" id="backToHomeBtn">
-        <svg viewBox="0 0 24 24">
-          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        العودة للرئيسية
-      </button>
-
-      <h1 class="login-title">تسجيل الدخول</h1>
-
-      <!-- حقل البريد الإلكتروني -->
-      <input type="email" id="emailInput" class="input-field" placeholder="البريد الإلكتروني" dir="rtl">
-      <div id="emailError" class="error-message">يرجى إدخال البريد الإلكتروني</div>
-
-      <!-- حقل كلمة المرور -->
-      <input type="password" id="passwordInput" class="input-field" placeholder="كلمة المرور" dir="rtl">
-      <div id="passwordError" class="error-message">يرجى إدخال كلمة المرور</div>
-
-      <!-- زر دخول -->
-      <button class="login-btn" id="loginSubmitBtn">دخول</button>
-
-      <!-- نسيت كلمة السر -->
-      <a href="#" class="forgot-password" id="forgotPasswordLink">نسيت كلمة السر؟</a>
-
-      <!-- الفاصل -->
-      <div class="divider">أو المتابعة عبر</div>
-
-      <!-- أزرار التواصل الاجتماعي -->
-      <button class="social-btn google-btn" id="googleLoginBtn">
-        <svg viewBox="0 0 24 24" width="22" height="22">
-          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-        </svg>
-        Google متابعة عبر
-      </button>
-
-      <button class="social-btn facebook-btn" id="facebookLoginBtn">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="#1877f2">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
-        Facebook متابعة عبر
-      </button>
-
-      <!-- ليس لديك حساب؟ انضم الآن -->
-      <div class="signup-prompt">
-        ليس لديك حساب؟
-        <a href="#" class="signup-link" id="signupLink">انضم الآن</a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function() {
-      // ---------- عناصر الصفحة ----------
-      const homePage = document.getElementById('homePage');
-      const loginPage = document.getElementById('loginPage');
-
-      const showLoginBtn = document.getElementById('showLoginBtn');
-      const backToHomeBtn = document.getElementById('backToHomeBtn');
-      
-      // حقول الإدخال وأزرار صفحة تسجيل الدخول
-      const emailInput = document.getElementById('emailInput');
-      const passwordInput = document.getElementById('passwordInput');
-      const emailError = document.getElementById('emailError');
-      const passwordError = document.getElementById('passwordError');
-      const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-
-      // أزرار اجتماعية وروابط (سلوك افتراضي)
-      const googleBtn = document.getElementById('googleLoginBtn');
-      const facebookBtn = document.getElementById('facebookLoginBtn');
-      const forgotLink = document.getElementById('forgotPasswordLink');
-      const signupLink = document.getElementById('signupLink');
-      const mockSignupBtn = document.getElementById('mockSignupBtn');
-
-      // ---------- دوال الانتقال بين الصفحات ----------
-      function showLoginPage() {
-        homePage.classList.add('hidden');
-        loginPage.classList.add('visible');
-        // تركيز على حقل البريد الإلكتروني تلقائياً لسهولة الاستخدام
-        setTimeout(() => {
-          emailInput.focus();
-        }, 200);
-      }
-
-      function showHomePage() {
-        loginPage.classList.remove('visible');
-        homePage.classList.remove('hidden');
-        // إعادة تعيين حقول الإدخال والرسائل الخطأ
-        emailInput.value = '';
-        passwordInput.value = '';
-        emailError.style.display = 'none';
-        passwordError.style.display = 'none';
-      }
-
-      // ---------- ربط الأحداث ----------
-      showLoginBtn.addEventListener('click', showLoginPage);
-      backToHomeBtn.addEventListener('click', showHomePage);
-
-      // زر "انضم الآن" في الصفحة الرئيسية (يمكن توجيهه لصفحة التسجيل لاحقاً)
-      mockSignupBtn.addEventListener('click', function() {
-        alert('سيتم توجيهك إلى صفحة إنشاء حساب جديد (قيد التطوير)');
-      });
-
-      // التحقق من البيانات قبل الدخول
-      function validateLoginForm() {
-        let isValid = true;
-        // إخفاء الرسائل السابقة
-        emailError.style.display = 'none';
-        passwordError.style.display = 'none';
-
-        const emailValue = emailInput.value.trim();
-        const passwordValue = passwordInput.value.trim();
-
-        if (emailValue === '') {
-          emailError.textContent = 'يرجى إدخال البريد الإلكتروني';
-          emailError.style.display = 'block';
-          isValid = false;
-        } else if (!emailValue.includes('@') || !emailValue.includes('.')) {
-          emailError.textContent = 'يرجى إدخال بريد إلكتروني صالح';
-          emailError.style.display = 'block';
-          isValid = false;
-        }
-
-        if (passwordValue === '') {
-          passwordError.textContent = 'يرجى إدخال كلمة المرور';
-          passwordError.style.display = 'block';
-          isValid = false;
-        } else if (passwordValue.length < 4) {
-          passwordError.textContent = 'كلمة المرور يجب أن تكون 4 أحرف على الأقل';
-          passwordError.style.display = 'block';
-          isValid = false;
-        }
-
-        return isValid;
-      }
-
-      loginSubmitBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (validateLoginForm()) {
-          // محاكاة نجاح تسجيل الدخول - في الواقع يتم توجيهه أو إظهار رسالة
-          alert(`أهلاً بك، ${emailInput.value}! تم تسجيل الدخول بنجاح (محاكاة).`);
-          // هنا يمكنك دمج الكود السابق لتوجيه المستخدم إلى لوحة التحكم أو تحديث الواجهة
-          // مثلاً: showHomePage(); أو استدعاء دالة من الكود السابق
-        }
-      });
-
-      // إمكانية الضغط على Enter لتسجيل الدخول
-      passwordInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          loginSubmitBtn.click();
-        }
-      });
-      emailInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          passwordInput.focus();
-        }
-      });
-
-      // معالجة الأزرار الاجتماعية وروابط أخرى (تمنع الإرسال الافتراضي)
-      googleBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('محاكاة تسجيل الدخول عبر Google');
-      });
-      facebookBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('محاكاة تسجيل الدخول عبر Facebook');
-      });
-      forgotLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('سيتم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني');
-      });
-      signupLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('توجيه إلى صفحة إنشاء حساب جديد');
-      });
-
-      // للتأكد من أن صفحة تسجيل الدخول مخفية في البداية (حالة افتراضية)
-      // نضمن إزالة أي كلاسات قديمة (الأمان)
-      loginPage.classList.remove('visible');
-      homePage.classList.remove('hidden');
-    })();
-  </script>
-</body>
-</html>
+                        <button onClick={e => { e.stopPropagation(); onCommentsClick && onCommentsClick(prod); }} className="p-1.5 rounded-lg text-xs bg-blue-100 text-blue-600"><i className="fas
